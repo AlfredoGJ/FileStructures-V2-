@@ -25,7 +25,7 @@ namespace FileStructures
 
         public List<object> Fields
         {
-            get => default(int);
+            get => default(List<object>);
             set
             {
             }
@@ -33,7 +33,7 @@ namespace FileStructures
 
         public List<char> DataTemplate
         {
-            get => default(int);
+            get => default(List<char>);
             set
             {
             }

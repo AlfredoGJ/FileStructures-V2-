@@ -9,7 +9,7 @@ namespace FileStructures
     {
         public string Name
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }
@@ -17,7 +17,7 @@ namespace FileStructures
 
         public List<Entity> Entities
         {
-            get => default(int);
+            get => default(List<Entity>);
             set
             {
             }

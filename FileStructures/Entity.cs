@@ -11,7 +11,7 @@ namespace FileStructures
 
         public string Name
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }
@@ -51,7 +51,7 @@ namespace FileStructures
 
         public List<Attribute> Attributes
         {
-            get => default(int);
+            get => default(List<Attribute>);
             set
             {
             }
@@ -67,7 +67,7 @@ namespace FileStructures
 
         public List<DataRegister> Registers
         {
-            get => default(int);
+            get => default(List<DataRegister>);
             set
             {
             }
@@ -75,7 +75,7 @@ namespace FileStructures
 
         public bool Edited
         {
-            get => default(int);
+            get => default(bool);
             set
             {
             }

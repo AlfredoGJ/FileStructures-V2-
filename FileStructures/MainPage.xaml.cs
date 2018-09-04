@@ -26,5 +26,23 @@ namespace FileStructures
         {
             this.InitializeComponent();
         }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Navigation_Loaded(object sender, RoutedEventArgs e)
+        {
+            foreach (NavigationViewItemBase item in navigation.MenuItems)
+            {
+                if (item is NavigationViewItem && item.Tag.ToString() == "Home_Page")
+                {
+                    navigation.SelectedItem = item;
+                    break;
+                }
+            }
+            ContentFrame.Navigate(typeof(Views.Home));
+        }
     }
 }

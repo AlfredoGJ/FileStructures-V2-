@@ -9,7 +9,7 @@ namespace FileStructures
     {
         public string Name
         {
-            get => default(int);
+            get => default(string);
             set
             {
             }
@@ -17,7 +17,7 @@ namespace FileStructures
 
         public char Type
         {
-            get => default(int);
+            get => default(char);
             set
             {
             }
@@ -49,7 +49,7 @@ namespace FileStructures
 
         public bool Edited
         {
-            get => default(int);
+            get => default(bool);
             set
             {
             }
