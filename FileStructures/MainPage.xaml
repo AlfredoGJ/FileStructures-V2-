@@ -9,7 +9,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid>
-        <NavigationView x:Name="navigation" IsSettingsVisible="False" Loaded="Navigation_Loaded">
+        <NavigationView x:Name="navigation" IsSettingsVisible="False" Loaded="Navigation_Loaded" SelectionChanged="navigation_SelectionChanged">
             <NavigationView.MenuItems>
 
                 <NavigationViewItem Content="Archivo"  Tag="Home_Page" >
@@ -18,13 +18,13 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 
-                <NavigationViewItem Content="Entidades" >
+                <NavigationViewItem Content="Datos"  Tag="Datos">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE8F1;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 
-                <NavigationViewItem Content="Atributos" >
+                <NavigationViewItem Content="Diccionario" Tag="Diccionario">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE74C;"/>
                     </NavigationViewItem.Icon>

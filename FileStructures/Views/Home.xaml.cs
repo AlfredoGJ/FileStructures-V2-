@@ -33,24 +33,39 @@ namespace FileStructures.Views
         {
             FileOpenPicker picker = new FileOpenPicker();
             picker.ViewMode = PickerViewMode.Thumbnail;
-            picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-            picker.FileTypeFilter.Add(".vao");
-            picker.FileTypeFilter.Add(".bin");
-            picker.FileTypeFilter.Add(".das");
+            picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            picker.FileTypeFilter.Add(".ddc");
+           
 
             StorageFile file =  await picker.PickSingleFileAsync();
             if (file != null)
             {
                 CurrentFileName.Text = file.Name;
+                App.CurrentFileName = file.Name;
             }
+
+            
         }
 
         private async void NewFile_Click(object sender, RoutedEventArgs e)
         {
+            ContentDialogResult dialog = await NewFileDialog.ShowAsync();
+            if (dialog == ContentDialogResult.Primary)
+            {
+               
+                StorageFolder localFolder = KnownFolders.PicturesLibrary;
+                StorageFolder projectsFolder=  await localFolder.CreateFolderAsync("Projects", CreationCollisionOption.OpenIfExists);
+                StorageFile myNewFile= await projectsFolder.CreateFileAsync(FileNameTextBox.Text + ".ddc");
+                BinaryWriter writer = new BinaryWriter(  await myNewFile.OpenStreamForWriteAsync());
+                writer.Write(((long)(-1)));
+                writer.Close();
 
-            await NewFileDialog.ShowAsync();
 
-            
+                CurrentFileName.Text = myNewFile.Name ;
+                Header.Text = "Current opened file:";
+                App.CurrentFileName = myNewFile.Name;
+
+            }
         }
     }
 }

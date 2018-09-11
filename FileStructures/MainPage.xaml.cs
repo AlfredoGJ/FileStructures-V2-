@@ -44,5 +44,21 @@ namespace FileStructures
             }
             ContentFrame.Navigate(typeof(Views.Home));
         }
+
+        private void navigation_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        {
+            switch ((args.SelectedItem as NavigationViewItem).Tag.ToString())
+            {
+                case "Home_Page":
+                         ContentFrame.Navigate(typeof(Views.Home));
+                    break;
+
+
+                case "Diccionario":
+                    ContentFrame.Navigate(typeof(Views.Dictionary));
+                    break;
+            }
+           
+        }
     }
 }

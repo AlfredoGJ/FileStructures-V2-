@@ -5,7 +5,9 @@ using System.Text;
 
 namespace FileStructures
 {
-    public class HashDictionary:Dictionary
+    public class HashDictionary:DictionaryManager
     {
+        public HashDictionary(string name) : base(name)
+        { }
     }
 }

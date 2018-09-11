@@ -32,6 +32,9 @@ namespace FileStructures
             this.Suspending += OnSuspending;
         }
 
+        //public static string CurrentFilePath {get; set;}
+        public static string CurrentFileName { get; set; }
+
         /// <summary>
         /// Se invoca cuando el usuario final inicia la aplicación normalmente. Se usarán otros puntos
         /// de entrada cuando la aplicación se inicie para abrir un archivo específico, por ejemplo.
@@ -96,5 +99,7 @@ namespace FileStructures
             //TODO: Guardar el estado de la aplicación y detener toda actividad en segundo plano
             deferral.Complete();
         }
+
+
     }
 }

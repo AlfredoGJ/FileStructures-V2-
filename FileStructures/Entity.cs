@@ -7,48 +7,62 @@ namespace FileStructures
 {
     public class Entity
     {
+
+        // Private fields
         private DataFileManager dataManager;
+        private long atrPtr;
 
-        public string Name
+        // main fields
+        private string name;
+        private long position;
+        private long attributePointer;
+        private long dataPointer;
+        private long nextPointer;
+
+        // public properties
+        public string Name { get => name; }
+        public long Position { get => position; set  => position = value; }
+        public long AttributesPtr { get => attributePointer; }
+        public long DataPtr { get => dataPointer; }
+        public long NextPtr { get => nextPointer; set => nextPointer = value; }
+        public char[] ArrayName
         {
-            get => default(string);
-            set
+            get
             {
+                char[] arrName = new char[30];
+                arrName.Initialize();
+                for(int i=0; i<name.Length;i++)
+                {
+                    arrName[i] = name[i];
+                }
+                return arrName;
             }
         }
 
-        public long Position
+
+
+
+        public Entity(string name, long position, long atrPtr, long dataPtr, long nextPtr)
         {
-            get => default(int);
-            set
-            {
-            }
+            this.name = name;
+            this.position = position;
+            this.attributePointer = atrPtr;
+            this.dataPointer = dataPtr;
+            this.nextPointer = nextPtr;
         }
 
-        public long AttributesPtr
-        {
-            get => default(int);
-            set
-            {
-            }
-        }
 
-        public long DataPtr
+        public Entity(string name)
         {
-            get => default(int);
-            set
-            {
-            }
+            this.name = name;
+            position = -1;
+            attributePointer = - 1;
+            dataPointer = -1;
+            nextPointer = -1;
+            
         }
-
-        public long NextPtr
-        {
-            get => default(int);
-            set
-            {
-            }
-        }
-
+        
+       
         public List<Attribute> Attributes
         {
             get => default(List<Attribute>);

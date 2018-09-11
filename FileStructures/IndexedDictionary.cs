@@ -5,7 +5,11 @@ using System.Text;
 
 namespace FileStructures
 {
-    public class IndexedDictionary: Dictionary
+    public class IndexedDictionary: DictionaryManager
     {
+        public IndexedDictionary(string name):base(name)
+        {
+          
+        }
     }
 }

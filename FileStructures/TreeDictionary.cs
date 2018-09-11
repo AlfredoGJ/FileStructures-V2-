@@ -5,7 +5,11 @@ using System.Text;
 
 namespace FileStructures
 {
-    public class TreeDictionary:Dictionary
+    public class TreeDictionary : DictionaryManager
     {
+        public TreeDictionary(string name): base(name)
+        {
+
+        }
     }
 }
