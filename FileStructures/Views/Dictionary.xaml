@@ -21,9 +21,15 @@
             
         </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Column="0" Orientation="Vertical" FlowDirection="RightToLeft" HorizontalAlignment="Stretch">
+        <Grid Grid.Column="0"  FlowDirection="RightToLeft" HorizontalAlignment="Stretch">
 
-            <Grid FlowDirection="LeftToRight" Background="Black" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition/>
+                <RowDefinition Height="30"/>
+            </Grid.RowDefinitions>
+            
+            <Grid FlowDirection="LeftToRight" Background="Black" Grid.Row="0" Padding="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition MinWidth="250" />
                     <ColumnDefinition Width="*"/>
@@ -32,14 +38,14 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Name" Grid.Column="0" Margin="0,0,30,0" FontSize="18" Foreground="White"/>
-                <TextBlock Text="Position"  Grid.Column="1" FontSize="18" Foreground="White"/>
-                <TextBlock Text="Attributes ptr" Grid.Column="2"  FontSize="18" Foreground="White"/>
-                <TextBlock Text="Data Ptr" Grid.Column="3" FontSize="18" Foreground="White"/>
-                <TextBlock Text="Next Ptr" Grid.Column="4" FontSize="18" Foreground="White"/>
+                <TextBlock Text="Name" Grid.Column="0"  FontSize="18" Foreground="White" HorizontalAlignment="Left"/>
+                <TextBlock Text="Position"  Grid.Column="1" FontSize="18" Foreground="White" HorizontalAlignment="Left"/>
+                <TextBlock Text="Attr ptr" Grid.Column="2"  FontSize="18" Foreground="White" HorizontalAlignment="Left"/>
+                <TextBlock Text="Data Ptr" Grid.Column="3" FontSize="18" Foreground="White" HorizontalAlignment="Left"/>
+                <TextBlock Text="Next Ptr" Grid.Column="4" FontSize="18" Foreground="White" HorizontalAlignment="Left"/>
             </Grid>
             
-            <ListView x:Name="Entities" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+            <ListView x:Name="Entities" Margin="0,0,0,20" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Row="1" Background="{ThemeResource AppBarBackgroundThemeBrush}" >
                 <ListView.ItemTemplate>
                     <DataTemplate >
                         <local1:EntityDetailView HorizontalContentAlignment="Stretch">
@@ -49,14 +55,14 @@
                 </ListView.ItemTemplate>
             </ListView>
 
-            <Button Style="{ThemeResource AccentButtonStyle}" Name="AddEntity" Click="AddEntity_Click">
+            <Button Style="{ThemeResource AccentButtonStyle}" Name="AddEntity" Click="AddEntity_Click" Grid.Row="2" >
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon  Symbol="Add"  Margin="0,0,10,0"/>
                     <TextBlock >Add entity</TextBlock>
                 </StackPanel>
             </Button>
 
-        </StackPanel>
+        </Grid>
         
 
             <ContentDialog Title="Add Entity" PrimaryButtonText="Ok" CloseButtonText="Cancel"  Name="addEntityContentDialog">

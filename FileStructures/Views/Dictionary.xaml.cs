@@ -31,9 +31,21 @@ namespace FileStructures.Views
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            manager = new DictionaryManager(App.CurrentFileName);
-            Entities.ItemsSource = manager.Entities;
 
+           
+            manager = new DictionaryManager(App.CurrentFileName);
+            
+            //manager.itemsOnFileChanged = new DictionaryManager.ItemsOnFileChanged(newmethod);
+            manager.itemsOnFileChanged+= UpdateDictionaryData;
+            //do { } while (manager.Entities == null);
+           
+
+        }
+
+        private void UpdateDictionaryData()
+        {
+            Entities.ItemsSource = null;
+            Entities.ItemsSource = manager.Entities;
         }
 
         private async void AddEntity_Click(object sender, RoutedEventArgs e)
@@ -50,6 +62,7 @@ namespace FileStructures.Views
                 
             }
 
+            Entities.ItemsSource = null;
             Entities.ItemsSource = manager.Entities;
 
         }
