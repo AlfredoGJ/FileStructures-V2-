@@ -19,6 +19,8 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            
         </Grid.ColumnDefinitions>
 
         <TextBox x:Name="Name" Grid.Column="0" Margin="0,0,30,0" />
@@ -26,6 +28,10 @@
         <TextBlock x:Name="AtrrPtr" Grid.Column="2"  HorizontalAlignment="Left"/>
         <TextBlock x:Name="DataPtr" Grid.Column="3" HorizontalAlignment="Left"/>
         <TextBlock x:Name="NextPtr" Grid.Column="4" HorizontalAlignment="Left"/>
+        <Button Grid.Column="5" Name="Delete" Click="Delete_Click">
+            <SymbolIcon Symbol="Delete"/>
+
+        </Button>
 
 
     </Grid>

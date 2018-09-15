@@ -7,45 +7,54 @@ namespace FileStructures
 {
     public class Attribute
     {
-        public string Name
+
+
+        // main fields
+        private string name;
+        private long nextPointer;
+
+        // public properties
+        public string Name { get => name; set => name = value; }
+        public long Position { get; set; }
+        public char Type { get; set; }
+        public int Length { get; set; }
+        public int IndexType { get; set; }
+        public long IndexPtr { get; set; }
+        public long NextPtr { get => nextPointer; set => nextPointer = value; }
+
+
+        
+        
+        public char[] ArrayName
         {
-            get => default(string);
-            set
+            get
             {
+                char[] arrName = new char[30];
+                arrName.Initialize();
+                for (int i = 0; i < name.Length; i++)
+                {
+                    arrName[i] = name[i];
+                }
+                return arrName;
             }
+            
         }
 
-        public char Type
+
+        public Attribute(string name,long position, char type, int length, int indexType, long indexPrt, long nextPtr)
         {
-            get => default(char);
-            set
-            {
-            }
+            this.name = name;
+            Position = position;
+            Type = type;
+            Length = length;
+            IndexType =indexType;
+            IndexPtr = IndexPtr;
+            NextPtr = nextPtr ;
         }
 
-        public long Position
-        {
-            get => default(int);
-            set
-            {
-            }
-        }
 
-        public long NextPrt
-        {
-            get => default(int);
-            set
-            {
-            }
-        }
+       
 
-        public int Lenght
-        {
-            get => default(int);
-            set
-            {
-            }
-        }
 
         public bool Edited
         {

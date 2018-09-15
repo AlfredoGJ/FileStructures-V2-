@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -10,7 +11,9 @@ namespace FileStructures
 
         // Private fields
         private DataFileManager dataManager;
+        private DictionaryManager dictionaryManager;
         private long atrPtr;
+        private List<Attribute> attributes;
 
         // main fields
         private string name;
@@ -20,11 +23,12 @@ namespace FileStructures
         private long nextPointer;
 
         // public properties
-        public string Name { get => name; }
+        public string Name { get => name; set => name = value; }
         public long Position { get => position; set  => position = value; }
         public long AttributesPtr { get => attributePointer; }
         public long DataPtr { get => dataPointer; }
         public long NextPtr { get => nextPointer; set => nextPointer = value; }
+        public List<Attribute> Attributes { get => attributes; }
         public char[] ArrayName
         {
             get
@@ -42,13 +46,17 @@ namespace FileStructures
 
 
 
-        public Entity(string name, long position, long atrPtr, long dataPtr, long nextPtr)
+        public Entity(string name, long position, long atrPtr, long dataPtr, long nextPtr, DictionaryManager dictionaryManager)
         {
             this.name = name;
             this.position = position;
             this.attributePointer = atrPtr;
             this.dataPointer = dataPtr;
             this.nextPointer = nextPtr;
+            this.dictionaryManager = dictionaryManager;
+            attributes = dictionaryManager.ReadAttributes(attributePointer).Result;
+
+
         }
 
 
@@ -62,14 +70,7 @@ namespace FileStructures
             
         }
         
-       
-        public List<Attribute> Attributes
-        {
-            get => default(List<Attribute>);
-            set
-            {
-            }
-        }
+      
 
         public object PrimaryKeyAttribute
         {
@@ -95,9 +96,43 @@ namespace FileStructures
             }
         }
 
-        public void AddAttribute()
+
+
+        public void AddAttribute(Attribute attribute)
         {
-            throw new System.NotImplementedException();
+            attribute.Position = dictionaryManager.FileLength;
+
+            int i;
+            for (i = 0; i < attributes.Count; i++)
+            {
+                int comparison = string.Compare(attribute.Name, attributes[i].Name, StringComparison.CurrentCulture);
+                if (comparison == -1)
+                    break;
+            }
+
+            if (i == 0)
+            {
+                attribute.NextPtr = attributePointer;
+                attributePointer = attribute.Position;
+                attributes.Insert(i, attribute);
+            }
+            else
+            {
+                if (i == attributes.Count)
+                {
+                    attributes[i - 1].NextPtr = attribute.Position;
+                    attributes.Add(attribute);
+
+                }
+                else
+                {
+                    attribute.NextPtr = attributes[i - 1].NextPtr;
+                    attributes[i - 1].NextPtr = attribute.Position;
+                    attributes.Insert(i, attribute);
+                }
+
+            }
+            //WriteBack();  TODO: Write changes
         }
 
         public void RemoveAttribute()

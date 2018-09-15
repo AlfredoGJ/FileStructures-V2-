@@ -17,8 +17,11 @@ using Windows.UI.Xaml.Navigation;
 
 namespace FileStructures.Controls
 {
+    public delegate void EntityChangedHandler (Entity entity, char chage);
     public sealed partial class EntityDetailView : UserControl
     {
+
+        public EntityChangedHandler entityChanged;
         public Entity entity { get; set; }
         public EntityDetailView()
         {
@@ -34,9 +37,16 @@ namespace FileStructures.Controls
             entity = this.DataContext as Entity;
             Name.Text = entity.Name;
             Pos.Text = entity.Position.ToString();
-            AtrrPtr.Text = entity.Position.ToString();
+            AtrrPtr.Text = entity.AttributesPtr.ToString();
             DataPtr.Text = entity.DataPtr.ToString();
             NextPtr.Text = entity.NextPtr.ToString();
+
+            //entityChanged+= 
+        }
+
+        private void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            entityChanged.Invoke(entity,'d');
         }
     }
 }
