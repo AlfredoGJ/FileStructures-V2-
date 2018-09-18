@@ -64,7 +64,7 @@
             <ListView x:Name="Entities" Margin="0,0,0,20" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Row="1" Background="{ThemeResource AppBarBackgroundThemeBrush}" >
                 <ListView.ItemTemplate>
                     <DataTemplate >
-                        <Grid  FlowDirection="LeftToRight" HorizontalAlignment="Stretch" Width="580" >
+                        <Grid  FlowDirection="LeftToRight" HorizontalAlignment="Stretch"  >
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition MinWidth="250" />
@@ -78,7 +78,7 @@
 
                             <TextBox x:Name="Name" Grid.Column="0" Margin="0,0,30,0" Text="{Binding Path=Name}" LostFocus="Name_LostFocus"/>
                             <TextBlock x:Name="Pos"  Grid.Column="1" HorizontalAlignment="Left" Text="{Binding Path=Position}"/>
-                            <TextBlock x:Name="AtrrPtr" Grid.Column="2"  HorizontalAlignment="Left" Text="{Binding Path=AttributesPtr}"/>
+                            <TextBlock x:Name="AtrrPtr" Grid.Column="2"  HorizontalAlignment="Left" Text="{Binding Path=AttributesPtr, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock x:Name="DataPtr" Grid.Column="3" HorizontalAlignment="Left" Text="{Binding DataPtr}"/>
                             <TextBlock x:Name="NextPtr" Grid.Column="4" HorizontalAlignment="Left" Text="{Binding Path= NextPtr}"/>
                             <Button Grid.Column="5" Name="Delete" Click="Delete_Click" >
@@ -90,6 +90,11 @@
                         </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
             </ListView>
 
             <Button Style="{ThemeResource AccentButtonStyle}"  Click="AddEntity_Click" Grid.Row="2" Name="AddEntityButton" >
@@ -121,56 +126,79 @@
 
                 <Grid FlowDirection="LeftToRight"  Grid.Row="1" Padding="5" Height="40" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Background="{StaticResource SystemControlAccentAcrylicElementAccentMediumHighBrush}" >
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition MinWidth="250" />
+                        <ColumnDefinition MinWidth="200" />
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="Name" Grid.Column="0"  FontSize="18" Foreground="White" Margin="32,0,0,0"/>
-                    <TextBlock Text="Position"  Grid.Column="1" FontSize="18" Foreground="White" />
-                    <TextBlock Text="Attr Ptr" Grid.Column="2"  FontSize="18" Foreground="White" />
-                    <TextBlock Text="Data Ptr" Grid.Column="3" FontSize="18" Foreground="White" />
-                    <TextBlock Text="Next Ptr" Grid.Column="4" FontSize="18" Foreground="White" />
-                    
+                    <TextBlock Text="Type"  Grid.Column="1" FontSize="18" Foreground="White" />
+                    <TextBlock Text="Lenght" Grid.Column="2"  FontSize="18" Foreground="White" />
+                    <TextBlock Text="Key Type" Grid.Column="3" FontSize="18" Foreground="White" />
+                    <TextBlock Text="Position" Grid.Column="4" FontSize="18" Foreground="White" />
+                    <TextBlock Text="Next Ptr" Grid.Column="5" FontSize="18" Foreground="White" />
+                    <TextBlock Text="IndexPtr" Grid.Column="6" FontSize="18" Foreground="White"/>
+
                 </Grid>
             </StackPanel>
 
-          
 
-            <ListView x:Name="Attributes" Margin="0,0,0,20" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Row="1" Background="{ThemeResource AppBarBackgroundThemeBrush}" >
-                <ListView.ItemTemplate>
-                    <DataTemplate >
-                        <Grid  FlowDirection="LeftToRight" HorizontalAlignment="Stretch" Width="580" >
+            <Grid Grid.Row="1" HorizontalAlignment="Stretch">
+                <ListView x:Name="Attributes" HorizontalAlignment="Stretch" ItemsSource="{Binding ElementName=Entities, Path=SelectedItem.Attributes, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,20" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Grid.Row="1" Background="{ThemeResource AppBarBackgroundThemeBrush}" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate >
+                            <Grid  FlowDirection="LeftToRight" HorizontalAlignment="Stretch"  >
 
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition MinWidth="250" />
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="60"/>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="200" />
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="50"/>
 
-                            </Grid.ColumnDefinitions>
+                                </Grid.ColumnDefinitions>
 
-                            <TextBox x:Name="Name" Grid.Column="0" Margin="0,0,30,0" Text="{Binding Path=Name}" LostFocus="Name_LostFocus"/>
-                            <TextBlock x:Name="Pos"  Grid.Column="1" HorizontalAlignment="Left" Text="{Binding Path=Position}"/>
-                            <TextBlock x:Name="AtrrPtr" Grid.Column="2"  HorizontalAlignment="Left" Text="{Binding Path=AttributesPtr}"/>
-                            <TextBlock x:Name="DataPtr" Grid.Column="3" HorizontalAlignment="Left" Text="{Binding DataPtr}"/>
-                            <TextBlock x:Name="NextPtr" Grid.Column="4" HorizontalAlignment="Left" Text="{Binding Path= NextPtr}"/>
-                            <Button Grid.Column="5" Name="Delete" Click="Delete_Click">
-                                <SymbolIcon Symbol="Delete"/>
+                                <TextBlock x:Name="Name" Grid.Column="0" Margin="0,0,30,0" Text="{Binding Path=Name}" />
+                                <TextBlock x:Name="Type"  Grid.Column="1" HorizontalAlignment="Left" Text="{Binding Path=Type}"/>
+                                <TextBlock x:Name="Length" Grid.Column="2"  HorizontalAlignment="Left" Text="{Binding Path=Length}"/>
+                                <TextBlock x:Name="KeyType" Grid.Column="3" HorizontalAlignment="Left" Text="{Binding IndexType}"/>
+                                <TextBlock x:Name="Position" Grid.Column="4" HorizontalAlignment="Left" Text="{Binding Path= Position}"/>
+                                <TextBlock x:Name="NextPtr" Grid.Column="5" HorizontalAlignment="Left" Text="{Binding Path= NextPtr}"/>
+                                <TextBlock x:Name="IndexPtr" Grid.Column="6" HorizontalAlignment="Left" Text="{Binding Path= IndexPtr}"/>
+                                <Button Grid.Column="7" Name="DeleteAttribute" Click="DeleteAttribute_Click">
+                                    <SymbolIcon Symbol="Delete"/>
 
-                            </Button>
+                                </Button>
+                                
+                                <Button Grid.Column="8" Name="EditAttribute" Click="EditAttribute_Click">
+                                    <SymbolIcon Symbol="Edit" />
+
+                                </Button>
 
 
-                        </Grid>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
 
+            </Grid>
+
+            
             <Button Style="{ThemeResource AccentButtonStyle}"   Grid.Row="3" Name="AddAttributeButton" Click="AddAttributeButton_Click" >
                 <StackPanel Orientation="Horizontal">
                     <SymbolIcon  Symbol="Add"  Margin="0,0,10,0"/>
@@ -188,28 +216,69 @@
                 </StackPanel>
             </ContentDialog>
 
-        <ContentDialog Title="Add Attribute" PrimaryButtonText="Ok" CloseButtonText="Cancel"  Name="addAttributeContentDialog"  Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxWidth="800"  >
+        <ContentDialog Title="Add Attribute" PrimaryButtonText="Ok" CloseButtonText="Cancel"  Name="addAttributeContentDialog"  Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxWidth="800" PrimaryButtonClick="addAttributeContentDialog_PrimaryButtonClick" >
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" >
                 
-                <TextBox x:Name="SttributeName" MaxLength="30" Width="150" PlaceholderText="Name" Margin="10" MinWidth="200"/>
+                <TextBox x:Name="AttributeName" MaxLength="30" Width="150" PlaceholderText="Name" Margin="10" MinWidth="200"/>
                 
-                <ComboBox Name="DataType" Margin="10" MinWidth="100" PlaceholderText="Type">
-                    <ComboBoxItem >
+                <ComboBox Name="DataType" Margin="10" MinWidth="100" PlaceholderText="Type" SelectionChanged="DataType_SelectionChanged" SelectedValuePath="Tag">
+                    <ComboBoxItem Tag="I" >
                         Integer
-                    </ComboBoxItem>
-                    <ComboBoxItem  >
+                    </ComboBoxItem >
+                    <ComboBoxItem Tag="S"  >
                         String
                     </ComboBoxItem>
-                    <ComboBoxItem  >
-                        Float
-                    </ComboBoxItem>
+                    
 
                 </ComboBox>
                 
-                <TextBox Name="Lenght" Margin="10" MinWidth="50" PlaceholderText="Length"/>
+                <TextBox Name="Lenght" Margin="10" MinWidth="50" PlaceholderText="Length" InputScope="Number" Text=""/>
 
                 <ComboBox Name="IndexType" Margin="10" MinWidth="180" PlaceholderText="Index Type">
+                    <ComboBoxItem >
+                        No index
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        Search Key
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        Primary Search Key
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        Secondary Search Key
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        Primary B+ Search Key
+                    </ComboBoxItem>
+
+                </ComboBox>
+
+
+
+            </StackPanel>
+        </ContentDialog>
+
+        <ContentDialog Title="Add Attribute" PrimaryButtonText="Ok" CloseButtonText="Cancel"  Name="addAttributeEditContentDialog"  Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxWidth="800" PrimaryButtonClick="addAttributeContentDialog_PrimaryButtonClick" >
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" >
+
+                <TextBox x:Name="AttributeEditName" MaxLength="30" Width="150" PlaceholderText="Name" Margin="10" MinWidth="200"/>
+
+                <ComboBox Name="DataEditType" Margin="10" MinWidth="100" PlaceholderText="Type" SelectionChanged="DataEditType_SelectionChanged"  SelectedValuePath="Tag">
+                    <ComboBoxItem Tag="I" >
+                        Integer
+                    </ComboBoxItem >
+                    <ComboBoxItem Tag="S"  >
+                        String
+                    </ComboBoxItem>
+
+
+                </ComboBox>
+
+                <TextBox Name="LenghtEdit" Margin="10" MinWidth="50" PlaceholderText="Length" InputScope="Number" Text=""/>
+
+                <ComboBox Name="IndexTypeEdit" Margin="10" MinWidth="180" PlaceholderText="Index Type">
                     <ComboBoxItem >
                         No index
                     </ComboBoxItem>

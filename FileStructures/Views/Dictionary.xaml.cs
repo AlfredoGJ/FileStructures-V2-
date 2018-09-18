@@ -38,6 +38,7 @@ namespace FileStructures.Views
 
                 manager = new DictionaryManager(App.CurrentFileName);
                 manager.itemsOnFileChanged += UpdateDictionaryData;
+                
 
             }
             else
@@ -48,9 +49,14 @@ namespace FileStructures.Views
 
         private void UpdateDictionaryData()
         {
+            Entity E = Entities.SelectedItem as Entity;
             Entities.ItemsSource = null;
             Entities.ItemsSource = manager.Entities;
-            Header.Text = "  "+manager.Header.ToString(); ;
+            Header.Text = "  " + manager.Header.ToString();
+            Entities.SelectedItem = E;
+
+            
+
         }
 
         public void EntityChange(Entity entity, char chage)
@@ -66,7 +72,7 @@ namespace FileStructures.Views
             {
                 if (EntityName.Text != "")
                 {
-                    entity = new Entity(EntityName.Text);
+                    entity = new Entity(EntityName.Text, manager);
                     var entities = manager.Entities;
                     if (!entities.Any(x => x.Name == entity.Name))
                     {
@@ -134,14 +140,108 @@ namespace FileStructures.Views
                     
                 }
             }
-                
-            
-
         }
 
         private async  void AddAttributeButton_Click(object sender, RoutedEventArgs e)
         {
-            ContentDialogResult result = await addAttributeContentDialog.ShowAsync();
+            Entity entity = Entities.SelectedItem as Entity;
+            if (entity != null)
+            {
+                ContentDialogResult result = await addAttributeContentDialog.ShowAsync();
+                if (result == ContentDialogResult.Primary)
+                {
+                    int lenght = 0;
+                    int.TryParse(Lenght.Text,out lenght);
+                    var attributes = entity.Attributes;
+
+                    Attribute attribute = new Attribute(AttributeName.Text, DataType.SelectedValue.ToString()[0], lenght, IndexType.SelectedIndex);
+                    if (!attributes.Any(x => x.Name == attribute.Name))
+                    {
+                        entity.AddAttribute(attribute);
+                        UpdateDictionaryData();
+                    }
+                   
+                  
+                   
+
+                    
+                   
+                }
+            }
+            
+        }
+
+        private void DataType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (DataType.SelectedIndex)
+            {
+                case 0:
+                    Lenght.Text = "4";
+                    Lenght.IsEnabled = false;
+                    break;
+
+                case 1:
+                    Lenght.Text ="1";
+                    Lenght.IsEnabled = true;
+                    break;
+
+               
+
+
+            }
+        }
+
+        private async void addAttributeContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            if (String.IsNullOrWhiteSpace(AttributeName.Text) || DataType.SelectedValue == null || IndexType.SelectedValue == null)
+            {
+                args.Cancel = true;
+                
+            }
+           
+        }
+
+        private async void DeleteAttribute_Click(object sender, RoutedEventArgs e)
+        {
+            ContentDialog cd = new ContentDialog();
+            cd.CloseButtonText = "No";
+            cd.PrimaryButtonText = "Yes";
+            cd.Title = "Delete Attribute";
+            cd.Content = "Are you sure?";
+            var result = await cd.ShowAsync();
+
+            if (result == ContentDialogResult.Primary)
+            {
+                Entity entity = Entities.SelectedItem as Entity;
+                Attribute attribute = (sender as Control).DataContext as Attribute;
+                entity.RemoveAttribute(attribute);
+                UpdateDictionaryData();
+            }
+        }
+
+        private void EditAttribute_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DataEditType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (DataType.SelectedIndex)
+            {
+                case 0:
+                    LenghtEdit.Text = "4";
+                    LenghtEdit.IsEnabled = false;
+                    break;
+
+                case 1:
+                    LenghtEdit.Text = "1";
+                    LenghtEdit.IsEnabled = true;
+                    break;
+
+
+
+
+            }
         }
     }
 }

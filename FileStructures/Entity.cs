@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace FileStructures
 {
-    public class Entity
+    public class Entity :INotifyPropertyChanged
     {
 
         // Private fields
         private DataFileManager dataManager;
         private DictionaryManager dictionaryManager;
-        private long atrPtr;
         private List<Attribute> attributes;
 
         // main fields
@@ -21,6 +21,10 @@ namespace FileStructures
         private long attributePointer;
         private long dataPointer;
         private long nextPointer;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+
 
         // public properties
         public string Name { get => name; set => name = value; }
@@ -46,7 +50,7 @@ namespace FileStructures
 
 
 
-        public Entity(string name, long position, long atrPtr, long dataPtr, long nextPtr, DictionaryManager dictionaryManager)
+        public Entity(string name, long position, long atrPtr, long dataPtr, long nextPtr, DictionaryManager dictionaryManager, List< Attribute> attributes)
         {
             this.name = name;
             this.position = position;
@@ -54,31 +58,25 @@ namespace FileStructures
             this.dataPointer = dataPtr;
             this.nextPointer = nextPtr;
             this.dictionaryManager = dictionaryManager;
-            attributes = dictionaryManager.ReadAttributes(attributePointer).Result;
+            this.attributes = attributes;
 
 
         }
 
 
-        public Entity(string name)
+        public Entity(string name, DictionaryManager manager)
         {
             this.name = name;
             position = -1;
             attributePointer = - 1;
             dataPointer = -1;
             nextPointer = -1;
+            this.dictionaryManager = manager;
+            attributes = new List<Attribute>();
             
         }
-        
-      
 
-        public object PrimaryKeyAttribute
-        {
-            get => default(int);
-            set
-            {
-            }
-        }
+       
 
         public List<DataRegister> Registers
         {
@@ -97,8 +95,7 @@ namespace FileStructures
         }
 
 
-
-        public void AddAttribute(Attribute attribute)
+        public async void AddAttribute(Attribute attribute)
         {
             attribute.Position = dictionaryManager.FileLength;
 
@@ -132,27 +129,65 @@ namespace FileStructures
                 }
 
             }
-            //WriteBack();  TODO: Write changes
+            
+            await dictionaryManager.WriteEntity(this);
+            foreach (Attribute attr in attributes)
+            {
+                await dictionaryManager.WriteAttribute(attr);
+            }
+
+          
         }
 
-        public void RemoveAttribute()
+
+        protected void RaisePropertyChanged(string name)
         {
-            throw new System.NotImplementedException();
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            }
         }
 
-        public void SetPrimaryKeyAttribute()
+        public async void RemoveAttribute(Attribute attribute)
         {
-            throw new System.NotImplementedException();
+            int index = attributes.FindIndex(e => e.Name == attribute.Name);
+
+            if (index == 0)
+            {
+                attributePointer = attributes[0].NextPtr;
+                attributes.RemoveAt(0);
+            }
+            else
+            {
+                attributes[index - 1].NextPtr = attributes[index].NextPtr;
+                attributes.RemoveAt(index);
+            }
+            await dictionaryManager.WriteEntity(this);
+            foreach (Attribute attr in Attributes)
+            {
+                await dictionaryManager.WriteAttribute(attr);
+            }
+
         }
 
-        public void AddRegister()
-        {
-            throw new System.NotImplementedException();
-        }
+        //public void RemoveAttribute()
+        //{
+        //    throw new System.NotImplementedException();
+        //}
 
-        public void DeleteRegister()
-        {
-            throw new System.NotImplementedException();
-        }
+        //public void SetPrimaryKeyAttribute()
+        //{
+        //    throw new System.NotImplementedException();
+        //}
+
+        //public void AddRegister()
+        //{
+        //    throw new System.NotImplementedException();
+        //}
+
+        //public void DeleteRegister()
+        //{
+        //    throw new System.NotImplementedException();
+        //}
     }
 }

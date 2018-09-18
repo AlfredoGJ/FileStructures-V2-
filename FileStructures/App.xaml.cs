@@ -7,6 +7,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -30,9 +31,12 @@ namespace FileStructures
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+          
+            
+
         }
 
-        //public static string CurrentFilePath {get; set;}
+        //public static StorageFolder projectsFolder { get; set; } 
         public static string CurrentFileName { get; set; }
 
         /// <summary>
@@ -60,6 +64,9 @@ namespace FileStructures
 
                 // Poner el marco en la ventana actual.
                 Window.Current.Content = rootFrame;
+
+
+               
             }
 
             if (e.PrelaunchActivated == false)

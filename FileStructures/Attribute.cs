@@ -41,19 +41,30 @@ namespace FileStructures
         }
 
 
-        public Attribute(string name,long position, char type, int length, int indexType, long indexPrt, long nextPtr)
+        public Attribute(string name, char type, int length, int indexType)
+        {
+            this.name = name;
+            Position = -1 ;
+            Type = type;
+            Length = length;
+            IndexType =indexType;
+            IndexPtr = -1;
+            NextPtr = -1;
+        }
+
+        public Attribute(string name, char type, int length, int indexType, long position, long indexptr, long nextptr)
         {
             this.name = name;
             Position = position;
             Type = type;
             Length = length;
-            IndexType =indexType;
-            IndexPtr = IndexPtr;
-            NextPtr = nextPtr ;
+            IndexType = indexType;
+            IndexPtr = indexptr;
+            NextPtr = nextptr;
         }
 
 
-       
+
 
 
         public bool Edited

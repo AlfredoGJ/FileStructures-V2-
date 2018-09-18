@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,13 +22,20 @@ namespace FileStructures
         public string Name { get => name; set => value = name; }
         public long Header { get => headerValue; }
         public List<Entity> Entities { get => entities; }
-        public long FileLength { get => fileLength; } 
+        public long FileLength { get => fileLength; }
+
+        private StorageFolder projectFolder;
 
 
-        public DictionaryManager(string fileName)
+        public  DictionaryManager(string fileName)
         {
 
             this.name = fileName;
+            StorageFolder localFolder = KnownFolders.PicturesLibrary;
+            var T= localFolder.GetFolderAsync("Projects");
+            do { }
+            while (T.Status != Windows.Foundation.AsyncStatus.Completed);
+            projectFolder = T.GetResults(); 
             ReadFromFile();
         }
 
@@ -89,9 +97,8 @@ namespace FileStructures
 
         public async void WriteBack()
         {
-            StorageFolder localFolder = KnownFolders.PicturesLibrary;
-            StorageFolder projectsFolder = await localFolder.GetFolderAsync("Projects");
-            using (BinaryWriter writer = new BinaryWriter(await projectsFolder.OpenStreamForWriteAsync(name, CreationCollisionOption.OpenIfExists)))
+           
+            using (BinaryWriter writer = new BinaryWriter(await projectFolder.OpenStreamForWriteAsync(name, CreationCollisionOption.OpenIfExists)))
             {
                 writer.BaseStream.Seek(0, SeekOrigin.Begin);
                 writer.Write(headerValue);
@@ -107,12 +114,12 @@ namespace FileStructures
 
         private async void ReadFromFile()
         {
-            StorageFolder localFolder = KnownFolders.PicturesLibrary;
-            StorageFolder projectsFolder = await localFolder.GetFolderAsync("Projects");
+           
 
-            using (BinaryReader reader = new BinaryReader(await projectsFolder.OpenStreamForReadAsync(name)))
+            using (BinaryReader reader = new BinaryReader(await projectFolder.OpenStreamForReadAsync(name)))
             {
                 List<Entity> entidades = new List<Entity>();
+                
                 reader.BaseStream.Seek(0, SeekOrigin.Begin);
                 headerValue = reader.ReadInt64();
                 Int64 ApAux = headerValue;
@@ -121,28 +128,49 @@ namespace FileStructures
                     Entity EAux = ReadEntity(reader, ApAux);
                     ApAux = EAux.NextPtr;
                     entidades.Add(EAux);
+                   
 
                 }
 
                 fileLength = reader.BaseStream.Length;
                 entities = entidades;
                 itemsOnFileChanged.Invoke();
+                reader.Close();
             }
 
         }
 
+        public async Task<bool> WriteEntity(Entity entity)
+        {
+            using (BinaryWriter writer = new BinaryWriter(await projectFolder.OpenStreamForWriteAsync(name, CreationCollisionOption.OpenIfExists)))
+            {
+                writer.Seek((int)entity.Position, SeekOrigin.Begin);
+                writer.Write(entity.ArrayName);
+                writer.Write(entity.Position);
+                writer.Write(entity.AttributesPtr);
+                writer.Write(entity.DataPtr);
+                writer.Write(entity.NextPtr);
+                fileLength = writer.BaseStream.Length;                    
+            }
+            
+            return true;
+        }
+
         private void WriteEntity(Entity entity, BinaryWriter writer)
         {
+           
             writer.Seek((int)entity.Position, SeekOrigin.Begin);
             writer.Write(entity.ArrayName);
             writer.Write(entity.Position);
             writer.Write(entity.AttributesPtr);
             writer.Write(entity.DataPtr);
             writer.Write(entity.NextPtr);
+            
         }
 
         private Entity ReadEntity(BinaryReader reader, long pos)
         {
+            
             reader.BaseStream.Seek(pos, SeekOrigin.Begin);
             string name = new string(reader.ReadChars(30));
             name = name.Trim('\0');
@@ -152,8 +180,8 @@ namespace FileStructures
             long nextPtr = reader.ReadInt64();
 
 
-            //FindAtributos(Stream, E); TODO find the Entity atributes on the file
-            return new Entity(name, position, atrPtr, dataPtr, nextPtr,this);
+            List<Attribute> attributes = ReadAttributes(atrPtr,reader); 
+            return new Entity(name, position, atrPtr, dataPtr, nextPtr,this, attributes);
         }
 
        
@@ -167,26 +195,26 @@ namespace FileStructures
                 
         }
 
-        private void WriteAttribute(BinaryWriter writer, Attribute attribute)
+        public async Task<bool> WriteAttribute( Attribute attribute)
         {
-            writer.BaseStream.Seek(attribute.Position, SeekOrigin.Begin);
-            writer.Write(attribute.ArrayName);
-            writer.Write(attribute.Position);
-            writer.Write(attribute.Type);
-            writer.Write(attribute.Length);
-            writer.Write(attribute.IndexType);
-            writer.Write(attribute.IndexPtr);
-            writer.Write(attribute.NextPtr);
+            using (BinaryWriter writer = new BinaryWriter(await projectFolder.OpenStreamForWriteAsync(name,CreationCollisionOption.OpenIfExists)))
+            {
+                writer.BaseStream.Seek(attribute.Position, SeekOrigin.Begin);
+                writer.Write(attribute.ArrayName);
+                writer.Write(attribute.Position);
+                writer.Write(attribute.Type);
+                writer.Write(attribute.Length);
+                writer.Write(attribute.IndexType);
+                writer.Write(attribute.IndexPtr);
+                writer.Write(attribute.NextPtr);
+                fileLength = writer.BaseStream.Length;
+
+            }
+            return true;
         }
 
-        public async Task <List<Attribute> >ReadAttributes(long pos)
-        {
-
-            StorageFolder localFolder = KnownFolders.PicturesLibrary;
-            StorageFolder projectsFolder = await localFolder.GetFolderAsync("Projects");
-
-            using (BinaryReader reader = new BinaryReader(await projectsFolder.OpenStreamForReadAsync(name)))
-            {
+        public  List<Attribute> ReadAttributes(long pos, BinaryReader reader)
+        {     
                 long ptr = pos;
                 List<Attribute> attributes = new List<Attribute>();
                 while (ptr != -1)
@@ -194,12 +222,8 @@ namespace FileStructures
                     Attribute attrAux = ReadAttribute(reader, ptr);
                     ptr = attrAux.NextPtr;
                     attributes.Add(attrAux);
-
-                }
-                
-                return attributes;
-            }
-               
+                }    
+                return attributes;       
         }
 
         private Attribute ReadAttribute(BinaryReader reader, long pos)
@@ -213,11 +237,13 @@ namespace FileStructures
             int indexType = reader.ReadInt32();
             long indexPtr = reader.ReadInt64();
             long nextPtr = reader.ReadInt64();
-            Attribute attribute = new Attribute(name, position, type, length, indexType, indexPtr, nextPtr);
+            Attribute attribute = new Attribute(name, type, length, indexType,position, indexPtr, nextPtr);
             return attribute;
 
 
         }
+
+
 
     }
 }
