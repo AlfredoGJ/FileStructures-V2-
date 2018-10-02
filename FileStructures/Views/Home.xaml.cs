@@ -27,6 +27,16 @@ namespace FileStructures.Views
         public Home()
         {
             this.InitializeComponent();
+
+            if (!String.IsNullOrEmpty( App.CurrentFileName))
+            {
+                CurrentFileName.Text = App.CurrentFileName;
+                Header.Text = "Current opened file:";
+            }
+            else
+            {
+                Header.Text = "There is no an opened file";
+            }
         }
 
         private async void OpenFile_Click(object sender, RoutedEventArgs e)

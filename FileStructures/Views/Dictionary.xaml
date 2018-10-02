@@ -11,17 +11,17 @@
    
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid  Margin="20">
+    <Grid  Margin="40,0,40,0">
         
 
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition/>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition/>
             
-        </Grid.ColumnDefinitions>
+        </Grid.RowDefinitions>
 
-        <Grid Grid.Column="0"  FlowDirection="RightToLeft" HorizontalAlignment="Stretch" Margin="10">
+        <Grid Grid.Column="0" Grid.Row="0"  FlowDirection="RightToLeft" HorizontalAlignment="Stretch" Margin="10">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="110"/>
@@ -108,7 +108,7 @@
 
 
          
-        <Grid Grid.Column="1"  FlowDirection="RightToLeft" HorizontalAlignment="Stretch" Margin="10" >
+        <Grid Grid.Column="1"  Grid.Row="1" FlowDirection="RightToLeft" HorizontalAlignment="Stretch" Margin="10" >
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="110"/>
@@ -120,8 +120,9 @@
 
             <StackPanel Grid.Row="0" VerticalAlignment="Stretch" Orientation="Vertical" >
 
-                <StackPanel Background="Black" Height="70">
-                    <TextBlock Text="Attributes" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" FlowDirection="LeftToRight" FontSize="30" Margin="0,0,10,0"/>
+                <StackPanel Background="Black" Height="70" Orientation="Horizontal" FlowDirection="LeftToRight">
+                    <TextBlock Text="Attributes of " Style="{StaticResource TitleTextBlockStyle}" Foreground="White"  FontSize="20" Margin="10,0,0,0"/>
+                    <TextBlock Text="{Binding ElementName=Entities, Path = SelectedItem.Name}" Margin="10,0,0,0" Foreground="White" FontSize="30"  Style="{StaticResource TitleTextBlockStyle}"/>
                 </StackPanel>
 
                 <Grid FlowDirection="LeftToRight"  Grid.Row="1" Padding="5" Height="40" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Background="{StaticResource SystemControlAccentAcrylicElementAccentMediumHighBrush}" >
@@ -259,48 +260,7 @@
             </StackPanel>
         </ContentDialog>
 
-        <ContentDialog Title="Add Attribute" PrimaryButtonText="Ok" CloseButtonText="Cancel"  Name="addAttributeEditContentDialog"  Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" MaxWidth="800" PrimaryButtonClick="addAttributeContentDialog_PrimaryButtonClick" >
-
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" >
-
-                <TextBox x:Name="AttributeEditName" MaxLength="30" Width="150" PlaceholderText="Name" Margin="10" MinWidth="200"/>
-
-                <ComboBox Name="DataEditType" Margin="10" MinWidth="100" PlaceholderText="Type" SelectionChanged="DataEditType_SelectionChanged"  SelectedValuePath="Tag">
-                    <ComboBoxItem Tag="I" >
-                        Integer
-                    </ComboBoxItem >
-                    <ComboBoxItem Tag="S"  >
-                        String
-                    </ComboBoxItem>
-
-
-                </ComboBox>
-
-                <TextBox Name="LenghtEdit" Margin="10" MinWidth="50" PlaceholderText="Length" InputScope="Number" Text=""/>
-
-                <ComboBox Name="IndexTypeEdit" Margin="10" MinWidth="180" PlaceholderText="Index Type">
-                    <ComboBoxItem >
-                        No index
-                    </ComboBoxItem>
-                    <ComboBoxItem>
-                        Search Key
-                    </ComboBoxItem>
-                    <ComboBoxItem>
-                        Primary Search Key
-                    </ComboBoxItem>
-                    <ComboBoxItem>
-                        Secondary Search Key
-                    </ComboBoxItem>
-                    <ComboBoxItem>
-                        Primary B+ Search Key
-                    </ComboBoxItem>
-
-                </ComboBox>
-
-
-
-            </StackPanel>
-        </ContentDialog>
+        
 
 
 

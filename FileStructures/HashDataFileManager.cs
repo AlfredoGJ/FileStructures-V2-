@@ -5,7 +5,10 @@ using System.Text;
 
 namespace FileStructures
 {
-    public class HashDataFileManager:DataFileManager
+    public class HashDataFileManager : DataFileManager 
     {
+        public HashDataFileManager(string name, List<Attribute> template) : base(name, template)
+        { }
+       
     }
 }

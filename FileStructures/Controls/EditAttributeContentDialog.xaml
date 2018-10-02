@@ -1,0 +1,56 @@
+﻿<ContentDialog
+    x:Class="FileStructures.Controls.EditAttributeContentDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FileStructures.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"   
+    Title="Add Attribute"
+    PrimaryButtonText="Ok" 
+    CloseButtonText="Cancel" 
+    Name="addAttributeEditContentDialog"      
+    HorizontalContentAlignment="Stretch"
+    PrimaryButtonClick ="addAttributeEditContentDialog_PrimaryButtonClick">
+
+    <StackPanel Name="Container" Orientation="Horizontal" HorizontalAlignment="Center" >
+
+        <TextBox  x:Name="AttributeName" MaxLength="30" Width="150" PlaceholderText="Name" Margin="10" MinWidth="200"/>
+
+        <ComboBox Name="DataType" Margin="10" MinWidth="100" PlaceholderText="Type" SelectedValuePath="Tag" SelectionChanged="DataType_SelectionChanged">
+            <ComboBoxItem Tag="I" >
+                Integer
+            </ComboBoxItem >
+            <ComboBoxItem Tag="S"  >
+                String
+            </ComboBoxItem>
+
+
+        </ComboBox>
+
+        <TextBox Name="Lenght" Margin="10" MinWidth="50" PlaceholderText="Length" InputScope="Number" Text=""/>
+
+        <ComboBox Name="IndexType" Margin="10" MinWidth="180" PlaceholderText="Index Type">
+            <ComboBoxItem >
+                No index
+            </ComboBoxItem>
+            <ComboBoxItem>
+                Search Key
+            </ComboBoxItem>
+            <ComboBoxItem>
+                Primary Search Key
+            </ComboBoxItem>
+            <ComboBoxItem>
+                Secondary Search Key
+            </ComboBoxItem>
+            <ComboBoxItem>
+                Primary B+ Search Key
+            </ComboBoxItem>
+
+        </ComboBox>
+
+
+
+    </StackPanel>
+    
+</ContentDialog>

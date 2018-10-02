@@ -57,6 +57,10 @@ namespace FileStructures
                 case "Diccionario":
                     ContentFrame.Navigate(typeof(Views.Dictionary));
                     break;
+
+                case "Datos":
+                    ContentFrame.Navigate(typeof(Views.Registers));
+                    break;
             }
            
         }

@@ -7,5 +7,7 @@ namespace FileStructures
 {
     public class TreeDataFileManager:DataFileManager
     {
+        public TreeDataFileManager(string name, List<Attribute> template) : base(name,template)
+        { }
     }
 }

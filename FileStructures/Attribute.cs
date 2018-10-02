@@ -64,6 +64,17 @@ namespace FileStructures
         }
 
 
+        public void PasteTo(Attribute attribute)
+        {
+           attribute.name= this.name;
+           attribute.Position= Position;
+           attribute.Type= Type ;
+           attribute.Length= Length ;
+           attribute.IndexType= IndexType;
+           attribute.IndexPtr= IndexPtr;
+           attribute.NextPtr= NextPtr;
+        }
+
 
 
 

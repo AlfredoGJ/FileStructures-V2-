@@ -161,11 +161,6 @@ namespace FileStructures.Views
                         UpdateDictionaryData();
                     }
                    
-                  
-                   
-
-                    
-                   
                 }
             }
             
@@ -219,29 +214,17 @@ namespace FileStructures.Views
             }
         }
 
-        private void EditAttribute_Click(object sender, RoutedEventArgs e)
+        private async void EditAttribute_Click(object sender, RoutedEventArgs e)
         {
+            Attribute attribute = (sender as Control).DataContext as Attribute;
+            Entity entity = Entities.SelectedItem as Entity;
+            EditAttributeContentDialog editAttributeContentDialog = new EditAttributeContentDialog(attribute, entity);
+            var result=await editAttributeContentDialog.ShowAsync();
+            if (result == ContentDialogResult.Primary)
+                UpdateDictionaryData();
 
         }
 
-        private void DataEditType_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            switch (DataType.SelectedIndex)
-            {
-                case 0:
-                    LenghtEdit.Text = "4";
-                    LenghtEdit.IsEnabled = false;
-                    break;
-
-                case 1:
-                    LenghtEdit.Text = "1";
-                    LenghtEdit.IsEnabled = true;
-                    break;
-
-
-
-
-            }
-        }
+      
     }
 }

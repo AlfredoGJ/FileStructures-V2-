@@ -18,15 +18,17 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 
-                <NavigationViewItem Content="Datos"  Tag="Datos">
-                    <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE8F1;"/>
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
+               
 
                 <NavigationViewItem Content="Diccionario" Tag="Diccionario">
                     <NavigationViewItem.Icon>
                         <FontIcon Glyph="&#xE74C;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+
+                <NavigationViewItem Content="Datos"  Tag="Datos">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE8F1;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 
