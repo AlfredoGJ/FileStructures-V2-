@@ -35,7 +35,7 @@ namespace FileStructures.Views
             {
                 manager = new DictionaryManager(App.CurrentFileName);
                 manager.itemsOnFileChanged += UpdateDictionaryData;
-               
+
             }
         }
 
@@ -53,7 +53,7 @@ namespace FileStructures.Views
             {
                 RegistersList.ItemsSource = null;
                 RegistersList.ItemsSource = (EntitiesList.SelectedItem as Entity).Registers;
-            }            
+            }
         }
 
         private void AddRegister_Click(object sender, RoutedEventArgs e)
@@ -92,7 +92,7 @@ namespace FileStructures.Views
 
                 Headers.ColumnDefinitions.Add(new ColumnDefinition());
                 TextBlock pos = new TextBlock();
-                pos.Text ="Position";
+                pos.Text = "Position";
                 pos.FontSize = 18;
                 Grid.SetColumn(pos, i);
                 Headers.Children.Add(pos);
@@ -101,14 +101,45 @@ namespace FileStructures.Views
                 TextBlock next = new TextBlock();
                 next.Text = "NextPtr";
                 next.FontSize = 18;
-                Grid.SetColumn(next, i+1);
+                Grid.SetColumn(next, i + 1);
                 Headers.Children.Add(next);
+
+                Headers.ColumnDefinitions.Add(new ColumnDefinition());
+
 
 
                 UpdateRegistersData();
             }
         }
 
-      
+         async void DeleteRegisterButtonClick(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            DataRegister register = (button.Parent as Grid).DataContext as DataRegister;
+
+            if (EntitiesList.SelectedItem != null)
+            {
+                Entity entity = EntitiesList.SelectedItem as Entity;
+                ContentDialog cd = new ContentDialog();
+                cd.CloseButtonText = "No";
+                cd.PrimaryButtonText = "Yes";
+                cd.Title = "Delete Attribute";
+                cd.Content = "Are you sure?";
+                var result = await cd.ShowAsync();
+
+                if (result == ContentDialogResult.Primary)
+                {
+                    Attribute attribute = (sender as Control).DataContext as Attribute;
+                    entity.RemoveRegister (register);
+                    UpdateRegistersData();
+                }
+            }
+
+
+            //(e.OriginalSource as FrameworkElement).DataContext;
+
+        }
+
+
     }
 }

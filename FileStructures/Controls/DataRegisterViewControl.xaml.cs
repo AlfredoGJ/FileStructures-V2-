@@ -20,6 +20,11 @@ namespace FileStructures.Controls
     public sealed partial class DataRegisterViewControl : UserControl
     {
 
+        //private delegate deleteButtonClick void (object sender, RoutedEventArgs eventArgs);
+        public event RoutedEventHandler DeleteButtonClick; 
+        
+        //private Button deleteButton;
+
         private List<object> fields;
         private DataRegister register;
         public List<object> Fields
@@ -72,8 +77,28 @@ namespace FileStructures.Controls
             Grid.SetColumn(next, i+1);
             ControlContent.Children.Add(next);
 
+            ControlContent.ColumnDefinitions.Add(new ColumnDefinition());
+            Button deleteButton = new Button();
+            SymbolIcon symbol = new SymbolIcon(Symbol.Delete);
+            deleteButton.Content = symbol;
+            deleteButton.Click += DeleteClick;
+            Grid.SetColumn(deleteButton, i + 2);
+            ControlContent.Children.Add(deleteButton);
+
 
         }
+
+        private void DeleteClick(object sender, RoutedEventArgs e)
+        {
+            DeleteButtonClick?.Invoke(sender,e);
+        }
+
+        //private void deleteButton_Click(object sender, RoutedEventArgs e)
+        //{
+
+        //    int i = 0;
+        //    //DataRegister regis;
+        //}
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {

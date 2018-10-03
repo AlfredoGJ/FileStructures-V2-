@@ -110,13 +110,14 @@ namespace FileStructures
         {
             attribute.Position = dictionaryManager.FileLength;
 
-            int i;
-            for (i = 0; i < attributes.Count; i++)
-            {
-                int comparison = string.Compare(attribute.Name, attributes[i].Name, StringComparison.CurrentCulture);
-                if (comparison == -1)
-                    break;
-            }
+            int i= attributes.Count;
+            //for (i = 0; i < attributes.Count; i++)
+            //{
+            //    int comparison = string.Compare(attribute.Name, attributes[i].Name, StringComparison.CurrentCulture);
+            //    if (comparison == -1)
+            //        break;
+            //}
+
 
             if (i == 0)
             {
@@ -147,7 +148,6 @@ namespace FileStructures
                 await dictionaryManager.WriteAttribute(attr);
             }
 
-          
         }
 
         //This method is provitional, must be integrated on  AddAttribute later
@@ -278,9 +278,6 @@ namespace FileStructures
         private async void InsertDataOrdered(DataRegister register)
         {
             register.Position = dataManager.FileLength;
-
-
-
             int i=0;
 
             switch (primaryKey.Type)
@@ -336,9 +333,26 @@ namespace FileStructures
 
         }
 
-        //public void DeleteRegister()
-        //{
-        //    throw new System.NotImplementedException();
-        //}
+        public async void RemoveRegister(DataRegister register)
+        {
+            int index = registers.FindIndex(e => e.Position == register.Position);
+
+            if (index == 0)
+            {
+                dataPointer = registers[0].NextPtr;
+                registers.RemoveAt(0);
+            }
+            else
+            {
+                registers[index - 1].NextPtr = registers[index].NextPtr;
+                registers.RemoveAt(index);
+            }
+            await dictionaryManager.WriteEntity(this);
+            foreach (DataRegister reg in registers)
+            {
+                await dataManager.WriteRegister(reg);
+            }
+
+        }
     }
 }

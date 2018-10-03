@@ -62,6 +62,7 @@ namespace FileStructures
                 writer.Write(register.NextPtr);
                 fileLength = writer.BaseStream.Length;
             }
+
             itemsOnFileChanged.Invoke();
             return true;
         }
@@ -81,7 +82,6 @@ namespace FileStructures
                     DataRegister drAux = ReadRegister(reader, ApAux);
                     ApAux = drAux.NextPtr;
                     registers.Add(drAux);
-
 
                 }
 
