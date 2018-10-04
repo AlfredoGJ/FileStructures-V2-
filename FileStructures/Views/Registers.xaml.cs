@@ -64,7 +64,7 @@ namespace FileStructures.Views
                 AddRegisterContentDialog dialog = new AddRegisterContentDialog(EntitiesList.SelectedItem as Entity);
                 dialog.ShowAsync();
 
-                UpdateRegistersData();
+                
 
             }
 
@@ -105,6 +105,7 @@ namespace FileStructures.Views
                 Headers.Children.Add(next);
 
                 Headers.ColumnDefinitions.Add(new ColumnDefinition());
+                Headers.ColumnDefinitions.Add(new ColumnDefinition());
 
 
 
@@ -123,15 +124,15 @@ namespace FileStructures.Views
                 ContentDialog cd = new ContentDialog();
                 cd.CloseButtonText = "No";
                 cd.PrimaryButtonText = "Yes";
-                cd.Title = "Delete Attribute";
+                cd.Title = "Delete Register";
                 cd.Content = "Are you sure?";
                 var result = await cd.ShowAsync();
 
                 if (result == ContentDialogResult.Primary)
                 {
                     Attribute attribute = (sender as Control).DataContext as Attribute;
-                    entity.RemoveRegister (register);
-                    UpdateRegistersData();
+                    entity.RemoveRegister (register, true);
+                   
                 }
             }
 
@@ -140,6 +141,19 @@ namespace FileStructures.Views
 
         }
 
+        private void EditRegisterButtonClick(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            DataRegister register = (button.Parent as Grid).DataContext as DataRegister;
 
+            if (EntitiesList.SelectedItem != null)
+            {
+                Entity entity = EntitiesList.SelectedItem as Entity;
+
+                AddRegisterContentDialog dialog = new AddRegisterContentDialog(EntitiesList.SelectedItem as Entity, register);
+                dialog.ShowAsync();
+
+            }
+        }
     }
 }

@@ -143,6 +143,25 @@ namespace FileStructures
 
         }
 
+        public static object CloneObjPrimitive(object item, char type)
+        {
+            object o = new object();
+            switch (type)
+            {
+                case 'I':
+                    o = (int)item;
+                    break;
 
+                case 'S':
+                    o = (string)item;
+                    break;
+            }
+            return o;
+
+        }
+
+
+        }
+
+  
     }
-}

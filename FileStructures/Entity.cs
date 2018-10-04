@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FileStructures
 {
-    public class Entity :INotifyPropertyChanged
+    public class Entity : INotifyPropertyChanged
     {
 
 
@@ -28,14 +28,14 @@ namespace FileStructures
         private long attributePointer;
         private long dataPointer;
         private long nextPointer;
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
 
 
 
         // public properties
         public string Name { get => name; set => name = value; }
-        public long Position { get => position; set  => position = value; }
+        public long Position { get => position; set => position = value; }
         public long AttributesPtr { get => attributePointer; }
         public long DataPtr { get => dataPointer; }
         public long NextPtr { get => nextPointer; set => nextPointer = value; }
@@ -43,7 +43,7 @@ namespace FileStructures
         public Attribute PrimaryKey { get => primaryKey; }
 
         public List<DataRegister> Registers { get => registers; }
-       
+
 
 
         public char[] ArrayName
@@ -52,7 +52,7 @@ namespace FileStructures
             {
                 char[] arrName = new char[30];
                 arrName.Initialize();
-                for(int i=0; i<name.Length;i++)
+                for (int i = 0; i < name.Length; i++)
                 {
                     arrName[i] = name[i];
                 }
@@ -61,7 +61,7 @@ namespace FileStructures
         }
 
 
-        public Entity(string name, long position, long atrPtr, long dataPtr, long nextPtr, DictionaryManager dictionaryManager, List< Attribute> attributes)
+        public Entity(string name, long position, long atrPtr, long dataPtr, long nextPtr, DictionaryManager dictionaryManager, List<Attribute> attributes)
         {
             this.name = name;
             this.position = position;
@@ -71,15 +71,18 @@ namespace FileStructures
             this.dictionaryManager = dictionaryManager;
             this.attributes = attributes;
             this.primaryKey = attributes.Find(X => X.IndexType == 2);
-            this.dataManager = new DataFileManager(Name,attributes);
-            dataManager.itemsOnFileChanged += UpdateRegistersData;
+            this.dataManager = new DataFileManager(Name, attributes);
+
+            dataManager.itemsOnFileChanged += UpdateChangesInView;
             dataManager.ReadAllRegisters(dataPtr);
-           
+            //UpdateChangesInView();
+
+
 
 
         }
 
-        private void UpdateRegistersData()
+        private void UpdateChangesInView()
         {
             this.registers = dataManager.registers;
             itemsOnFileChanged?.Invoke();
@@ -89,12 +92,12 @@ namespace FileStructures
         {
             this.name = name;
             position = -1;
-            attributePointer = - 1;
+            attributePointer = -1;
             dataPointer = -1;
             nextPointer = -1;
             this.dictionaryManager = manager;
             attributes = new List<Attribute>();
-            
+
         }
 
 
@@ -110,7 +113,7 @@ namespace FileStructures
         {
             attribute.Position = dictionaryManager.FileLength;
 
-            int i= attributes.Count;
+            int i = attributes.Count;
             //for (i = 0; i < attributes.Count; i++)
             //{
             //    int comparison = string.Compare(attribute.Name, attributes[i].Name, StringComparison.CurrentCulture);
@@ -141,7 +144,7 @@ namespace FileStructures
                 }
 
             }
-            
+
             await dictionaryManager.WriteEntity(this);
             foreach (Attribute attr in attributes)
             {
@@ -167,14 +170,14 @@ namespace FileStructures
             {
                 attribute.NextPtr = attributePointer;
                 attributePointer = attribute.Position;
-               // attributes.Insert(i, attribute);
+                // attributes.Insert(i, attribute);
             }
             else
             {
                 if (i == attributes.Count)
                 {
                     attributes[i - 1].NextPtr = attribute.Position;
-                   // attributes.Add(attribute);
+                    // attributes.Add(attribute);
 
                 }
                 else
@@ -233,8 +236,8 @@ namespace FileStructures
             // Must be reordered acccording to its name
             if (findResult == null)
             {
-                attribute.PasteTo(attributes.Find(x=> x.Position==attribute.Position));
-               // AddAttributeExistent(attribute);  //implementation paused
+                attribute.PasteTo(attributes.Find(x => x.Position == attribute.Position));
+                // AddAttributeExistent(attribute);  //implementation paused
                 await dictionaryManager.WriteAttribute(attribute);
             }
             // Already exist an attribute named like this
@@ -255,18 +258,68 @@ namespace FileStructures
             return true;
         }
 
-       
+
+        public async Task<bool> UpdateDataRegister(DataRegister register)
+        {
+            bool insertResult= false;
+
+            if (register.Key != null)
+            {
+                DataRegister findResult = registers.Find(x => x.Key.ToString() == register.Key.ToString());
+
+                // There is no attribute named like the new one, it is rewrited in the same position with different Key
+                // Must be reordered acccording to its Key
+                if (findResult == null)
+                {
+                    DataRegister oldRegister = registers.Find(x => x.Position == register.Position);
+                    RemoveRegister(oldRegister, false);
+                    AddRegister(register, true,true);
+
+                    //register.PasteTo(registers.Find(x => x.Position == register.Position));
+
+
+                    //await dataManager.WriteRegister(register);
+                    insertResult = true;
+                }
+                // Already exist an attribute named like this
+                else
+                {
+                    // The attribute with the same name as this is actually the same attribute
+                    if (findResult.Position == register.Position)
+                    {
+                        await dataManager.WriteRegister(register);
+                        UpdateChangesInView();
+                        insertResult = true;
+                    }
+
+                    // else: The attribute with the same name is another attribute, no operation is done and an error msg shows to the user
+
+
+                }
+
+
+            }
+            else
+            {
+                //Insertion of edited reisters must be unordered
+            }
+            
+            return insertResult;
+
+        }
+
+
 
         //public void SetPrimaryKeyAttribute()
         //{
         //    throw new System.NotImplementedException();
         //}
 
-        public void AddRegister(DataRegister register)
+        public void AddRegister(DataRegister register, bool writeBack, bool existent)
         {
             if (register.Key != null)
             {
-                InsertDataOrdered(register);
+                InsertDataOrdered(register, writeBack, existent);
             }
             else
             {
@@ -275,9 +328,11 @@ namespace FileStructures
         }
 
 
-        private async void InsertDataOrdered(DataRegister register)
+        private async void InsertDataOrdered(DataRegister register, bool writeBack, bool existent )
         {
-            register.Position = dataManager.FileLength;
+            if(!existent)
+                register.Position = dataManager.FileLength;
+
             int i=0;
 
             switch (primaryKey.Type)
@@ -324,16 +379,20 @@ namespace FileStructures
                 }
 
             }
-
-            await dictionaryManager.WriteEntity(this);
-            foreach (DataRegister reg in registers)
+            if (writeBack)
             {
-                await dataManager.WriteRegister(reg);
+                await dictionaryManager.WriteEntity(this);
+                foreach (DataRegister reg in registers)
+                {
+                    await dataManager.WriteRegister(reg);
+                }
+                UpdateChangesInView();
             }
+            
 
         }
 
-        public async void RemoveRegister(DataRegister register)
+        public async void RemoveRegister(DataRegister register, bool writeBack)
         {
             int index = registers.FindIndex(e => e.Position == register.Position);
 
@@ -347,11 +406,17 @@ namespace FileStructures
                 registers[index - 1].NextPtr = registers[index].NextPtr;
                 registers.RemoveAt(index);
             }
-            await dictionaryManager.WriteEntity(this);
-            foreach (DataRegister reg in registers)
+
+            if (writeBack)
             {
-                await dataManager.WriteRegister(reg);
+                await dictionaryManager.WriteEntity(this);
+                foreach (DataRegister reg in registers)
+                {
+                    await dataManager.WriteRegister(reg);
+                }
+                UpdateChangesInView();
             }
+            
 
         }
     }

@@ -20,16 +20,14 @@ namespace FileStructures.Controls
     public sealed partial class AddRegisterContentDialog : ContentDialog
     {
         Entity entity;
-        byte[] block;
-        int offset;
-
+        DataRegister register;
         public AddRegisterContentDialog( Entity entity)
         {
             this.InitializeComponent();
             this.entity = entity;
-            int blockSise = entity.Attributes.Sum(x => x.Length);
-            byte[] block = new byte[blockSise];
-            offset = 0;
+            //int blockSise = entity.Attributes.Sum(x => x.Length);
+            //byte[] block = new byte[blockSise];
+            
 
             foreach (Attribute attr in this.entity.Attributes)
             {
@@ -41,13 +39,13 @@ namespace FileStructures.Controls
                 switch (attr.Type)
                 {
                     case 'I':
-                        tb.Width = 80;
+                        tb.Width = 120;
                         tb.MaxLength = 8;
 
                         break;
 
                     case 'S':
-                        tb.Width = attr.Length * 8;
+                        tb.Width = attr.Length * 12;
                         tb.MaxLength = attr.Length;
                         break;
                 }
@@ -55,22 +53,74 @@ namespace FileStructures.Controls
                 Container.Children.Add(tb);
             }
 
-
-
         }
 
-        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        public AddRegisterContentDialog(Entity entity, DataRegister register)
         {
+            this.InitializeComponent();
+            this.entity = entity;
+            this.register = register;
 
+            foreach (Attribute attr in this.entity.Attributes)
+            {
+                TextBox tb = new TextBox();
+                tb.Name = attr.Name;
+                tb.PlaceholderText = attr.Name;
+                tb.Margin = new Thickness(20, 0, 0, 0);
+                tb.Text = register.Fields[entity.Attributes.IndexOf(attr)].ToString();
+
+                switch (attr.Type)
+                {
+                    case 'I':
+                        tb.Width = 120;
+                        tb.MaxLength = 8;
+                        break;
+
+                    case 'S':
+                        tb.Width = attr.Length * 12;
+                        tb.MaxLength = attr.Length;
+                        break;
+                }
+                Container.Children.Add(tb);
+            }
+        }
+
+        private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
             List<string> values = new List<string>();
             for (int i = 0; i < Container.Children.Count; i++)
-              values.Add( (Container.Children[i] as TextBox).Text);
+                values.Add((Container.Children[i] as TextBox).Text);
 
             DataRegister register = new DataRegister(values, entity.Attributes);
 
-            entity.AddRegister(register);
+            // If we are adding the register
+            if (this.register == null)
+                entity.AddRegister(register,true,false);
 
+            // If we are Editing an existent Register
+            else
+            {
+                register.Position = this.register.Position;
+                register.NextPtr = this.register.NextPtr;
+                bool result= await entity.UpdateDataRegister(register);
+
+                if (!result)
+                    args.Cancel = true;
+
+                //if (!result)
+                //{
+                    //ContentDialog cd = new ContentDialog();
+                    //cd.CloseButtonText = "OK";
+                    //cd.Title = "Error";
+                    //cd.Content = "Already exist an attribute with the Key: " + register.Key;
+                    //cd.ShowAsync();
+                //}
             }
+                
+            
+           
+
+        }
 
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {

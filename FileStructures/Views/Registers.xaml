@@ -42,7 +42,7 @@
                
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <controls:DataRegisterViewControl DeleteButtonClick="DeleteRegisterButtonClick" >
+                        <controls:DataRegisterViewControl DeleteButtonClick="DeleteRegisterButtonClick" EditButtonClick="EditRegisterButtonClick" >
                             
                         </controls:DataRegisterViewControl>
                         

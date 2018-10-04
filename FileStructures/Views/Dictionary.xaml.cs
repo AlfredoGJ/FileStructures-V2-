@@ -105,7 +105,7 @@ namespace FileStructures.Views
             if (result == ContentDialogResult.Primary)
             {
                 Entity entity = (sender as Control).DataContext as Entity;
-                manager.RemoveEntity(entity);
+                manager.RemoveEntity(entity, true);
                 UpdateDictionaryData();
             }
           

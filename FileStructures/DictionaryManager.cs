@@ -78,7 +78,7 @@ namespace FileStructures
         }
 
 
-        public void RemoveEntity(Entity entity)
+        public void RemoveEntity(Entity entity,bool  writeBack)
         {
             int index = entities.FindIndex(e => e.Name == entity.Name);
 
@@ -92,7 +92,8 @@ namespace FileStructures
                 entities[index - 1].NextPtr = entities[index].NextPtr;
                 entities.RemoveAt(index);
             }
-            WriteBack();
+            if(writeBack)
+                WriteBack();
         }
 
         public async void WriteBack()
@@ -189,9 +190,15 @@ namespace FileStructures
         public void  UpdateEntity(Entity entity, string newName)
         {
 
-            int index = entities.FindIndex(x => x.Name == entity.Name);
-            entities[index].Name = newName;
-            WriteBack();
+            
+            //int index = entities.FindIndex(x => x.Name == entity.Name);
+            RemoveEntity(entity, false);
+            entity.Name = newName;
+            AddEntity(entity);
+            //entities[index].Name = newName;
+            //WriteBack();
+
+            itemsOnFileChanged?.Invoke();
                 
         }
 
@@ -239,8 +246,6 @@ namespace FileStructures
             long nextPtr = reader.ReadInt64();
             Attribute attribute = new Attribute(name, type, length, indexType,position, indexPtr, nextPtr);
             return attribute;
-
-
         }
 
 

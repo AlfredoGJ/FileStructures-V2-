@@ -14,6 +14,7 @@ namespace FileStructures
         public long Position { get; set; }
         public long NextPtr { get; set; }
         public object Key { get => key; }
+        private Attribute keyAttribute;
 
         private List<object> fields;
         private List<Attribute> template;
@@ -32,7 +33,7 @@ namespace FileStructures
 
         public DataRegister(List<string> values, List<Attribute> template)
         {
-            //this.template = template;
+            this.template = template;
             Position = -1;
             NextPtr = -1;
             CreateBlock(values,template);
@@ -41,6 +42,7 @@ namespace FileStructures
 
         public DataRegister(byte[] block, long pos, long nextPtr, List<Attribute> template)
         {
+            this.template = template;
             this.block = block;
             this.Position = pos;
             this.NextPtr = nextPtr;
@@ -96,7 +98,11 @@ namespace FileStructures
                         break;
                 }
                 if (template[i].IndexType == 2)
+                {
                     this.key = value;
+                    this.keyAttribute = template[i];
+                }
+                    
 
                 offset += template[i].Length;
             }
@@ -139,7 +145,11 @@ namespace FileStructures
                     }
 
                     if (template[i].IndexType == 2)
+                    {
                         key = value;
+                        keyAttribute = template[i];
+                    }
+                        
 
                     fields.Add(value);
 
@@ -154,23 +164,18 @@ namespace FileStructures
 
         }
 
+        public void PasteTo(DataRegister register)
+        {
+            register.Position = Position;
+            register.key =  App.CloneObjPrimitive(key, keyAttribute.Type);
+            register.block = (byte[])block.Clone();
+            register.template = template;
+            register.NextPtr = NextPtr;
+            register.fields = new List<object>();
 
+            foreach (object o in fields)
+                register.fields.Add(App.CloneObjPrimitive(o, template[fields.IndexOf(o)].Type));
 
-
-            //public List<object> Fields
-            //{
-            //    get => default(List<object>);
-            //    set
-            //    {
-            //    }
-            //}
-
-            //public List<char> DataTemplate
-            //{
-            //    get => default(List<char>);
-            //    set
-            //    {
-            //    }
-            //}
         }
+    }
 }

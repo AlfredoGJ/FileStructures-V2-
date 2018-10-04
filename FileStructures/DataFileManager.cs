@@ -63,7 +63,7 @@ namespace FileStructures
                 fileLength = writer.BaseStream.Length;
             }
 
-            itemsOnFileChanged.Invoke();
+            //itemsOnFileChanged.Invoke();
             return true;
         }
 
@@ -90,7 +90,7 @@ namespace FileStructures
                 this.registers = registers;
                 itemsOnFileChanged.Invoke();
                 //return registers;
-               
+
             }
 
 

@@ -21,8 +21,9 @@ namespace FileStructures.Controls
     {
 
         //private delegate deleteButtonClick void (object sender, RoutedEventArgs eventArgs);
-        public event RoutedEventHandler DeleteButtonClick; 
-        
+        public event RoutedEventHandler DeleteButtonClick;
+        public event RoutedEventHandler EditButtonClick;
+
         //private Button deleteButton;
 
         private List<object> fields;
@@ -85,7 +86,20 @@ namespace FileStructures.Controls
             Grid.SetColumn(deleteButton, i + 2);
             ControlContent.Children.Add(deleteButton);
 
+            ControlContent.ColumnDefinitions.Add(new ColumnDefinition());
+            Button editButton = new Button();
+            SymbolIcon symbolE = new SymbolIcon(Symbol.Edit);
+            editButton.Content = symbolE;
+            editButton.Click += EditClick;
+            Grid.SetColumn(editButton, i + 3);
+            ControlContent.Children.Add(editButton);
 
+
+        }
+
+        private void EditClick(object sender, RoutedEventArgs e)
+        {
+            EditButtonClick?.Invoke(sender, e);
         }
 
         private void DeleteClick(object sender, RoutedEventArgs e)
