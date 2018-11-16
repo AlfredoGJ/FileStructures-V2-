@@ -47,9 +47,9 @@ namespace FileStructures
 
         private void navigation_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            switch ((args.SelectedItem as NavigationViewItem).Tag.ToString())
+            switch ((args.SelectedItem as NavigationViewItem).Content)
             {
-                case "Home_Page":
+                case "Archivo":
                          ContentFrame.Navigate(typeof(Views.Home));
                     break;
 
@@ -60,6 +60,10 @@ namespace FileStructures
 
                 case "Datos":
                     ContentFrame.Navigate(typeof(Views.Registers));
+                    break;
+
+                case "Configuración":
+                    ContentFrame.Navigate(typeof(Views.Config));
                     break;
             }
            

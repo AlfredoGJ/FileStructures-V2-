@@ -45,13 +45,23 @@ namespace FileStructures.Views
             picker.ViewMode = PickerViewMode.Thumbnail;
             picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
             picker.FileTypeFilter.Add(".ddc");
-           
+            picker.FileTypeFilter.Add(".idd");
+
+
 
             StorageFile file =  await picker.PickSingleFileAsync();
+            
             if (file != null)
             {
                 CurrentFileName.Text = file.Name;
                 App.CurrentFileName = file.Name;
+                if (file.FileType == "ddc")
+                    App.CurrentFileOrganization = "Ordered";
+                else
+                    App.CurrentFileOrganization = "Indexed"; 
+
+
+
             }
 
             
@@ -65,7 +75,12 @@ namespace FileStructures.Views
                
                 StorageFolder localFolder = KnownFolders.PicturesLibrary;
                 StorageFolder projectsFolder=  await localFolder.CreateFolderAsync("Projects", CreationCollisionOption.OpenIfExists);
-                StorageFile myNewFile= await projectsFolder.CreateFileAsync(FileNameTextBox.Text + ".ddc");
+                StorageFile myNewFile;
+                if (App.CurrentFileOrganization=="Ordered")
+                    myNewFile= await projectsFolder.CreateFileAsync(FileNameTextBox.Text + ".ddc");
+                else
+                    myNewFile = await projectsFolder.CreateFileAsync(FileNameTextBox.Text + ".idd");
+
                 BinaryWriter writer = new BinaryWriter(  await myNewFile.OpenStreamForWriteAsync());
                 writer.Write(((long)(-1)));
                 writer.Close();

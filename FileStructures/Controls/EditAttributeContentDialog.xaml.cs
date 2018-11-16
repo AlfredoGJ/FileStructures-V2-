@@ -45,8 +45,14 @@ namespace FileStructures.Controls
 
             Lenght.Text = attribute.Length.ToString();
             IndexType.SelectedIndex = attribute.IndexType;
-            
-            
+
+        }
+
+        public EditAttributeContentDialog(Entity entity)
+        {
+            this.InitializeComponent();
+            this.entity = entity;
+
         }
 
         private void DataType_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -67,19 +73,72 @@ namespace FileStructures.Controls
 
         private async  void addAttributeEditContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            int lenght = 0;
-            int.TryParse(Lenght.Text, out lenght);
 
-            attribute.Name = AttributeName.Text;
-            attribute.Type = DataType.SelectedValue.ToString()[0];
-            attribute.Length = lenght;
-            attribute.IndexType = IndexType.SelectedIndex;
+            // Th attribute is being edited 
+            if (attribute != null)
+            {
+                int lenght = 0;
+                int.TryParse(Lenght.Text, out lenght);
 
-            bool result = await entity.UpdateAttribute(attribute);
-            if (!result)
-                args.Cancel = true;
+                attribute.Name = AttributeName.Text;
+                attribute.Type = DataType.SelectedValue.ToString()[0];
+                attribute.Length = lenght;
+                attribute.IndexType = IndexType.SelectedIndex;
 
+                bool result = await entity.UpdateAttribute(attribute);
+                if (!result)
+                {
+                    args.Cancel = true;
+                    Warning.Text = "Error: Already exists an attribute with ths name.";
+                }
+                    
+            }
+            // The attribute is being created and inserted
+            else
+            {
+                if (!String.IsNullOrWhiteSpace(AttributeName.Text) && DataType.SelectedValue != null && IndexType.SelectedValue != null)
+                {
+
+                    int lenght = 0;
+                    int.TryParse(Lenght.Text, out lenght);
+                    var attributes = entity.Attributes;
+
+                    Attribute attribute = new Attribute(AttributeName.Text, DataType.SelectedValue.ToString()[0], lenght, IndexType.SelectedIndex);
+                    if (!attributes.Any(x => x.Name == attribute.Name))
+                    {
+                        if (attributes.Any(x => x.IndexType == 2) && attribute.IndexType == 2)
+                        {
+                            args.Cancel = true;
+                            Warning.Text = "Error: This entity already contains a primary key.";
+                        }
+                        else
+                            entity.AddAttribute(attribute);
+                    }
+                    else
+                    {
+                        args.Cancel = true;
+                        Warning.Text = "Error: Already exists an attribute with ths name.";
+                    }
+                    
+
+                }
+                else
+                {
+                    args.Cancel = true;
+                    Warning.Text = "Error: Complete all the fields correctly";
+                }
+            }
+
+            
+           
 
         }
+
+        private void AnyField_GotFocus(object sender, RoutedEventArgs e)
+        {
+            Warning.Text = "";
+        }
+
+   
     }
 }

@@ -1,0 +1,33 @@
+﻿<Page
+    x:Class="FileStructures.Views.Config"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FileStructures.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <StackPanel Margin="20">
+        <TextBlock Style="{ThemeResource  TitleTextBlockStyle}" FontSize="28"  Margin="0,0,0,50">
+            Settings
+        </TextBlock>
+
+        <TextBlock Style="{StaticResource   SubtitleTextBlockStyle}" Margin="0,0,0,10" >
+            File Organization
+        </TextBlock>
+
+
+        <RadioButton Name="ordered" Checked="ordered_Checked">
+            Secuential
+        </RadioButton>
+        
+        <RadioButton IsChecked="True" Name ="indexed" Checked="indexed_Checked">
+            Indexed 
+        </RadioButton>
+
+
+
+
+    </StackPanel>
+</Page>

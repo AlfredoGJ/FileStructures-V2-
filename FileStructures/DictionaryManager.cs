@@ -115,8 +115,6 @@ namespace FileStructures
 
         private async void ReadFromFile()
         {
-           
-
             using (BinaryReader reader = new BinaryReader(await projectFolder.OpenStreamForReadAsync(name)))
             {
                 List<Entity> entidades = new List<Entity>();
@@ -159,14 +157,12 @@ namespace FileStructures
 
         private void WriteEntity(Entity entity, BinaryWriter writer)
         {
-           
             writer.Seek((int)entity.Position, SeekOrigin.Begin);
             writer.Write(entity.ArrayName);
             writer.Write(entity.Position);
             writer.Write(entity.AttributesPtr);
             writer.Write(entity.DataPtr);
             writer.Write(entity.NextPtr);
-            
         }
 
         private Entity ReadEntity(BinaryReader reader, long pos)

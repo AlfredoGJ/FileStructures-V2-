@@ -38,7 +38,7 @@ namespace FileStructures
 
         //public static StorageFolder projectsFolder { get; set; } 
         public static string CurrentFileName { get; set; }
-
+        public static string CurrentFileOrganization = "Indexed";
         
         /// <summary>
         /// Se invoca cuando el usuario final inicia la aplicación normalmente. Se usarán otros puntos

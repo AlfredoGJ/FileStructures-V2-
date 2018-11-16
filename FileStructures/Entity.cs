@@ -368,6 +368,7 @@ namespace FileStructures
                 if (i == registers.Count)
                 {
                     registers[i - 1].NextPtr = register.Position;
+                    register.NextPtr = -1;
                     registers.Add(register);
 
                 }

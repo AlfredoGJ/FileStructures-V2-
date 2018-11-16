@@ -118,9 +118,6 @@ namespace FileStructures
                 byte[] valueBytes = new byte[8];  // 8 is could be any value, is just for initializing the variable 
                 int offset = 0;
 
-                //BitConverter.GetBytes(Position).CopyTo(block, 0);
-                //BitConverter.GetBytes(NextPtr).CopyTo(block,8);
-
                 for (int i = 0; i < values.Count; i++)
                 {
                     //TextBox tb = Container.Children[i] as TextBox;

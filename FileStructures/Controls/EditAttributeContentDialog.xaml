@@ -13,44 +13,49 @@
     HorizontalContentAlignment="Stretch"
     PrimaryButtonClick ="addAttributeEditContentDialog_PrimaryButtonClick">
 
-    <StackPanel Name="Container" Orientation="Horizontal" HorizontalAlignment="Center" >
+    <StackPanel>
+        <StackPanel Name="Container" Orientation="Horizontal" HorizontalAlignment="Center" >
 
-        <TextBox  x:Name="AttributeName" MaxLength="30" Width="150" PlaceholderText="Name" Margin="10" MinWidth="200"/>
+            <TextBox  x:Name="AttributeName" MaxLength="30" Width="150" PlaceholderText="Name" Margin="10" MinWidth="200" GotFocus="AnyField_GotFocus"/>
 
-        <ComboBox Name="DataType" Margin="10" MinWidth="100" PlaceholderText="Type" SelectedValuePath="Tag" SelectionChanged="DataType_SelectionChanged">
-            <ComboBoxItem Tag="I" >
-                Integer
-            </ComboBoxItem >
-            <ComboBoxItem Tag="S"  >
-                String
-            </ComboBoxItem>
-
-
-        </ComboBox>
-
-        <TextBox Name="Lenght" Margin="10" MinWidth="50" PlaceholderText="Length" InputScope="Number" Text=""/>
-
-        <ComboBox Name="IndexType" Margin="10" MinWidth="180" PlaceholderText="Index Type">
-            <ComboBoxItem >
-                No index
-            </ComboBoxItem>
-            <ComboBoxItem>
-                Search Key
-            </ComboBoxItem>
-            <ComboBoxItem>
-                Primary Search Key
-            </ComboBoxItem>
-            <ComboBoxItem>
-                Secondary Search Key
-            </ComboBoxItem>
-            <ComboBoxItem>
-                Primary B+ Search Key
-            </ComboBoxItem>
-
-        </ComboBox>
+            <ComboBox Name="DataType" Margin="10" MinWidth="100" PlaceholderText="Type" SelectedValuePath="Tag" SelectionChanged="DataType_SelectionChanged" GotFocus="AnyField_GotFocus">
+                <ComboBoxItem Tag="I" >
+                    Integer
+                </ComboBoxItem >
+                <ComboBoxItem Tag="S"  >
+                    String
+                </ComboBoxItem>
 
 
+            </ComboBox>
+
+            <TextBox Name="Lenght" Margin="10" MinWidth="50" PlaceholderText="Length" InputScope="Number" Text="" GotFocus="AnyField_GotFocus"/>
+
+            <ComboBox Name="IndexType" Margin="10" MinWidth="180" PlaceholderText="Index Type" GotFocus="AnyField_GotFocus">
+                <ComboBoxItem >
+                    No index
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    Search Key
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    Primary Search Key
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    Secondary Search Key
+                </ComboBoxItem>
+                <ComboBoxItem>
+                    Primary B+ Search Key
+                </ComboBoxItem>
+
+            </ComboBox>
+
+
+
+        </StackPanel>
+        <TextBlock Name="Warning"  Margin="10,0,0,0" Foreground="DarkRed" FontSize="16" />
 
     </StackPanel>
     
+
 </ContentDialog>

@@ -107,14 +107,7 @@ namespace FileStructures.Controls
                 if (!result)
                     args.Cancel = true;
 
-                //if (!result)
-                //{
-                    //ContentDialog cd = new ContentDialog();
-                    //cd.CloseButtonText = "OK";
-                    //cd.Title = "Error";
-                    //cd.Content = "Already exist an attribute with the Key: " + register.Key;
-                    //cd.ShowAsync();
-                //}
+                
             }
                 
             

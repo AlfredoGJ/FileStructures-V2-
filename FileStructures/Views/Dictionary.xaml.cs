@@ -38,8 +38,6 @@ namespace FileStructures.Views
 
                 manager = new DictionaryManager(App.CurrentFileName);
                 manager.itemsOnFileChanged += UpdateDictionaryData;
-                
-
             }
             else
             {
@@ -54,8 +52,6 @@ namespace FileStructures.Views
             Entities.ItemsSource = manager.Entities;
             Header.Text = "  " + manager.Header.ToString();
             Entities.SelectedItem = E;
-
-            
 
         }
 
@@ -147,21 +143,29 @@ namespace FileStructures.Views
             Entity entity = Entities.SelectedItem as Entity;
             if (entity != null)
             {
-                ContentDialogResult result = await addAttributeContentDialog.ShowAsync();
-                if (result == ContentDialogResult.Primary)
-                {
-                    int lenght = 0;
-                    int.TryParse(Lenght.Text,out lenght);
-                    var attributes = entity.Attributes;
 
-                    Attribute attribute = new Attribute(AttributeName.Text, DataType.SelectedValue.ToString()[0], lenght, IndexType.SelectedIndex);
-                    if (!attributes.Any(x => x.Name == attribute.Name))
-                    {
-                        entity.AddAttribute(attribute);
-                        UpdateDictionaryData();
-                    }
-                   
-                }
+                ContentDialog dialog = new EditAttributeContentDialog(entity);
+                var result = await dialog.ShowAsync();
+                if (result == ContentDialogResult.Primary)
+                    UpdateDictionaryData();
+
+
+
+                //ContentDialogResult result = await addAttributeContentDialog.ShowAsync();
+                //if (result == ContentDialogResult.Primary)
+                //{
+                //    int lenght = 0;
+                //    int.TryParse(Lenght.Text, out lenght);
+                //    var attributes = entity.Attributes;
+
+                //    Attribute attribute = new Attribute(AttributeName.Text, DataType.SelectedValue.ToString()[0], lenght, IndexType.SelectedIndex);
+                //    if (!attributes.Any(x => x.Name == attribute.Name))
+                //    {
+                //        entity.AddAttribute(attribute);
+                //        UpdateDictionaryData();
+                //    }
+
+                //}
             }
             
         }
@@ -179,20 +183,29 @@ namespace FileStructures.Views
                     Lenght.Text ="1";
                     Lenght.IsEnabled = true;
                     break;
-
-               
-
-
             }
         }
 
         private async void addAttributeContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            if (String.IsNullOrWhiteSpace(AttributeName.Text) || DataType.SelectedValue == null || IndexType.SelectedValue == null)
-            {
-                args.Cancel = true;
-                
-            }
+            //if (!String.IsNullOrWhiteSpace(AttributeName.Text) && DataType.SelectedValue != null && IndexType.SelectedValue != null)
+            //{
+               
+            //    int lenght = 0;
+            //    int.TryParse(Lenght.Text, out lenght);
+            //    var attributes = entity.Attributes;
+
+            //    Attribute attribute = new Attribute(AttributeName.Text, DataType.SelectedValue.ToString()[0], lenght, IndexType.SelectedIndex);
+            //    if (!attributes.Any(x => x.Name == attribute.Name))
+            //    {
+            //        entity.AddAttribute(attribute);
+            //        UpdateDictionaryData();
+            //    }
+            //}
+            //else
+            //{
+            //    args.Cancel = true;
+            //}
            
         }
 
