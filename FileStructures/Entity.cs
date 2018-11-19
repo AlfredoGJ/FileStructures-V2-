@@ -20,6 +20,7 @@ namespace FileStructures
         private List<Attribute> attributes;
         private Attribute primaryKey;
         private List<DataRegister> registers;
+        private IndexManager indexManager;
 
 
         // main fields

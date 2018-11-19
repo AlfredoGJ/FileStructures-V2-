@@ -59,7 +59,10 @@ namespace FileStructures
                     break;
 
                 case "Datos":
-                    ContentFrame.Navigate(typeof(Views.Registers));
+                    if(App.CurrentFileOrganization== "Ordered")
+                        ContentFrame.Navigate(typeof(Views.Registers));
+                    if(App.CurrentFileOrganization == "Indexed")
+                        ContentFrame.Navigate(typeof(Views.IndexedRegisters));
                     break;
 
                 case "Configuración":
