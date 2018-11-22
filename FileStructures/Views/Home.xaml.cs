@@ -56,9 +56,9 @@ namespace FileStructures.Views
                 CurrentFileName.Text = file.Name;
                 App.CurrentFileName = file.Name;
                 if (file.FileType == "ddc")
-                    App.CurrentFileOrganization = "Ordered";
+                    App.CurrentFileOrganization =  FileOrganization.Ordered;
                 else
-                    App.CurrentFileOrganization = "Indexed"; 
+                    App.CurrentFileOrganization =  FileOrganization.Indexed; 
 
 
 
@@ -76,7 +76,7 @@ namespace FileStructures.Views
                 StorageFolder localFolder = KnownFolders.PicturesLibrary;
                 StorageFolder projectsFolder=  await localFolder.CreateFolderAsync("Projects", CreationCollisionOption.OpenIfExists);
                 StorageFile myNewFile;
-                if (App.CurrentFileOrganization=="Ordered")
+                if (App.CurrentFileOrganization== FileOrganization.Ordered)
                     myNewFile= await projectsFolder.CreateFileAsync(FileNameTextBox.Text + ".ddc");
                 else
                     myNewFile = await projectsFolder.CreateFileAsync(FileNameTextBox.Text + ".idd");

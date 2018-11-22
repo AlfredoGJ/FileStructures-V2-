@@ -24,7 +24,7 @@ namespace FileStructures.Views
     public sealed partial class IndexedRegisters : Page
     {
         DictionaryManager dataManager;
-        IndexManager indexManager;
+        //IndexManager indexManager;
         public IndexedRegisters()
         {
             this.InitializeComponent();
@@ -158,5 +158,6 @@ namespace FileStructures.Views
             }
         }
 
+      
     }
 }

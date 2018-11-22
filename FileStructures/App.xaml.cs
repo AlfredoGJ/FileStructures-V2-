@@ -38,9 +38,11 @@ namespace FileStructures
 
         //public static StorageFolder projectsFolder { get; set; } 
         public static string CurrentFileName { get; set; }
-        public static string CurrentFileOrganization = "Indexed";
+        public static FileOrganization CurrentFileOrganization = FileOrganization.Indexed;
         public static int PrimaryKeyIndexNumber = 5;
         public static int SecondaryKeyIndexNumber=5;
+
+        public static List<Char> Alphabet = new List<char> {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S', 'T','U','V','X','Y','Z'}; 
         /// <summary>
         /// Se invoca cuando el usuario final inicia la aplicación normalmente. Se usarán otros puntos
         /// de entrada cuando la aplicación se inicie para abrir un archivo específico, por ejemplo.
@@ -164,7 +166,8 @@ namespace FileStructures
         public static int GetIntFirstDigit(int number)
         {
             var asString = number.ToString();
-            return Convert.ToInt32(asString[0]);
+            int result=int.Parse(asString[0].ToString());
+            return result;
 
         }
 

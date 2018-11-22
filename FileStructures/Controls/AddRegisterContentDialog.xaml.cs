@@ -93,34 +93,23 @@ namespace FileStructures.Controls
 
             DataRegister register = new DataRegister(values, entity.Attributes);
 
-            if (App.CurrentFileOrganization == "Ordered")
+            
+            // If we are adding the register
+            if (this.register == null)
+                entity.AddRegister(register, true, false);
+
+            // If we are Editing an existent Register
+            else
             {
-                // If we are adding the register
-                if (this.register == null)
-                    entity.AddRegister(register, true, false);
+                register.Position = this.register.Position;
+                register.NextPtr = this.register.NextPtr;
+                bool result = await entity.UpdateDataRegister(register);
 
-                // If we are Editing an existent Register
-                else
-                {
-                    register.Position = this.register.Position;
-                    register.NextPtr = this.register.NextPtr;
-                    bool result = await entity.UpdateDataRegister(register);
+                if (!result)
+                    args.Cancel = true;
 
-                    if (!result)
-                        args.Cancel = true;
-
-
-                }
-            }
-            if (App.CurrentFileOrganization == "Indexed")
-            {
 
             }
-
-            
-                
-            
-           
 
         }
 

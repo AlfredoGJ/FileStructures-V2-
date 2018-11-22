@@ -31,12 +31,12 @@ namespace FileStructures.Views
 
         private void ordered_Checked(object sender, RoutedEventArgs e)
         {
-            App.CurrentFileOrganization = "Ordered"; 
+            App.CurrentFileOrganization = FileOrganization.Ordered;  
         }
 
         private void indexed_Checked(object sender, RoutedEventArgs e)
         {
-            App.CurrentFileOrganization = "Indexed";
+            App.CurrentFileOrganization = FileOrganization.Indexed;
         }
     }
 }

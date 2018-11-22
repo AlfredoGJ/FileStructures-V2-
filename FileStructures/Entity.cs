@@ -17,10 +17,11 @@ namespace FileStructures
         // Private fields
         private DataFileManager dataManager;
         private DictionaryManager dictionaryManager;
+        private IndexManager indexManager;
         private List<Attribute> attributes;
         private Attribute primaryKey;
         private List<DataRegister> registers;
-        private IndexManager indexManager;
+        
 
 
         // main fields
@@ -73,9 +74,12 @@ namespace FileStructures
             this.attributes = attributes;
             this.primaryKey = attributes.Find(X => X.IndexType == 2);
             this.dataManager = new DataFileManager(Name, attributes);
+            this.indexManager = new IndexManager(Name,attributes,false);
 
             dataManager.itemsOnFileChanged += UpdateChangesInView;
             dataManager.ReadAllRegisters(dataPtr);
+
+            indexManager.ReadFromFile();
             //UpdateChangesInView();
 
 
@@ -318,16 +322,73 @@ namespace FileStructures
 
         public void AddRegister(DataRegister register, bool writeBack, bool existent)
         {
-            if (register.Key != null)
+            switch (App.CurrentFileOrganization)
             {
-                InsertDataOrdered(register, writeBack, existent);
-            }
-            else
-            {
+                case FileOrganization.Ordered:
+                    if (register.Key != null)
+                    {
+                        InsertDataOrdered(register, writeBack, existent);
+                    }
+                    else
+                    {
+                        InsertDataUnordered(register,writeBack,existent);
+                    }
+                    break;
 
+                case FileOrganization.Indexed:
+                    AddRegisterIndexed(register);
+                  
+                    break;
             }
+            
         }
 
+
+        private async void AddRegisterIndexed(DataRegister register)
+        {
+           
+            var fields = register.Fields;
+            List<int> entries = new List<int>();
+            List<int> eIndexes = new List<int>();
+
+            for (int i = 0; i < fields.Count(); i++)
+            {
+                Attribute E = Attributes[i];
+
+                // If its an index
+                if (E.IndexType == 2 || E.IndexType == 3)
+                {
+                    int entry = -1;
+
+                    if (E.Type == 'S')
+                        entry = App.Alphabet.IndexOf((char.ToUpper((fields[i] as string)[0])));
+
+                    if (E.Type == 'I')
+                        entry = App.GetIntFirstDigit((int)fields[i]);
+
+                    entries.Add(entry);
+                    eIndexes.Add(i);
+                }
+            }
+            
+            int numFreeSlots = indexManager.HasSlots(entries);
+
+            // All entries can be inserted 
+            if (numFreeSlots == entries.Count())
+            {
+                indexManager.InsertIndexesOf(register, eIndexes, entries);
+            }
+            // Just some entries can be insertesd 
+            else if (numFreeSlots > 0)
+            {
+            }
+            // No entry can be inserted
+            else
+            {
+            }
+            
+
+        }
 
         private async void InsertDataOrdered(DataRegister register, bool writeBack, bool existent )
         {
@@ -392,6 +453,50 @@ namespace FileStructures
             }
             
 
+        }
+
+        private async Task<long> InsertDataUnordered(DataRegister register, bool writeBack, bool existent)
+        {
+            if (!existent)
+                register.Position = dataManager.FileLength;
+
+            int i = registers.Count;
+
+            if (i == 0)
+            {
+                register.NextPtr = dataPointer;
+                dataPointer = register.Position;
+                registers.Insert(i, register);
+            }
+
+            else
+            {
+                if (i == registers.Count)
+                {
+                    registers[i - 1].NextPtr = register.Position;
+                    register.NextPtr = -1;
+                    registers.Add(register);
+
+                }
+                else
+                {
+                    register.NextPtr = registers[i - 1].NextPtr;
+                    registers[i - 1].NextPtr = register.Position;
+                    registers.Insert(i, register);
+                }
+
+            }
+            if (writeBack)
+            {
+                await dictionaryManager.WriteEntity(this);
+                foreach (DataRegister reg in registers)
+                {
+                    await dataManager.WriteRegister(reg);
+                }
+                UpdateChangesInView();
+            }
+
+            return register.Position; 
         }
 
         public async void RemoveRegister(DataRegister register, bool writeBack)

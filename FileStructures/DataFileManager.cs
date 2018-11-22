@@ -37,8 +37,6 @@ namespace FileStructures
 
         }
 
-
-
         private DataRegister ReadRegister(BinaryReader reader, long pos)
         {
             reader.BaseStream.Seek(pos,SeekOrigin.Begin);

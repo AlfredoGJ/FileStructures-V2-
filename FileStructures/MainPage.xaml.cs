@@ -17,6 +17,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace FileStructures
 {
+
+    public enum FileOrganization {Ordered, Indexed,Tree }
+
     /// <summary>
     /// Página vacía que se puede usar de forma independiente o a la que se puede navegar dentro de un objeto Frame.
     /// </summary>
@@ -59,9 +62,9 @@ namespace FileStructures
                     break;
 
                 case "Datos":
-                    if(App.CurrentFileOrganization== "Ordered")
+                    if(App.CurrentFileOrganization== FileOrganization.Ordered)
                         ContentFrame.Navigate(typeof(Views.Registers));
-                    if(App.CurrentFileOrganization == "Indexed")
+                    if(App.CurrentFileOrganization == FileOrganization.Indexed)
                         ContentFrame.Navigate(typeof(Views.IndexedRegisters));
                     break;
 
