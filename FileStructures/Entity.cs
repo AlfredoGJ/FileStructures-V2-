@@ -74,12 +74,12 @@ namespace FileStructures
             this.attributes = attributes;
             this.primaryKey = attributes.Find(X => X.IndexType == 2);
             this.dataManager = new DataFileManager(Name, attributes);
-            this.indexManager = new IndexManager(Name,attributes,false);
+            this.indexManager = new IndexManager(Name,attributes);
 
             dataManager.itemsOnFileChanged += UpdateChangesInView;
             dataManager.ReadAllRegisters(dataPtr);
 
-            indexManager.ReadFromFile();
+            indexManager.initialize();
             //UpdateChangesInView();
 
 
@@ -376,7 +376,9 @@ namespace FileStructures
             // All entries can be inserted 
             if (numFreeSlots == entries.Count())
             {
-                indexManager.InsertIndexesOf(register, eIndexes, entries);
+                InsertDataUnordered(register,true,false);
+                indexManager.InsertIndexesOf(register, eIndexes, entries, register.Position);
+                indexManager.WriteToFile();
             }
             // Just some entries can be insertesd 
             else if (numFreeSlots > 0)

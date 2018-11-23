@@ -52,7 +52,6 @@ namespace FileStructures.Views
             Entities.ItemsSource = manager.Entities;
             Header.Text = "  " + manager.Header.ToString();
             Entities.SelectedItem = E;
-
         }
 
         public void EntityChange(Entity entity, char chage)

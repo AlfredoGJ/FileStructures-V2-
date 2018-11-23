@@ -27,12 +27,12 @@ namespace FileStructures
                 return mainTableStart + MainTable.Count() * 8 + (lenght + 8) * slotsNumber;
             }
         }
-        
-        
 
-        public Index( char type, int lenght, int slots)
+
+
+        public Index(char type, int lenght, int slots, long pos)
         {
-            pos = -1;
+            this.pos = pos;
             this.type = type;
             this.lenght = lenght;
             slotsNumber = slots;
@@ -42,9 +42,24 @@ namespace FileStructures
             if (type == 'S')
                 mainTableEntries = 26;
 
-            dataAreaStart = pos + MainTable.Count() * 8;
             MainTable = new long[mainTableEntries];
-            SecondaryTable = new Tuple<object, long>[slots*mainTableEntries ];
+
+            for (int i = 0; i < mainTableEntries; i++)
+                MainTable[i] = -1;
+
+            SecondaryTable = new Tuple<object, long>[slots * mainTableEntries];
+
+            for (int i = 0; i < slots * mainTableEntries; i++)
+            {
+                if(type=='I')
+                    SecondaryTable[i] = new Tuple<object, long>(-1, -1);
+                if (type == 'S')
+                    SecondaryTable[i] = new Tuple<object, long>(new string('\0',lenght), -1);
+            }
+                
+
+            dataAreaStart = pos + MainTable.Count() * 8;
+           
            
         }
 
@@ -53,7 +68,7 @@ namespace FileStructures
             
             if (tableEntry < mainTableEntries)
             {
-                return SecondaryTable.Skip(tableEntry * mainTableEntries).Take(slotsNumber).Any(x => x.Item2 == -1);
+                return SecondaryTable.Skip(tableEntry * slotsNumber).Take(slotsNumber).Any(x => x.Item2 == -1);
             }
             return false;
         }
@@ -62,15 +77,24 @@ namespace FileStructures
         {
             if (tableEntry < mainTableEntries)
             {
-                if (MainTable[tableEntry] == -1)
+                if (MainTable[tableEntry] != -1)
                 {
-                    MainTable[tableEntry] = dataAreaStart + tableEntry * mainTableEntries;
+                    //MainTable[tableEntry] = dataAreaStart + tableEntry * mainTableEntries;
 
-                    for (int i = tableEntry * mainTableEntries; i < tableEntry * mainTableEntries + 1; i++)
+                    for (int i = tableEntry * slotsNumber; i < (tableEntry + 1) * slotsNumber ; i++)
                     {
                         if (SecondaryTable[i].Item2 == -1)
+                        {
                             SecondaryTable[i] = new Tuple<object, long>(value, pointer);
+                            break;
+                        }
                     }
+                }
+                else
+                {
+                    MainTable[tableEntry] = dataAreaStart + tableEntry * slotsNumber;
+                    SecondaryTable[tableEntry*slotsNumber] = new Tuple<object, long>(value, pointer);
+
                 }
                 
             }
