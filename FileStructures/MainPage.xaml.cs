@@ -66,6 +66,10 @@ namespace FileStructures
                         ContentFrame.Navigate(typeof(Views.Registers));
                     if(App.CurrentFileOrganization == FileOrganization.Indexed)
                         ContentFrame.Navigate(typeof(Views.IndexedRegisters));
+
+                    if (App.CurrentFileOrganization == FileOrganization.Tree)
+                        ContentFrame.Navigate(typeof(Views.TreeRegisters));
+
                     break;
 
                 case "Configuración":

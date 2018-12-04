@@ -8,7 +8,7 @@ using Windows.Storage;
 
 namespace FileStructures
 {
-    class IndexManager
+    public class IndexManager
     {
         private string name;
         private List<Index> indexes;
@@ -73,10 +73,11 @@ namespace FileStructures
         private async void WriteIndex(BinaryWriter writer, Index index)
         {
             writer.Seek((int)index.pos, SeekOrigin.Begin);
-            writer.Write(index.type);
+            writer.Write((byte)index.type);
             writer.Write(index.lenght);
             writer.Write(index.slotsNumber);
             writer.Write(index.next);
+
             foreach (long ptr in index.MainTable)
                 writer.Write(ptr);
 
@@ -84,20 +85,29 @@ namespace FileStructures
             {
                 if(index.type=='I')
                     writer.Write((int)values.Item1);
-                if (index.type == 'S')
-                    writer.Write((values.Item1 as string).ToCharArray());
 
-                writer.Write(values.Item2);
+                if (index.type == 'S')
+                {
+                    char[]  S = (values.Item1 as string).ToCharArray();
+                    for (int i = 0; i < index.lenght; i++)
+                    {
+                        if (i < S.Length)
+                            writer.Write((byte)S[i]);
+                        else
+                            writer.Write('\0');
+                    }
+                        
+                }
+
+                writer.Write((long)values.Item2);
             }
-            
-            
         }
 
         private async Task<Index> ReadIndex(BinaryReader reader, long position)
         {
 
             reader.BaseStream.Seek(position,SeekOrigin.Begin);
-            Index index = new Index(reader.ReadChar(), reader.ReadInt32(), reader.ReadInt32(), position);
+            Index index = new Index((char)reader.ReadByte(), reader.ReadInt32(), reader.ReadInt32(), position);
             index.next = reader.ReadInt64();
 
             for (int i = 0; i < index.MainTable.Length;i++)
@@ -106,10 +116,23 @@ namespace FileStructures
             for(int i=0;i< index.SecondaryTable.Length;i++)
             {
                 if (index.type == 'I')
-                    index.SecondaryTable[i] = new Tuple<object, long>(reader.ReadInt32(),reader.ReadInt64());
-                    
+                {
+                    int key = reader.ReadInt32();
+                    long pos = reader.ReadInt64();
+                    index.SecondaryTable[i] = new Tuple<object, long>(key,pos);
+                }
+
                 if (index.type == 'S')
-                    index.SecondaryTable[i] = new Tuple<object, long>(new string(reader.ReadChars(index.lenght)), reader.ReadInt64());
+                {
+                    char[] S= new char[index.lenght];
+                    for (int j = 0; j < index.lenght; j++)
+                    {
+                        S[j] = (char)reader.ReadByte();
+                    }
+
+                    index.SecondaryTable[i] = new Tuple<object, long>(new string(S), reader.ReadInt64());
+                }
+                    
                
             }
             return index;
@@ -160,8 +183,6 @@ namespace FileStructures
                 }
                 else
                     result = false;
-
-                
             }
             return result;
         }

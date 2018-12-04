@@ -6,6 +6,8 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -21,11 +23,10 @@ namespace FileStructures.Views
     /// <summary>
     /// Una página vacía que se puede usar de forma independiente o a la que se puede navegar dentro de un objeto Frame.
     /// </summary>
-    public sealed partial class IndexedRegisters : Page
+    public sealed partial class TreeRegisters : Page
     {
         DictionaryManager dataManager;
-        //IndexManager indexManager;
-        public IndexedRegisters()
+        public TreeRegisters()
         {
             this.InitializeComponent();
         }
@@ -53,9 +54,13 @@ namespace FileStructures.Views
         {
             if (EntitiesList.SelectedItem != null)
             {
+                Entity currentEntity = (EntitiesList.SelectedItem as Entity);
                 RegistersList.ItemsSource = null;
-                RegistersList.ItemsSource = (EntitiesList.SelectedItem as Entity).Registers;
-                FillIndexesView((EntitiesList.SelectedItem as Entity).indexManager.Indexes);
+                RegistersList.ItemsSource = currentEntity.Registers;
+                currentEntity.treeManager.Tree.Draw(MyCanvas);
+                //FillIndexesView((EntitiesList.SelectedItem as Entity).indexManager.Indexes);
+
+                
             }
         }
 
@@ -113,18 +118,18 @@ namespace FileStructures.Views
 
 
                 UpdateRegistersData();
-                FillIndexesView(E.indexManager.Indexes);
+                //FillIndexesView(E.indexManager.Indexes);
             }
         }
 
-        private void FillIndexesView(List<Index> indexes)
-        {
-            Indexes.Children.Clear();
-            foreach (Index index in indexes)
-            {
-                Indexes.Children.Add(new IndexControl(index));
-            }
-        }
+        //private void FillIndexesView(List<Index> indexes)
+        //{
+        //    Indexes.Children.Clear();
+        //    foreach (Index index in indexes)
+        //    {
+        //        Indexes.Children.Add(new IndexControl(index));
+        //    }
+        //}
 
         async void DeleteRegisterButtonClick(object sender, RoutedEventArgs e)
         {
@@ -169,6 +174,59 @@ namespace FileStructures.Views
             }
         }
 
-      
+        private async void ImportRegisters_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (EntitiesList.SelectedItem != null)
+            {
+                Entity current = EntitiesList.SelectedItem as Entity;
+
+                FileOpenPicker picker = new FileOpenPicker();
+                picker.ViewMode = PickerViewMode.Thumbnail;
+                picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+                picker.FileTypeFilter.Add(".txt");
+
+
+                StorageFile file = await picker.PickSingleFileAsync();
+
+                if (file != null)
+                {
+                    var stream = await file.OpenReadAsync();
+                    byte[] data = new byte[stream.Size];
+                    string sRead = "";
+
+                    using (BinaryReader reader = new BinaryReader(await file.OpenStreamForReadAsync()))
+                    {
+                        reader.BaseStream.Seek(0, SeekOrigin.Begin);
+                        reader.Read(data, 0, data.Length);
+                        foreach (byte b in data)
+                        {
+                            sRead += (char)b;
+                        }
+
+
+                    }
+
+                    List<DataRegister> registers = new List<DataRegister>();
+                    List<List<string>> intermediate = App.CutStringToRegisters(sRead);
+
+                    foreach (List<string> reg in intermediate)
+                    {
+                        DataRegister newRegister = new DataRegister(reg, current.Attributes);
+                        //registers.Add(new DataRegister(reg, current.Attributes));
+
+                        current.AddRegister(newRegister, false, false);
+                        
+
+                    }
+                       
+
+
+
+                }
+
+            }
+            
+        }
     }
 }

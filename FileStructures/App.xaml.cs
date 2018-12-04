@@ -32,8 +32,6 @@ namespace FileStructures
             this.InitializeComponent();
             this.Suspending += OnSuspending;
           
-            
-
         }
 
         //public static StorageFolder projectsFolder { get; set; } 
@@ -42,7 +40,7 @@ namespace FileStructures
         public static int PrimaryKeyIndexNumber = 5;
         public static int SecondaryKeyIndexNumber=5;
 
-        public static List<Char> Alphabet = new List<char> {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S', 'T','U','V','X','Y','Z'}; 
+        public static List<Char> Alphabet = new List<char> {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'}; 
         /// <summary>
         /// Se invoca cuando el usuario final inicia la aplicación normalmente. Se usarán otros puntos
         /// de entrada cuando la aplicación se inicie para abrir un archivo específico, por ejemplo.
@@ -171,8 +169,38 @@ namespace FileStructures
 
         }
 
+        // A>B --> -1 
+        // A<B --> 1
+        // A=B --> 0
+        public static int CompareObjects(object objectA, object objectB)
+        {
+            int result = -1;
+            string a = objectA.GetType().Name;
+            string b = objectB.GetType().Name;
+            //if (objectA.GetType().Name != objectB.GetType().Name)
+            // {
+            if (objectA.GetType() == typeof(int))
+            {
+                if ((int)objectA < (int)objectB)
+                    result = 1;
+                else if ((int)objectA == (int)objectB)
+                    result = 0;
+            }
+            else if (objectA.GetType() == typeof(string))
+            {
+                result = string.Compare(objectA as string, objectB as string, StringComparison.CurrentCulture);
+            }
+            //}
+            // else
+            //   throw new Exception("arguments are not instances of the same type");
 
+            return result;
         }
+
+        public static int TDrawElemSize = 46;
+
+
+    }
 
   
     }

@@ -69,7 +69,7 @@ namespace FileStructures
         {
             //Open files or create them if don't exist 
             StorageFile file = await projectFolder.CreateFileAsync(name + ".dat", CreationCollisionOption.OpenIfExists);
-            StorageFile fileIdx = await projectFolder.CreateFileAsync(name + ".idx", CreationCollisionOption.OpenIfExists);
+           // StorageFile fileIdx = await projectFolder.CreateFileAsync(name + ".idx", CreationCollisionOption.OpenIfExists);
 
 
             using (BinaryReader reader = new BinaryReader(await projectFolder.OpenStreamForReadAsync(name+".dat")))

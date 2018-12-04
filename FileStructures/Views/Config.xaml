@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
+    Loaded="Page_Loaded"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <StackPanel Margin="20">
@@ -18,12 +19,16 @@
         </TextBlock>
 
 
-        <RadioButton Name="ordered" Checked="ordered_Checked">
+        <RadioButton Name="ordered"  Click="ordered_Click">
             Secuential
         </RadioButton>
         
-        <RadioButton IsChecked="True" Name ="indexed" Checked="indexed_Checked">
+        <RadioButton Name ="indexed"  Click="indexed_Click" >
             Indexed 
+        </RadioButton>
+
+        <RadioButton  Name ="tree"  Click="tree_Click">
+            B+ Tree
         </RadioButton>
 
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FileStructures
 {
-    class Index
+    public class Index
     {
         public long pos;
         public char type;
@@ -16,15 +16,15 @@ namespace FileStructures
         public long next;
         public long[] MainTable;
         public Tuple<object, long>[] SecondaryTable;
-        // Index Size=8+1+4+4= 19
-        private int mainTableStart = 9;
+        // Index Size=8+1+4+4= 17
+        private int mainTableStart = 17;
         private long dataAreaStart;
 
         public int SizeInBytes
         {
             get
             {
-                return mainTableStart + MainTable.Count() * 8 + (lenght + 8) * slotsNumber;
+                return mainTableStart + (MainTable.Count() * 8) + (lenght + 8) * slotsNumber * mainTableEntries;
             }
         }
 
@@ -99,6 +99,19 @@ namespace FileStructures
                 
             }
            
+        }
+
+        public List<Tuple<object, long>> GetEntrySlots(int tableEntry)
+        {
+            List<Tuple<object, long>> result = new List<Tuple<object, long>>();
+
+            if (tableEntry < mainTableEntries)
+            {
+                for (int i = tableEntry*slotsNumber; i < (tableEntry * slotsNumber) + slotsNumber; i++)
+                    result.Add(SecondaryTable[i]);
+
+            }
+            return result;
         }
 
         

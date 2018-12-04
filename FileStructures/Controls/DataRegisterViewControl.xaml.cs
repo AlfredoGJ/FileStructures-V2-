@@ -116,12 +116,23 @@ namespace FileStructures.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            if (DataContext != null)
+            {
+                register = (DataContext as DataRegister);
 
-            register = (DataContext as DataRegister);
+                Fields = register.Fields;
+            }
 
-            Fields = register.Fields;
-            
+        }
 
+        private void UserControl_DataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+        {
+            if (DataContext != null)
+            {
+                register = (DataContext as DataRegister);
+
+                Fields = register.Fields;
+            }
         }
     }
 }

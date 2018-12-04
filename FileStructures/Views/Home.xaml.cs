@@ -46,6 +46,7 @@ namespace FileStructures.Views
             picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
             picker.FileTypeFilter.Add(".ddc");
             picker.FileTypeFilter.Add(".idd");
+            picker.FileTypeFilter.Add(".tdd");
 
 
 
@@ -57,10 +58,10 @@ namespace FileStructures.Views
                 App.CurrentFileName = file.Name;
                 if (file.FileType == "ddc")
                     App.CurrentFileOrganization =  FileOrganization.Ordered;
-                else
+                else if(file.FileType=="idd")
                     App.CurrentFileOrganization =  FileOrganization.Indexed; 
-
-
+                else
+                    App.CurrentFileOrganization = FileOrganization.Tree;
 
             }
 
@@ -78,8 +79,10 @@ namespace FileStructures.Views
                 StorageFile myNewFile;
                 if (App.CurrentFileOrganization== FileOrganization.Ordered)
                     myNewFile= await projectsFolder.CreateFileAsync(FileNameTextBox.Text + ".ddc");
-                else
+                else if(App.CurrentFileOrganization == FileOrganization.Indexed)
                     myNewFile = await projectsFolder.CreateFileAsync(FileNameTextBox.Text + ".idd");
+                else
+                    myNewFile = await projectsFolder.CreateFileAsync(FileNameTextBox.Text + ".tdd");
 
                 BinaryWriter writer = new BinaryWriter(  await myNewFile.OpenStreamForWriteAsync());
                 writer.Write(((long)(-1)));

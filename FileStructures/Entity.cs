@@ -17,7 +17,8 @@ namespace FileStructures
         // Private fields
         private DataFileManager dataManager;
         private DictionaryManager dictionaryManager;
-        private IndexManager indexManager;
+        public IndexManager indexManager;
+        public TreeManager treeManager;
         private List<Attribute> attributes;
         private Attribute primaryKey;
         private List<DataRegister> registers;
@@ -74,23 +75,37 @@ namespace FileStructures
             this.attributes = attributes;
             this.primaryKey = attributes.Find(X => X.IndexType == 2);
             this.dataManager = new DataFileManager(Name, attributes);
-            this.indexManager = new IndexManager(Name,attributes);
+ 
 
             dataManager.itemsOnFileChanged += UpdateChangesInView;
             dataManager.ReadAllRegisters(dataPtr);
 
-            indexManager.initialize();
+
+            if (App.CurrentFileOrganization == FileOrganization.Indexed)
+            {
+                this.indexManager = new IndexManager(Name, attributes);
+                indexManager.initialize();
+            }
+
+            if (App.CurrentFileOrganization == FileOrganization.Tree)
+            {
+
+                this.treeManager = new TreeManager(Name);
+            }
+
             //UpdateChangesInView();
-
-
-
-
         }
 
+        //
         private void UpdateChangesInView()
         {
             this.registers = dataManager.registers;
             itemsOnFileChanged?.Invoke();
+
+
+            if (App.CurrentFileOrganization == FileOrganization.Tree)
+                this.treeManager.Initialize(dataManager.registers);
+
         }
 
         public Entity(string name, DictionaryManager manager)
@@ -339,10 +354,22 @@ namespace FileStructures
                     AddRegisterIndexed(register);
                   
                     break;
+
+                case FileOrganization.Tree:
+                    AddRegisterTree(register);
+
+                    break;
+
             }
             
         }
 
+
+        private void AddRegisterTree( DataRegister register)
+        {
+            InsertDataUnordered(register, true, false);
+            treeManager.AddKey(register.Key, register.Position) ;
+        }
 
         private async void AddRegisterIndexed(DataRegister register)
         {
