@@ -144,7 +144,7 @@ namespace FileStructures.Views
                 if (result == ContentDialogResult.Primary)
                 {
                     Attribute attribute = (sender as Control).DataContext as Attribute;
-                    entity.RemoveRegister(register, true);
+                    entity.RemoveRegisterIndexed(register);
 
                 }
             }

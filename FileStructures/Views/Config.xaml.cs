@@ -38,14 +38,14 @@ namespace FileStructures.Views
         {
             if (App.CurrentFileOrganization != FileOrganization.Indexed)
                 App.CurrentFileName = "";
-            App.CurrentFileOrganization = FileOrganization.Indexed;
+             App.CurrentFileOrganization = FileOrganization.Indexed;
         }
 
         private void ordered_Click(object sender, RoutedEventArgs e)
         {
             if (App.CurrentFileOrganization != FileOrganization.Ordered)
                 App.CurrentFileName = "";
-            App.CurrentFileOrganization = FileOrganization.Ordered;
+             App.CurrentFileOrganization = FileOrganization.Ordered;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

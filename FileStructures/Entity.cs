@@ -528,6 +528,45 @@ namespace FileStructures
             return register.Position; 
         }
 
+
+        public async void RemoveRegisterIndexed(DataRegister register)
+        {
+            RemoveRegister(register, true);
+
+            var fields = register.Fields;
+            List<int> entries = new List<int>();
+            List<int> eIndexes = new List<int>();
+
+            for (int i = 0; i < fields.Count(); i++)
+            {
+                Attribute E = Attributes[i];
+
+                // If its an index
+                if (E.IndexType == 2 || E.IndexType == 3)
+                {
+                    int entry = -1;
+
+                    if (E.Type == 'S')
+                        entry = App.Alphabet.IndexOf((char.ToUpper((fields[i] as string)[0])));
+
+                    if (E.Type == 'I')
+                        entry = App.GetIntFirstDigit((int)fields[i]);
+
+                    entries.Add(entry);
+                    eIndexes.Add(i);
+                }
+            }
+
+
+           
+            indexManager.ClearIndexesOf(register, eIndexes, entries);
+            indexManager.WriteToFile();
+            
+
+
+
+        }
+
         public async void RemoveRegister(DataRegister register, bool writeBack)
         {
             int index = registers.FindIndex(e => e.Position == register.Position);

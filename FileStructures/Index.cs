@@ -101,6 +101,28 @@ namespace FileStructures
            
         }
 
+        public void ClearEntry(int tableEntry, object value)
+        {
+            if (tableEntry < mainTableEntries)
+            {
+                if (MainTable[tableEntry] != -1)
+                {
+                    //MainTable[tableEntry] = dataAreaStart + tableEntry * mainTableEntries;
+
+                    for (int i = tableEntry * slotsNumber; i < (tableEntry + 1) * slotsNumber; i++)
+                    {
+                        if (SecondaryTable[i].Item1 == value)
+                        {
+                            SecondaryTable[i] = new Tuple<object, long>(-1, -1);
+                            break;
+                        }
+                    }
+                }
+                
+
+            }
+        }
+
         public List<Tuple<object, long>> GetEntrySlots(int tableEntry)
         {
             List<Tuple<object, long>> result = new List<Tuple<object, long>>();

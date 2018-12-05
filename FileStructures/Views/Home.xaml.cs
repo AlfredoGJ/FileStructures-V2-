@@ -56,9 +56,9 @@ namespace FileStructures.Views
             {
                 CurrentFileName.Text = file.Name;
                 App.CurrentFileName = file.Name;
-                if (file.FileType == "ddc")
+                if (file.FileType == ".ddc")
                     App.CurrentFileOrganization =  FileOrganization.Ordered;
-                else if(file.FileType=="idd")
+                else if(file.FileType==".idd")
                     App.CurrentFileOrganization =  FileOrganization.Indexed; 
                 else
                     App.CurrentFileOrganization = FileOrganization.Tree;

@@ -209,5 +209,18 @@ namespace FileStructures
             }
 
         }
+
+        public void ClearIndexesOf(DataRegister register, List<int> idxIndexes, List<int> entries)
+        {
+            int freeIndexCount = 0;
+
+            for (int i = 0; i < indexes.Count; i++)
+            {
+                indexes[i].ClearEntry(entries[i], register.Fields[idxIndexes[i]]);
+                
+            }
+
+        }
+
     }
 }
