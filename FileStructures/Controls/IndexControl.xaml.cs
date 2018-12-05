@@ -37,23 +37,62 @@ namespace FileStructures.Controls
             Position.Text += index.pos.ToString();
             Size.Text += index.SizeInBytes.ToString();
 
-            if (index.type == 'I')
+            //Indice tipo primario
+            if (!index.IT)
             {
-                List<Tuple<int, long>> mainTable = new List<Tuple<int, long>>();
-                for (int i = 0; i < index.MainTable.Count(); i++)
-                    mainTable.Add(new Tuple<int, long>(i, index.MainTable[i]));
+                Title.Text = "Primary Index";
+                if (index.type == 'I')
+                {
+                    List<Tuple<int, long>> mainTable = new List<Tuple<int, long>>();
+                    for (int i = 0; i < index.MainTable.Count(); i++)
+                        mainTable.Add(new Tuple<int, long>(i, index.MainTable[i]));
 
-                IndexDetail.ItemsSource = mainTable;
+                    IndexDetail.ItemsSource = mainTable;
+                }
+
+                if (index.type == 'S')
+                {
+                    List<Tuple<string, long>> mainTable = new List<Tuple<string, long>>();
+                    for (int i = 0; i < index.MainTable.Count(); i++)
+                        mainTable.Add(new Tuple<string, long>(App.Alphabet[i].ToString(), index.MainTable[i]));
+
+                    IndexDetail.ItemsSource = mainTable;
+                }
             }
-
-            if (index.type == 'S')
+            // Indice tipo secundario
+            else
             {
-                List<Tuple<string, long>> mainTable = new List<Tuple<string, long>>();
-                for (int i = 0; i < index.MainTable.Count(); i++)
-                    mainTable.Add(new Tuple<string, long>(App.Alphabet[i].ToString(), index.MainTable[i]));
+                Title.Text = "Secondary Index";
 
-                IndexDetail.ItemsSource = mainTable;
+                
+                if (index.type == 'I')
+                {
+                    List<Tuple<int, string>> mainTable = new List<Tuple<int, string>>();
+
+                    for (int i = 0; i < index.SecondaryTable.Count(); i++)
+                    {
+                        if(!mainTable.Any(x=> x.Item1== (int)index.SecondaryTable[i].Item1))
+                            mainTable.Add(new Tuple<int, string>((int)index.SecondaryTable[i].Item1,""));
+                    }
+                        
+
+                    IndexDetail.ItemsSource = mainTable;
+                }
+
+                if (index.type == 'S')
+                {
+                    List<Tuple<string, string>> mainTable = new List<Tuple<string, string>>();
+
+                    for (int i = 0; i < index.SecondaryTable.Count(); i++)
+                    {
+                        if (!mainTable.Any(x => x.Item1 == (string)index.SecondaryTable[i].Item1))
+                            mainTable.Add(new Tuple<string, string>((string)index.SecondaryTable[i].Item1, ""));
+                    }
+
+                    IndexDetail.ItemsSource = mainTable;
+                }
             }
+            
 
         }
 
@@ -62,22 +101,47 @@ namespace FileStructures.Controls
             
             var context = (e.OriginalSource as Control).DataContext;
 
-            if (context.GetType() == new Tuple<int, long>(1, 1).GetType())
+            // When the index is primary
+            if (!index.IT)
             {
-                
-                int idx = (context as Tuple<int, long>).Item1;
-                SecTable.ItemsSource= index.GetEntrySlots(idx);
+                if (context.GetType() == new Tuple<int, long>(1, 1).GetType())
+                {
+
+                    int idx = (context as Tuple<int, long>).Item1;
+                    SecTable.ItemsSource = index.GetEntrySlots(idx);
 
 
 
+                }
+
+                if (context.GetType() == new Tuple<string, long>("1", 1).GetType())
+                {
+                    string key = (context as Tuple<string, long>).Item1;
+                    int idx = App.Alphabet.IndexOf(Char.ToUpper(key[0]));
+                    SecTable.ItemsSource = index.GetEntrySlots(idx);
+                }
             }
-
-            if (context.GetType() == new Tuple<string, long>("1", 1).GetType())
+            else
             {
-                string key = (context as Tuple<string, long>).Item1;
-                int idx = App.Alphabet.IndexOf(Char .ToUpper(key[0]));
-                SecTable.ItemsSource = index.GetEntrySlots(idx);
+                if (context.GetType() == new Tuple<int, string>(1, "1").GetType())
+                {
+
+                    int idx = (context as Tuple<int, string>).Item1;
+                    SecTable.ItemsSource = index.SecondaryTable.ToList().FindAll(x=> (int)x.Item1==idx);
+
+
+
+                }
+
+                if (context.GetType() == new Tuple<string, string>("1", "1").GetType())
+                {
+                    string key = (context as Tuple<string, string>).Item1;
+                    SecTable.ItemsSource = index.SecondaryTable.ToList().FindAll(x => (string)x.Item1 == key);
+                    //int idx = App.Alphabet.IndexOf(Char.ToUpper(key[0]));
+                    //SecTable.ItemsSource = index.GetEntrySlots(idx);
+                }
             }
+            
 
         }
     }

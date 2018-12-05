@@ -52,12 +52,12 @@ namespace FileStructures
                     switch (attr.IndexType)
                     {
                         case 2:
-                            index = new Index(attr.Type, attr.Length, App.PrimaryKeyIndexNumber,ptrAux);
+                            index = new Index(attr.Type, attr.Length, App.PrimaryKeyIndexNumber,ptrAux,false);
                             ptrAux += index.SizeInBytes;
                             indexes.Add(index);
                             break;
                         case 3:
-                            index = new Index(attr.Type, attr.Length, App.SecondaryKeyIndexNumber,ptrAux);
+                            index = new Index(attr.Type, attr.Length, App.SecondaryKeyIndexNumber,ptrAux,true);
                             ptrAux += index.SizeInBytes;
                             indexes.Add(index);
                             break;
@@ -86,6 +86,7 @@ namespace FileStructures
             writer.Write((byte)index.type);
             writer.Write(index.lenght);
             writer.Write(index.slotsNumber);
+            writer.Write(index.IT);
             writer.Write(index.next);
 
             foreach (long ptr in index.MainTable)
@@ -123,7 +124,7 @@ namespace FileStructures
         {
 
             reader.BaseStream.Seek(position,SeekOrigin.Begin);
-            Index index = new Index((char)reader.ReadByte(), reader.ReadInt32(), reader.ReadInt32(), position);
+            Index index = new Index((char)reader.ReadByte(), reader.ReadInt32(), reader.ReadInt32(), position,reader.ReadBoolean());
             index.next = reader.ReadInt64();
 
             for (int i = 0; i < index.MainTable.Length;i++)

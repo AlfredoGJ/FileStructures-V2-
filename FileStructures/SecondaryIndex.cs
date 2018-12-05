@@ -21,6 +21,15 @@ namespace FileStructures
         private int mainTableStart = 17;
         public long dataAreaStart;
 
+
+        public int SizeInBytes
+        {
+            get
+            {
+                return mainTableStart + (MainTable.Count() * lenght) + 8 * slotsNumber * mainTableEntries;
+            }
+        }
+
         public SecondaryIndex(char type, int lenght,int slots, int entries,long pos ) : base()
         {
             this.pos = pos;

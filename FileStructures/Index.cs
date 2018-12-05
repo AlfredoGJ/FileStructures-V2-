@@ -45,11 +45,13 @@ namespace FileStructures
         /// </summary>
         public Tuple<object, long>[] SecondaryTable;
         // Index Size=8+1+4+4= 17
-        private int mainTableStart = 17;
+        private int mainTableStart = 18;
         /// <summary>
         /// Posicion donde comienza el area de datos del indice
         /// </summary>
         public long dataAreaStart;
+
+        public bool IT { get; set; }
 
         /// <summary>
         /// Tamaño total que ocupa el indice en el archivo de indices
@@ -65,12 +67,14 @@ namespace FileStructures
         public Index()
         { }
 
-        public Index(char type, int lenght, int slots, long pos)
+        public Index(char type, int lenght, int slots, long pos, bool indextype)
         {
             this.pos = pos;
             this.type = type;
             this.lenght = lenght;
             slotsNumber = slots;
+
+            this.IT = indextype;
 
             if (type == 'I')
                 mainTableEntries = 10;
@@ -162,11 +166,24 @@ namespace FileStructures
 
                     for (int i = tableEntry * slotsNumber; i < (tableEntry + 1) * slotsNumber; i++)
                     {
-                        if (SecondaryTable[i].Item1 == value)
+                        if (type == 'I')
                         {
-                            SecondaryTable[i] = new Tuple<object, long>(-1, -1);
-                            break;
+                            if ((int)SecondaryTable[i].Item1 == (int)value)
+                            {
+                                SecondaryTable[i] = new Tuple<object, long>(-1, -1);
+                                break;
+                            }
                         }
+                        if (type == 'S')
+                        {
+                            if ((string)SecondaryTable[i].Item1 == (string)value)
+                            {
+                                string aux = new string('\0', lenght);
+                                SecondaryTable[i] = new Tuple<object, long>(aux, -1);
+                                break;
+                            }
+                        }
+                        
                     }
                 }
                 
