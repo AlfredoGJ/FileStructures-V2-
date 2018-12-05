@@ -8,16 +8,28 @@ using System.Threading.Tasks;
 
 namespace FileStructures
 {
+
+    /// <summary>
+    /// Clase que representa una entidad 
+    /// </summary>
     public class Entity : INotifyPropertyChanged
     {
 
-
+        /// <summary>
+        /// Delegado creado para actualizar los cambios en la entidad
+        /// </summary>
         public delegate void ItemsOnFileChanged();
+        /// <summary>
+        /// Evento que se invoca cada que hay cambios en la entidad
+        /// </summary>
         public event ItemsOnFileChanged itemsOnFileChanged;
         // Private fields
         private DataFileManager dataManager;
         private DictionaryManager dictionaryManager;
         public IndexManager indexManager;
+        /// <summary>
+        /// Manejador de el arbol binario
+        /// </summary>
         public TreeManager treeManager;
         private List<Attribute> attributes;
         private Attribute primaryKey;
@@ -32,23 +44,51 @@ namespace FileStructures
         private long dataPointer;
         private long nextPointer;
 
+        /// <summary>
+        /// Evento qe se invoca cuando una propiedad cambia en la entidad
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
 
 
         // public properties
+        /// <summary>
+        /// Nombre de la entidad
+        /// </summary>
         public string Name { get => name; set => name = value; }
+        /// <summary>
+        /// Posicion en el dicccionario de datos de la entidad
+        /// </summary>
         public long Position { get => position; set => position = value; }
+        /// <summary>
+        /// Apuntador a los atributos de la entidad
+        /// </summary>
         public long AttributesPtr { get => attributePointer; }
+        /// <summary>
+        /// Apuntador a datos de la entidad
+        /// </summary>
         public long DataPtr { get => dataPointer; }
+        /// <summary>
+        /// Apuntador a la siguiente entidad
+        /// </summary>
         public long NextPtr { get => nextPointer; set => nextPointer = value; }
+        /// <summary>
+        /// Lista de atributos de la entidad
+        /// </summary>
         public List<Attribute> Attributes { get => attributes; }
+        /// <summary>
+        /// Clave primaria de la entidad
+        /// </summary>
         public Attribute PrimaryKey { get => primaryKey; }
-
+        /// <summary>
+        /// Lista de registros de datos de la entidad
+        /// </summary>
         public List<DataRegister> Registers { get => registers; }
 
 
-
+        /// <summary>
+        /// Nombre de la entidad representado en un arreglo de caracteres
+        /// </summary>
         public char[] ArrayName
         {
             get
@@ -96,7 +136,7 @@ namespace FileStructures
             //UpdateChangesInView();
         }
 
-        //
+        
         private void UpdateChangesInView()
         {
             this.registers = dataManager.registers;
@@ -107,6 +147,7 @@ namespace FileStructures
                 this.treeManager.Initialize(dataManager.registers);
 
         }
+
 
         public Entity(string name, DictionaryManager manager)
         {
@@ -121,14 +162,10 @@ namespace FileStructures
         }
 
 
-        public bool Edited
-        {
-            get => default(bool);
-            set
-            {
-            }
-        }
-
+        /// <summary>
+        /// Agrega un atributo a la entidad
+        /// </summary>
+        /// <param name="attribute">Atributo que se agregará</param>
         public async void AddAttribute(Attribute attribute)
         {
             attribute.Position = dictionaryManager.FileLength;
@@ -173,7 +210,10 @@ namespace FileStructures
 
         }
 
-        //This method is provitional, must be integrated on  AddAttribute later
+        /// <summary>
+        /// Agrega un atributo que ya existe en la entidad, usado para cuando se edita un atributo
+        /// </summary>
+        /// <param name="attribute"></param>
         public async void AddAttributeExistent(Attribute attribute)
         {
             //attribute.Position = dictionaryManager.FileLength;
@@ -225,7 +265,10 @@ namespace FileStructures
                 PropertyChanged(this, new PropertyChangedEventArgs(name));
             }
         }
-
+        /// <summary>
+        /// Elimina un atributo de la entidad
+        /// </summary>
+        /// <param name="attribute">Atributo a eliminar</param>
         public async void RemoveAttribute(Attribute attribute)
         {
             int index = attributes.FindIndex(e => e.Name == attribute.Name);
@@ -248,6 +291,11 @@ namespace FileStructures
 
         }
 
+        /// <summary>
+        /// Actualiza un atributo en la entidad
+        /// </summary>
+        /// <param name="attribute">Atributo a actualizar</param>
+        /// <returns>true si se actualizo correctamente</returns>
         public async Task<bool> UpdateAttribute(Attribute attribute)
         {
             Attribute findResult = attributes.Find(x => x.Name == attribute.Name);
@@ -279,6 +327,12 @@ namespace FileStructures
         }
 
 
+
+        /// <summary>
+        /// Actualiza un registr de datos en la entidad
+        /// </summary>
+        /// <param name="register">Registro a actualizar</param>
+        /// <returns>True si se actualizo correctamente</returns>
         public async Task<bool> UpdateDataRegister(DataRegister register)
         {
             bool insertResult= false;
@@ -330,11 +384,13 @@ namespace FileStructures
 
 
 
-        //public void SetPrimaryKeyAttribute()
-        //{
-        //    throw new System.NotImplementedException();
-        //}
-
+    
+        /// <summary>
+        /// Agrega un registro a la entidad
+        /// </summary>
+        /// <param name="register">Registro a agregar</param>
+        /// <param name="writeBack">variable que especifica si se escribira el archvo de datos despues de la insercion</param>
+        /// <param name="existent">variable que indica si el registro existe actualmente en la entidad, usado para la edicion de registros</param>
         public void AddRegister(DataRegister register, bool writeBack, bool existent)
         {
             switch (App.CurrentFileOrganization)
@@ -529,6 +585,10 @@ namespace FileStructures
         }
 
 
+        /// <summary>
+        /// Elimina un registro de la entidad en modo indedxado
+        /// </summary>
+        /// <param name="register">Registro a eliminar</param>
         public async void RemoveRegisterIndexed(DataRegister register)
         {
             RemoveRegister(register, true);
@@ -566,7 +626,11 @@ namespace FileStructures
 
 
         }
-
+        /// <summary>
+        /// Elimina un registro de la entidad
+        /// </summary>
+        /// <param name="register">Registro a eliminar</param>
+        /// <param name="writeBack">Variable que indica se se escribira el archivo de datos despues de la eliminacion</param>
         public async void RemoveRegister(DataRegister register, bool writeBack)
         {
             int index = registers.FindIndex(e => e.Position == register.Position);

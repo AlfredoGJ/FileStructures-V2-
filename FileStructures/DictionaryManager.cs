@@ -10,18 +10,40 @@ using Windows.UI.Xaml.Controls;
 
 namespace FileStructures
 {
+
+    /// <summary>
+    /// Clase que se encarga de manejar el archivo de diccionario de datos Escritura /Lectura
+    /// </summary>
     public class DictionaryManager
     {
+        /// <summary>
+        /// delegado para actualizar la vista cuando haya cambios en el diccionario
+        /// </summary>
         public delegate void ItemsOnFileChanged();
+        /// <summary>
+        /// Evento que se invoca cuando hay cambios en el diccionario de datos
+        /// </summary>
         public event ItemsOnFileChanged itemsOnFileChanged;
         private long headerValue;
         private long fileLength;
         private string name;
         private List<Entity> entities;
 
+        /// <summary>
+        /// Nombre del diccionario de datos
+        /// </summary>
         public string Name { get => name; set => value = name; }
+        /// <summary>
+        /// CAbecera del diccionario de datos
+        /// </summary>
         public long Header { get => headerValue; }
+        /// <summary>
+        /// Lista de entidades del diccionario de datos
+        /// </summary>
         public List<Entity> Entities { get => entities; }
+        /// <summary>
+        /// Longitud del archivo de diccionario de datos
+        /// </summary>
         public long FileLength { get => fileLength; }
 
         private StorageFolder projectFolder;
@@ -39,6 +61,10 @@ namespace FileStructures
             ReadFromFile();
         }
 
+        /// <summary>
+        /// Metodo para agregar una entidad al diccionario de datos
+        /// </summary>
+        /// <param name="entity">Entidad a agregar</param>
         public void AddEntity(Entity entity)
         {
 
@@ -78,6 +104,11 @@ namespace FileStructures
         }
 
 
+        /// <summary>
+        /// Metodo que elimina una entidad del diccionario de datos
+        /// </summary>
+        /// <param name="entity">Entidad a eliminar</param>
+        /// <param name="writeBack">Variable que indica si se escribira el archivo despues de la eliminacion</param>
         public void RemoveEntity(Entity entity,bool  writeBack)
         {
             int index = entities.FindIndex(e => e.Name == entity.Name);
@@ -113,6 +144,9 @@ namespace FileStructures
 
         }
 
+        /// <summary>
+        /// Metodo que lee las entidades y atributos desde el archivo de diccionario de datos
+        /// </summary>
         private async void ReadFromFile()
         {
             using (BinaryReader reader = new BinaryReader(await projectFolder.OpenStreamForReadAsync(name)))
@@ -139,6 +173,11 @@ namespace FileStructures
 
         }
 
+        /// <summary>
+        /// Metodo para escribir una entidad en el diccionario de datos
+        /// </summary>
+        /// <param name="entity">Entidad a escribir</param>
+        /// <returns>Regresa true si se escribio correctamente</returns>
         public async Task<bool> WriteEntity(Entity entity)
         {
             using (BinaryWriter writer = new BinaryWriter(await projectFolder.OpenStreamForWriteAsync(name, CreationCollisionOption.OpenIfExists)))
@@ -183,6 +222,11 @@ namespace FileStructures
 
        
 
+        /// <summary>
+        /// Metodo que actualiza una entidad en el diccionario de atos
+        /// </summary>
+        /// <param name="entity">Entidad a actualizar</param>
+        /// <param name="newName">Nuevo nombre de la entidad</param>
         public void  UpdateEntity(Entity entity, string newName)
         {
 
@@ -198,6 +242,11 @@ namespace FileStructures
                 
         }
 
+        /// <summary>
+        /// Metodo para escribir un atributo en el diccionario de datos
+        /// </summary>
+        /// <param name="attribute">Atributo a escribir</param>
+        /// <returns>Regresa true si se escribio correctamente</returns>
         public async Task<bool> WriteAttribute( Attribute attribute)
         {
             using (BinaryWriter writer = new BinaryWriter(await projectFolder.OpenStreamForWriteAsync(name,CreationCollisionOption.OpenIfExists)))
@@ -216,6 +265,12 @@ namespace FileStructures
             return true;
         }
 
+        /// <summary>
+        /// Lee los atributos  desde el archivo de diccionario de datos
+        /// </summary>
+        /// <param name="pos"> Posicion de comienzo de los atributos</param>
+        /// <param name="reader">Lector binario</param>
+        /// <returns>Regresa la lista de atributos leidos</returns>
         public  List<Attribute> ReadAttributes(long pos, BinaryReader reader)
         {     
                 long ptr = pos;

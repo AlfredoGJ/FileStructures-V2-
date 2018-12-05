@@ -5,6 +5,9 @@ using System.Text;
 
 namespace FileStructures
 {
+    /// <summary>
+    /// Clase que representa un atributo 
+    /// </summary>
     public class Attribute
     {
 
@@ -14,17 +17,38 @@ namespace FileStructures
         private long nextPointer;
 
         // public properties
+        /// <summary>
+        /// Nombre del atributo
+        /// </summary>
         public string Name { get => name; set => name = value; }
+        /// <summary>
+        /// Posicion en el archivo
+        /// </summary>
         public long Position { get; set; }
+        /// <summary>
+        /// Tipo del atributo
+        /// </summary>
         public char Type { get; set; }
+        /// <summary>
+        /// Longitud del atributo
+        /// </summary>
         public int Length { get; set; }
+        /// <summary>
+        /// Tipo de indice del atributo
+        /// </summary>
         public int IndexType { get; set; }
+
+        /// <summary>
+        /// Apuntador al indice
+        /// </summary>
         public long IndexPtr { get; set; }
+        /// <summary>
+        /// Apuntador al siguiente atributo
+        /// </summary>
         public long NextPtr { get => nextPointer; set => nextPointer = value; }
-
-
-        
-        
+        /// <summary>
+        /// Nombre del atributo en un arreglo de caracteres
+        /// </summary>
         public char[] ArrayName
         {
             get
@@ -64,6 +88,10 @@ namespace FileStructures
         }
 
 
+        /// <summary>
+        /// Copia las caracteristicas del atributo a otro atributo
+        /// </summary>
+        /// <param name="attribute">Atributo al que seran copiadas las caracteristicas</param>
         public void PasteTo(Attribute attribute)
         {
            attribute.name= this.name;
@@ -73,17 +101,6 @@ namespace FileStructures
            attribute.IndexType= IndexType;
            attribute.IndexPtr= IndexPtr;
            attribute.NextPtr= NextPtr;
-        }
-
-
-
-
-        public bool Edited
-        {
-            get => default(bool);
-            set
-            {
-            }
         }
     }
 }

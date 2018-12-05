@@ -122,18 +122,13 @@
     <Compile Include="DataRegister.cs" />
     <Compile Include="DictionaryManager.cs" />
     <Compile Include="Entity.cs" />
-    <Compile Include="HashDataFileManager.cs" />
-    <Compile Include="HashDictionary.cs" />
     <Compile Include="Index.cs" />
-    <Compile Include="IndexedDataFileManager.cs" />
-    <Compile Include="IndexedDictionary.cs" />
     <Compile Include="IndexManager.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TreeDataFileManager.cs" />
-    <Compile Include="TreeDictionary.cs" />
+    <Compile Include="SecondaryIndex.cs" />
     <Compile Include="TreeManager.cs" />
     <Compile Include="Views\Config.xaml.cs">
       <DependentUpon>Config.xaml</DependentUpon>

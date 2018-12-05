@@ -8,6 +8,9 @@ using Windows.Storage;
 
 namespace FileStructures
 {
+    /// <summary>
+    /// Clase que se encarga de manejar los indices y su escritura lectura en el archivo de indices
+    /// </summary>
     public class IndexManager
     {
         private string name;
@@ -34,7 +37,9 @@ namespace FileStructures
            
             
         }
-
+        /// <summary>
+        /// Metodo para inicializar el manejador de indices
+        /// </summary>
         public async  void initialize()
         {
             bool initialized = await ReadFromFile();
@@ -70,6 +75,11 @@ namespace FileStructures
             }
         }
 
+        /// <summary>
+        /// Escribe un indice en el archivo de datos
+        /// </summary>
+        /// <param name="writer">Instanci BinaryWriter que se encarga de escribir en el archivo</param>
+        /// <param name="index"> Indice a escribir en el archivo</param>
         private async void WriteIndex(BinaryWriter writer, Index index)
         {
             writer.Seek((int)index.pos, SeekOrigin.Begin);
@@ -103,6 +113,12 @@ namespace FileStructures
             }
         }
 
+        /// <summary>
+        /// Metodo para leer un indice desde el archivo de indices
+        /// </summary>
+        /// <param name="reader">Instancia BinaryReader que se encarga de leer el archivo </param>
+        /// <param name="position"> Posicion en el archivo donde se encuentra el indice</param>
+        /// <returns></returns>
         private async Task<Index> ReadIndex(BinaryReader reader, long position)
         {
 
@@ -139,7 +155,9 @@ namespace FileStructures
         }
 
 
-
+        /// <summary>
+        /// Metodo que se encarga de escribir los indices en el archivo de indices
+        /// </summary>
         public async void WriteToFile()
         {
             StorageFile file = await projectFolder.CreateFileAsync(name + ".idx", CreationCollisionOption.OpenIfExists);
@@ -163,6 +181,10 @@ namespace FileStructures
             }
         }
 
+        /// <summary>
+        /// Metodo que se encarga de leer los indices desde el archivo de indices
+        /// </summary>
+        /// <returns>true si se leyeron correctamente los indices, de lo contrario regresa false </returns>
         public async Task<bool>ReadFromFile()
         {
             bool result = false;
@@ -186,7 +208,11 @@ namespace FileStructures
             }
             return result;
         }
-
+        /// <summary>
+        /// Funcion que checa si hay espacio disponible en cierto indice
+        /// </summary>
+        /// <param name="entries"> lista de  cada entrada a checar</param>
+        /// <returns></returns>
         public int HasSlots(List<int> entries)
         {
             int count = 0;
@@ -198,7 +224,13 @@ namespace FileStructures
             return count;
         }
 
-        
+        /// <summary>
+        /// Inserta los indices de un registro en cada indice correspondiente
+        /// </summary>
+        /// <param name="register"> Registro a insertar</param>
+        /// <param name="idxIndexes"> Lista de ID´s a usar para la insercion</param>
+        /// <param name="entries">lissta de entradas a ingresar de cada indice</param>
+        /// <param name="posInDataFile"> Posicion del indice en el archivo de datos</param>
         public void InsertIndexesOf(DataRegister register, List<int> idxIndexes, List<int> entries, long posInDataFile)
         {
             int freeIndexCount = 0;
@@ -209,7 +241,12 @@ namespace FileStructures
             }
 
         }
-
+        /// <summary>
+        /// Remueve los indices ocupados por el registro
+        /// </summary>
+        /// <param name="register">Registro del cual se eliminarán los indices</param>
+        /// <param name="idxIndexes">Indices de cada registro a usar para la eliminacion</param>
+        /// <param name="entries">Entradas en cada registro a eliminar</param>
         public void ClearIndexesOf(DataRegister register, List<int> idxIndexes, List<int> entries)
         {
             int freeIndexCount = 0;

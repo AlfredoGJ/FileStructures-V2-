@@ -5,20 +5,40 @@ using System.Text;
 
 namespace FileStructures
 {
+    /// <summary>
+    /// Clase que representa un registro de datos
+    /// </summary>
     public class DataRegister
     {
 
+        /// <summary>
+        /// Clave primaria del registro
+        /// </summary>
         private object key;
-
+        /// <summary>
+        /// Bloque binario que representa los datos del registro
+        /// </summary>
         private byte[] block;
+        /// <summary>
+        /// Posicion del registro en el archivo
+        /// </summary>
         public long Position { get; set; }
+        /// <summary>
+        /// Apuntador al siguiente registro
+        /// </summary>
         public long NextPtr { get; set; }
+        /// <summary>
+        /// Clave primaria del registro
+        /// </summary>
         public object Key { get => key; }
         private Attribute keyAttribute;
 
         private List<object> fields;
         private List<Attribute> template;
 
+        /// <summary>
+        /// Lista de campos del registro
+        /// </summary>
         public List<object> Fields { get =>fields; }
 
         public byte[] Block
@@ -51,7 +71,11 @@ namespace FileStructures
 
 
         }
-
+        /// <summary>
+        /// Desempaqueta un bloque de datos binario y crea a partie de el un registro
+        /// </summary>
+        /// <param name="block"> Bloque de datos a desempaquetar</param>
+        /// <param name="template">Lista de atributos que describen el registro </param>
         private void UnPack(byte[] block, List<Attribute> template)
         {
             int offset = 0;
@@ -107,7 +131,11 @@ namespace FileStructures
                 offset += template[i].Length;
             }
         }
-
+        /// <summary>
+        /// Crea un bloque binario de datos a partir de una lista de cadenas
+        /// </summary>
+        /// <param name="values"> Lista de cadenas que contiene los datos del registro</param>
+        /// <param name="template"> Lista de atributos que descru¿iben el registro</param>
         private void CreateBlock(List<string> values, List<Attribute> template)
         {
             if (values.Count == template.Count)
@@ -161,6 +189,11 @@ namespace FileStructures
 
         }
 
+
+        /// <summary>
+        /// Copia los datos de un registro a otro
+        /// </summary>
+        /// <param name="register"> Registro donde se vaciarán los datos del registro actual</param>
         public void PasteTo(DataRegister register)
         {
             register.Position = Position;

@@ -8,15 +8,27 @@ using Windows.UI.Xaml.Controls;
 using FileStructures.Controls;
 namespace FileStructures
 {
-
+    /// <summary>
+    /// Enumeracion para clasificar los tipos de nodos en una arbol
+    /// </summary>
     public enum NodeType { Header, Intermediate, Leaf };
 
 
+    /// <summary>
+    /// Clase que representa un arbol B+
+    /// </summary>
     public class Tree
     {
         Node header;
+        /// <summary>
+        /// Lista de nodos del arbol
+        /// </summary>
         public List<Node> Nodes { get => nodes; }
+
         private List<Node> nodes;
+        /// <summary>
+        /// Orden del arbol
+        /// </summary>
         public int order;
 
         public Tree(int order)
@@ -28,6 +40,12 @@ namespace FileStructures
 
         }
 
+
+        /// <summary>
+        /// Metodo que maneja la insercion en el arbol
+        /// </summary>
+        /// <param name="key">Clave a insertar</param>
+        /// <param name="address">Direccion en el archivo de datos del registro de la clave</param>
         public void Insert(object key, long address)
         {
             Child result=null;
@@ -49,6 +67,10 @@ namespace FileStructures
 
         }
 
+        /// <summary>
+        /// Dibuja el arbol sobre un contro canvas
+        /// </summary>
+        /// <param name="canvas">Area donde se dibujara el arbol</param>
         public void Draw(Canvas canvas)
         {
 
@@ -69,10 +91,22 @@ namespace FileStructures
 
 
 
+    /// <summary>
+    /// Clase que representa un nodo del arbol B+
+    /// </summary>
     public class Node
     {
+        /// <summary>
+        /// Tipo del nodo
+        /// </summary>
         public NodeType Type { get; set; }
+        /// <summary>
+        /// Lista de elementos que estan dentro del nodo
+        /// </summary>
         public List<Child> Children { get; set; }
+        /// <summary>
+        /// Orden del nodo
+        /// </summary>
         public int Order { get => order; }
 
         private int order;
@@ -95,6 +129,12 @@ namespace FileStructures
             Children = new List<Child>();
         }
 
+        /// <summary>
+        /// Metodo que maneja la insercion en el nodo
+        /// </summary>
+        /// <param name="element">Elemento a insertar en el nodo</param>
+        /// <param name="descending">Variable que indica en que sentido del recorrido va la insercion (hacia abajo o hacia arriba)</param>
+        /// <returns>Regresa un elemento si es que se desborda el nodo</returns>
         public Child Insert(Child element, bool descending)
         {
             Child returnChild = null;
@@ -188,6 +228,11 @@ namespace FileStructures
 
         }
 
+
+        /// <summary>
+        /// Metodo que divide el nodo una vez que se alcanza el numero maximo de elementos
+        /// </summary>
+        /// <returns> Regresa el elemento central</returns>
         private Child Split()
         {
 
@@ -225,6 +270,11 @@ namespace FileStructures
 
 
 
+        /// <summary>
+        /// Metodo que inserta un elemento en la lista de elementos del nodo
+        /// </summary>
+        /// <param name="child">Elemento que se inserta</param>
+        /// <returns>Regresa true si se inserta correctamente el elemento, regresa false si el elemento esta repetido</returns>
         private bool PutChildren(Child child)
         {
             if (Children.Count == 0)
@@ -299,15 +349,32 @@ namespace FileStructures
 
 
 
-
+    /// <summary>
+    /// Clase que representa el componente minimo de un arbol B+ la cual contiene una clave y una direccion , este elemento puede apuntar a los nodos del arbol
+    /// </summary>
     public class Child
     {
+        /// <summary>
+        /// Elemento siguiente
+        /// </summary>
         public Child Next { get; set; }
+        /// <summary>
+        /// Elemento anterior
+        /// </summary>
         public Child Previous { get; set; }
+        /// <summary>
+        /// Nodo a la izquierda de este elemento
+        /// </summary>
         public Node LeftDescendant { get; set; }
+        /// <summary>
+        /// Nodo a la derecha de este elemento
+        /// </summary>
         public Node RightDescendant { get; set; }
         Node Node { get; set; }
         Tuple<object, long> Value { get => value; }
+        /// <summary>
+        /// Tupla que contiene el par clave - posicion
+        /// </summary>
         public Tuple<object, long> value;
 
         public Child(Tuple<object, long> value)

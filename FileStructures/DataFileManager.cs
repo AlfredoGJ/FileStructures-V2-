@@ -8,19 +8,34 @@ using Windows.Storage;
 
 namespace FileStructures
 {
+    /// <summary>
+    ///Clase que maneja el archivo de datos
+    /// </summary>
     public class DataFileManager
     {
         private FileStream stream;
         private string filePath;
         private string name;
         private long fileLength;
+        /// <summary>
+        /// Longitud del archivo de datos
+        /// </summary>
         public long FileLength { get => fileLength;  }
 
         private StorageFolder projectFolder;
         List<Attribute> template;
 
+        /// <summary>
+        /// Lista de regitros en el archivo de datos
+        /// </summary>
         public List<DataRegister> registers;
+        /// <summary>
+        /// Delegado para la actualizacion de los datos
+        /// </summary>
         public delegate void ItemsOnFileChanged();
+        /// <summary>
+        /// Evento  invocado cada que se actualizan los datos en el archivo
+        /// </summary>
         public event ItemsOnFileChanged itemsOnFileChanged;
 
         public DataFileManager(string name, List<Attribute> template)
@@ -49,6 +64,12 @@ namespace FileStructures
             return new DataRegister(block, position, nextPtr, template);
         }
 
+
+        /// <summary>
+        /// Metodo que escribe un registro de datos en el archivo
+        /// </summary>
+        /// <param name="register">Registro a escribir</param>
+        /// <returns>Regresa true si se escribio el registro correctamente</returns>
         public async Task<bool>  WriteRegister(DataRegister register)
         {
             StorageFile file = await projectFolder.CreateFileAsync(name+".dat", CreationCollisionOption.OpenIfExists);
@@ -65,6 +86,10 @@ namespace FileStructures
             return true;
         }
 
+        /// <summary>
+        /// Lee todos los registros del archivo de datos
+        /// </summary>
+        /// <param name="pos">Posicion donde se comenzará a leer</param>
         public async void  ReadAllRegisters(long pos)
         {
             //Open files or create them if don't exist 
@@ -97,9 +122,6 @@ namespace FileStructures
 
         }
 
-        public void WriteRegisters()
-        {
-            throw new System.NotImplementedException();
-        }
+       
     }
 }

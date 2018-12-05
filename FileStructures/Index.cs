@@ -6,20 +6,54 @@ using System.Threading.Tasks;
 
 namespace FileStructures
 {
+
+    /// <summary>
+    /// Clase que representa un indice
+    /// </summary>
     public class Index
     {
+        /// <summary>
+        /// Posicion del indice en el archivo
+        /// </summary>
         public long pos;
+        /// <summary>
+        /// Tipo de indice S o I, Entero o Cadena
+        /// </summary>
         public char type;
+        /// <summary>
+        /// Longitud de el campo de el indice
+        /// </summary>
         public int lenght;
+        /// <summary>
+        /// Numero de localidades que tendra el indice para cada entrada
+        /// </summary>
         public int slotsNumber;
-        private int mainTableEntries;
+        /// <summary>
+        /// Numero de enyradas en la tabla principal
+        /// </summary>
+        public int mainTableEntries;
+        /// <summary>
+        /// Apuntador al siguiente indice en el archivo de indices
+        /// </summary>
         public long next;
+        /// <summary>
+        /// Tabla principal de indices
+        /// </summary>
         public long[] MainTable;
+        /// <summary>
+        /// Tabla secundaria de Indices
+        /// </summary>
         public Tuple<object, long>[] SecondaryTable;
         // Index Size=8+1+4+4= 17
         private int mainTableStart = 17;
-        private long dataAreaStart;
+        /// <summary>
+        /// Posicion donde comienza el area de datos del indice
+        /// </summary>
+        public long dataAreaStart;
 
+        /// <summary>
+        /// Tamaño total que ocupa el indice en el archivo de indices
+        /// </summary>
         public int SizeInBytes
         {
             get
@@ -28,7 +62,8 @@ namespace FileStructures
             }
         }
 
-
+        public Index()
+        { }
 
         public Index(char type, int lenght, int slots, long pos)
         {
@@ -62,7 +97,11 @@ namespace FileStructures
            
            
         }
-
+        /// <summary>
+        /// Checa si el indice de la entrada tiene localidades libres
+        /// </summary>
+        /// <param name="tableEntry">Entrada en la tabla principal a checar</param>
+        /// <returns> Regresa true si hay lugar, false  si no</returns>
         public bool HasFreeSlot(int tableEntry)
         {
             
@@ -73,6 +112,12 @@ namespace FileStructures
             return false;
         }
 
+        /// <summary>
+        /// Inserta un valor para para la entrada de la tabla principal indicada
+        /// </summary>
+        /// <param name="tableEntry">  Entrada de la tabla principal</param>
+        /// <param name="value">Valor a insertar</param>
+        /// <param name="pointer"> Posicion en el archivo de datos del registro asociado al valor proporcionado</param>
         public void InsertOnEntry(int tableEntry, object value, long pointer)
         {
             if (tableEntry < mainTableEntries)
@@ -101,6 +146,12 @@ namespace FileStructures
            
         }
 
+
+        /// <summary>
+        /// Libera el espacio ocupado por un valor en el indice
+        /// </summary>
+        /// <param name="tableEntry">Entradade la tabla principal donde se encuantra el valor</param>
+        /// <param name="value"> Valor a eliminar</param>
         public void ClearEntry(int tableEntry, object value)
         {
             if (tableEntry < mainTableEntries)
@@ -123,6 +174,11 @@ namespace FileStructures
             }
         }
 
+        /// <summary>
+        /// Regresa los todos los valores almacenados en la entrada indicada
+        /// </summary>
+        /// <param name="tableEntry">Entrada </param>
+        /// <returns>Regresa una lista de tuplas <valor, posicion>  que representan a cada valor</returns>
         public List<Tuple<object, long>> GetEntrySlots(int tableEntry)
         {
             List<Tuple<object, long>> result = new List<Tuple<object, long>>();

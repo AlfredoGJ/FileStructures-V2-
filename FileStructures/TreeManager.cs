@@ -11,6 +11,9 @@ namespace FileStructures
         private string name;
         private List<Attribute> attributes;
         private Tree tree;
+        /// <summary>
+        /// Arbol manejado por la clase
+        /// </summary>
         public Tree Tree{get =>  tree ;set => tree= value;}
         private bool initialized;
 
@@ -21,6 +24,10 @@ namespace FileStructures
             tree = new Tree(2);
         }
 
+        /// <summary>
+        /// Función que inicializa el manager
+        /// </summary>
+        /// <param name="registers">Lista de registros con que se debe inicializar</param>
         public void Initialize(List<DataRegister> registers)
         {
             if (!initialized)
@@ -32,16 +39,11 @@ namespace FileStructures
             }
         }
 
-        //public void AddKey(int key, long address)
-        //{
-        //    tree.Insert(key,address);
-        //}
-
-        //public void AddKey(string key, long address)
-        //{
-        //    tree.Insert(key, address);
-        //}
-
+        /// <summary>
+        /// Agrega una clave al arbol
+        /// </summary>
+        /// <param name="key">Clave que se agregará al arbol</param>
+        /// <param name="address">Direccion en el archivo de datos de la clave a insertar</param>
         public void AddKey(object key, long address)
         {
             tree.Insert(key, address);
