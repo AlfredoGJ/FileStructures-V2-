@@ -164,8 +164,14 @@ namespace FileStructures
                             valueBytes = new byte[template[i].Length];
                             value = str;
 
-                            for (int j = 0; j < str.Length; j++)
-                                valueBytes[j] = BitConverter.GetBytes(str[j])[0];
+                            for (int j = 0; j < template[i].Length; j++)
+                            {
+                                if (j < str.Length)
+                                    valueBytes[j] = BitConverter.GetBytes(str[j])[0];
+                                else
+                                    valueBytes[j] = BitConverter.GetBytes('\0')[0];
+                            }
+                               
                             break;
                     }
 

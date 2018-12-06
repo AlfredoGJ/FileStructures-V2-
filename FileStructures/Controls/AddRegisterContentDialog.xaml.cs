@@ -31,6 +31,7 @@ namespace FileStructures.Controls
 
             foreach (Attribute attr in this.entity.Attributes)
             {
+                
                 TextBox tb = new TextBox();
                 tb.Name = attr.Name;
                 tb.PlaceholderText = attr.Name;
@@ -41,18 +42,50 @@ namespace FileStructures.Controls
                     case 'I':
                         tb.Width = 120;
                         tb.MaxLength = 8;
-
+                        tb.TextChanging += NumbersOnly;
                         break;
 
                     case 'S':
                         tb.Width = attr.Length * 12;
                         tb.MaxLength = attr.Length;
+                        tb.TextChanging += OnlyText;
                         break;
                 }
 
                 Container.Children.Add(tb);
             }
 
+        }
+
+        private void OnlyText(TextBox sender, TextBoxTextChangingEventArgs args)
+        {
+            string tAux = "";
+            string text = (sender as TextBox).Text;
+            foreach (char c in text)
+            {
+                if (Char.IsLetter(c))
+                    tAux += c;
+
+            }
+             (sender as TextBox).Text = tAux;
+            (sender as TextBox).SelectionStart = tAux.Length;
+            (sender as TextBox).SelectionLength = 0;
+
+        }
+
+        private void NumbersOnly(TextBox sender, TextBoxTextChangingEventArgs args)
+        {
+            string tAux = "";
+            string text = (sender as TextBox).Text;
+            foreach (char c in text)
+            {
+                if (Char.IsDigit(c))
+                    tAux+=c;
+
+            }
+             (sender as TextBox).Text = tAux;
+            (sender as TextBox).SelectionStart = tAux.Length;
+            (sender as TextBox).SelectionLength = 0;
         }
 
         public AddRegisterContentDialog(Entity entity, DataRegister register)
@@ -93,10 +126,19 @@ namespace FileStructures.Controls
 
             DataRegister register = new DataRegister(values, entity.Attributes);
 
-            
             // If we are adding the register
             if (this.register == null)
-                entity.AddRegister(register, true, false);
+            {
+                if (!entity.Registers.Any(x => App.CompareObjects(x.Key, register.Key) == 0))
+                    entity.AddRegister(register, true, false);
+                else
+                {
+                    Warning.Margin = new Thickness(20, 10, 10, 0);
+                    Warning.Text = "Error: This entity already contains a register with the key " + register.Key.ToString();
+                    args.Cancel = true;
+                }
+            }
+                
 
             // If we are Editing an existent Register
             else

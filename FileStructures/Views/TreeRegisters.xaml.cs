@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
@@ -215,8 +216,8 @@ namespace FileStructures.Views
                         DataRegister newRegister = new DataRegister(reg, current.Attributes);
                         //registers.Add(new DataRegister(reg, current.Attributes));
 
-                        current.AddRegister(newRegister, false, false);
-                        
+                        current.AddRegister(newRegister,false, false);
+                        Thread.Sleep(200);
 
                     }
                        

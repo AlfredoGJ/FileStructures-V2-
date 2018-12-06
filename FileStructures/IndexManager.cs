@@ -254,7 +254,7 @@ namespace FileStructures
 
             for (int i = 0; i < indexes.Count; i++)
             {
-                indexes[i].ClearEntry(entries[i], register.Fields[idxIndexes[i]]);
+                indexes[i].ClearEntry(entries[i], register.Fields[idxIndexes[i]],register.Position);
                 
             }
 

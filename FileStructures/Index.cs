@@ -156,38 +156,64 @@ namespace FileStructures
         /// </summary>
         /// <param name="tableEntry">Entradade la tabla principal donde se encuantra el valor</param>
         /// <param name="value"> Valor a eliminar</param>
-        public void ClearEntry(int tableEntry, object value)
+        public void ClearEntry(int tableEntry, object value, long pos)
         {
             if (tableEntry < mainTableEntries)
             {
-                if (MainTable[tableEntry] != -1)
+                if (!IT)
                 {
-                    //MainTable[tableEntry] = dataAreaStart + tableEntry * mainTableEntries;
-
-                    for (int i = tableEntry * slotsNumber; i < (tableEntry + 1) * slotsNumber; i++)
+                    if (MainTable[tableEntry] != -1)
                     {
-                        if (type == 'I')
+                        for (int i = tableEntry * slotsNumber; i < (tableEntry + 1) * slotsNumber; i++)
                         {
-                            if ((int)SecondaryTable[i].Item1 == (int)value)
+                            if (type == 'I')
                             {
-                                SecondaryTable[i] = new Tuple<object, long>(-1, -1);
-                                break;
+                                if ((int)SecondaryTable[i].Item1 == (int)value)
+                                {
+                                    SecondaryTable[i] = new Tuple<object, long>(-1, -1);
+                                    break;
+                                }
+                            }
+                            if (type == 'S')
+                            {
+                                if ((string)SecondaryTable[i].Item1 == (string)value)
+                                {
+                                    string aux = new string('\0', lenght);
+                                    SecondaryTable[i] = new Tuple<object, long>(aux, -1);
+                                    break;
+                                }
                             }
                         }
-                        if (type == 'S')
-                        {
-                            if ((string)SecondaryTable[i].Item1 == (string)value)
-                            {
-                                string aux = new string('\0', lenght);
-                                SecondaryTable[i] = new Tuple<object, long>(aux, -1);
-                                break;
-                            }
-                        }
-                        
                     }
                 }
-                
+                else
+                {
+                    if (MainTable[tableEntry] != -1)
+                    {
+                        for (int i = tableEntry * slotsNumber; i < (tableEntry + 1) * slotsNumber; i++)
+                        {
+                            if (type == 'I')
+                            {
+                                if (SecondaryTable[i].Item2 == pos)
+                                {
+                                    SecondaryTable[i] = new Tuple<object, long>(-1, -1);
+                                    break;
+                                }
+                            }
+                            if (type == 'S')
+                            {
+                                if (SecondaryTable[i].Item2 == pos)
+                                {
+                                    string aux = new string('\0', lenght);
+                                    SecondaryTable[i] = new Tuple<object, long>(aux, -1);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
 
+                
             }
         }
 

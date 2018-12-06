@@ -71,11 +71,12 @@ namespace FileStructures.Controls
 
                     for (int i = 0; i < index.SecondaryTable.Count(); i++)
                     {
-                        if(!mainTable.Any(x=> x.Item1== (int)index.SecondaryTable[i].Item1))
-                            mainTable.Add(new Tuple<int, string>((int)index.SecondaryTable[i].Item1,""));
+                        if (!mainTable.Any(x => x.Item1 == (int)index.SecondaryTable[i].Item1))
+                        {
+                            if(index.SecondaryTable[i].Item2!=-1)
+                                mainTable.Add(new Tuple<int, string>((int)index.SecondaryTable[i].Item1, ""));
+                        }
                     }
-                        
-
                     IndexDetail.ItemsSource = mainTable;
                 }
 
@@ -86,7 +87,11 @@ namespace FileStructures.Controls
                     for (int i = 0; i < index.SecondaryTable.Count(); i++)
                     {
                         if (!mainTable.Any(x => x.Item1 == (string)index.SecondaryTable[i].Item1))
-                            mainTable.Add(new Tuple<string, string>((string)index.SecondaryTable[i].Item1, ""));
+                        {
+                            if (index.SecondaryTable[i].Item2 != -1)
+                                mainTable.Add(new Tuple<string, string>((string)index.SecondaryTable[i].Item1, ""));
+                        }
+                            
                     }
 
                     IndexDetail.ItemsSource = mainTable;

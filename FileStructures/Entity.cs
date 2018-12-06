@@ -402,7 +402,7 @@ namespace FileStructures
                     }
                     else
                     {
-                        InsertDataUnordered(register,writeBack,existent);
+                      InsertDataUnordered(register,writeBack,existent);
                     }
                     break;
 
@@ -412,7 +412,7 @@ namespace FileStructures
                     break;
 
                 case FileOrganization.Tree:
-                    AddRegisterTree(register);
+                     AddRegisterTree(register);
 
                     break;
 
@@ -421,15 +421,14 @@ namespace FileStructures
         }
 
 
-        private void AddRegisterTree( DataRegister register)
+        private async void AddRegisterTree( DataRegister register)
         {
-            InsertDataUnordered(register, true, false);
+            InsertDataUnordered(register,true, false);
             treeManager.AddKey(register.Key, register.Position) ;
         }
 
         private async void AddRegisterIndexed(DataRegister register)
         {
-           
             var fields = register.Fields;
             List<int> entries = new List<int>();
             List<int> eIndexes = new List<int>();

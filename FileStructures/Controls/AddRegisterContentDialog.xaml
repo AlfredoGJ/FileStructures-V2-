@@ -10,8 +10,18 @@
     PrimaryButtonText="Ok"
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
-    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
+   
+    >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
 
-    <StackPanel Name="Container" Orientation="Horizontal" VerticalAlignment="Center">
-    </StackPanel>
+        <StackPanel Grid.Row="0" Name="Container" Orientation="Horizontal" VerticalAlignment="Center"/>
+        <TextBlock Grid.Row="1" Text="" Foreground="DarkRed" Name="Warning" Margin="20,0,0,-20"/>
+
+    </Grid>
+    
 </ContentDialog>

@@ -152,8 +152,8 @@ namespace FileStructures
                             returnChild = Split();
                         }
                     }
-                    else
-                        throw new Exception("The value already exist in the Binary tree");
+                    //else
+                    //    throw new Exception("The value already exist in the Binary tree");
                 }
                 if (Type == NodeType.Intermediate)
                 {
