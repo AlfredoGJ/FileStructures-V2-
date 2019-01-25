@@ -36,27 +36,27 @@
                         <TextBlock Text="Entities" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" FlowDirection="LeftToRight" FontSize="30" Margin="0,0,10,0"/>
                     </StackPanel>
 
-                    <StackPanel  Background="Black" Orientation="Horizontal" FlowDirection="LeftToRight" Height="30" >
+                    <!--<StackPanel  Background="Black" Orientation="Horizontal" FlowDirection="LeftToRight" Height="30" >
                         <TextBlock Text="Header: " Foreground="White"  FontSize="18" Margin="10,0,0,0" />
                         <TextBlock Name="Header"   Foreground="White"  FontSize="18" Margin="0,0,10,0"/>
-                    </StackPanel>
+                    </StackPanel>-->
                 </StackPanel>
 
                 <Grid FlowDirection="LeftToRight"   Grid.Row="1" Padding="5" Background="{StaticResource SystemControlAccentAcrylicElementAccentMediumHighBrush}" Height="40">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition MinWidth="250" />
+                        <!--<ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>-->
                         <ColumnDefinition Width="60"/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="Name" Grid.Column="0"  FontSize="18" Foreground="White" Margin="32,0,0,0"/>
-                    <TextBlock Text="Position"  Grid.Column="1" FontSize="18" Foreground="White" />
+                    <!--<TextBlock Text="Position"  Grid.Column="1" FontSize="18" Foreground="White" />
                     <TextBlock Text="Attr Ptr" Grid.Column="2"  FontSize="18" Foreground="White" />
                     <TextBlock Text="Data Ptr" Grid.Column="3" FontSize="18" Foreground="White" />
-                    <TextBlock Text="Next Ptr" Grid.Column="4" FontSize="18" Foreground="White" />
+                    <TextBlock Text="Next Ptr" Grid.Column="4" FontSize="18" Foreground="White" />-->
                 </Grid>
             </StackPanel>
          
@@ -77,10 +77,10 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBox x:Name="Name" Grid.Column="0" Margin="0,0,30,0" Text="{Binding Path=Name}" LostFocus="Name_LostFocus"/>
-                            <TextBlock x:Name="Pos"  Grid.Column="1" HorizontalAlignment="Left" Text="{Binding Path=Position}"/>
+                            <!--<TextBlock x:Name="Pos"  Grid.Column="1" HorizontalAlignment="Left" Text="{Binding Path=Position}"/>
                             <TextBlock x:Name="AtrrPtr" Grid.Column="2"  HorizontalAlignment="Left" Text="{Binding Path=AttributesPtr, UpdateSourceTrigger=PropertyChanged}"/>
                             <TextBlock x:Name="DataPtr" Grid.Column="3" HorizontalAlignment="Left" Text="{Binding DataPtr}"/>
-                            <TextBlock x:Name="NextPtr" Grid.Column="4" HorizontalAlignment="Left" Text="{Binding Path= NextPtr}"/>
+                            <TextBlock x:Name="NextPtr" Grid.Column="4" HorizontalAlignment="Left" Text="{Binding Path= NextPtr}"/>-->
                             <Button Grid.Column="5" Name="Delete" Click="Delete_Click" >
                                 <SymbolIcon Symbol="Delete"/>
 

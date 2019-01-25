@@ -50,7 +50,7 @@ namespace FileStructures.Views
             Entity E = Entities.SelectedItem as Entity;
             Entities.ItemsSource = null;
             Entities.ItemsSource = manager.Entities;
-            Header.Text = "  " + manager.Header.ToString();
+            //Header.Text = "  " + manager.Header.ToString();
             Entities.SelectedItem = E;
         }
 
