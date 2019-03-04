@@ -11,7 +11,7 @@
     <AssemblyName>FileStructures</AssemblyName>
     <DefaultLanguage>es-ES</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17763.0</TargetPlatformVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.17134.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
@@ -96,7 +96,6 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Attribute.cs" />
-    <Compile Include="BPlusTree.cs" />
     <Compile Include="Controls\AddRegisterContentDialog.xaml.cs">
       <DependentUpon>AddRegisterContentDialog.xaml</DependentUpon>
     </Compile>
@@ -106,11 +105,11 @@
     <Compile Include="Controls\EditAttributeContentDialog.xaml.cs">
       <DependentUpon>EditAttributeContentDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\EntityContentDialog.xaml.cs">
+      <DependentUpon>EntityContentDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\EntityDetailView.xaml.cs">
       <DependentUpon>EntityDetailView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\IndexControl.xaml.cs">
-      <DependentUpon>IndexControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\TreeElement.xaml.cs">
       <DependentUpon>TreeElement.xaml</DependentUpon>
@@ -118,18 +117,13 @@
     <Compile Include="Controls\TreeNode.xaml.cs">
       <DependentUpon>TreeNode.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DataFileManager.cs" />
     <Compile Include="DataRegister.cs" />
-    <Compile Include="DictionaryManager.cs" />
     <Compile Include="Entity.cs" />
-    <Compile Include="Index.cs" />
-    <Compile Include="IndexManager.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SecondaryIndex.cs" />
-    <Compile Include="TreeManager.cs" />
     <Compile Include="Views\Config.xaml.cs">
       <DependentUpon>Config.xaml</DependentUpon>
     </Compile>
@@ -139,14 +133,8 @@
     <Compile Include="Views\Home.xaml.cs">
       <DependentUpon>Home.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\IndexedRegisters.xaml.cs">
-      <DependentUpon>IndexedRegisters.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Registers.xaml.cs">
       <DependentUpon>Registers.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\TreeRegisters.xaml.cs">
-      <DependentUpon>TreeRegisters.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -222,11 +210,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\EntityDetailView.xaml">
+    <Page Include="Controls\EntityContentDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\IndexControl.xaml">
+    <Page Include="Controls\EntityDetailView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -254,15 +242,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\IndexedRegisters.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\Registers.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\TreeRegisters.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

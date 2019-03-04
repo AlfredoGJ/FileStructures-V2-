@@ -10,34 +10,76 @@
     Loaded="Page_Loaded"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
      
-    <Grid Margin="30">
+    <Grid Margin="30,10,30,10" >
         <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="80"/>
             <RowDefinition/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
-        <ComboBox Grid.Row="0" Name="EntitiesList" Width="200" SelectionChanged="EntitiesList_SelectionChanged">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <TextBlock Text="{Binding Name}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
 
-        <Grid Grid.Row= "1">
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Select an entity:" VerticalAlignment="Top" Style="{StaticResource TitleTextBlockStyle}" Margin="0,0,20,0"/>
+            <ComboBox Grid.Row="0"  Name="EntitiesList" Width="200" SelectionChanged="EntitiesList_SelectionChanged" VerticalAlignment="Top">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1"   Orientation="Vertical" >
+
+
+           
+            <StackPanel Height="70">
+                <StackPanel Background="Black" Height="40" Orientation="Horizontal">
+                    <TextBlock Text="Registers of" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" FlowDirection="LeftToRight" FontSize="30" Margin="10,0,0,0"/>
+                    <TextBlock Text="{Binding ElementName=EntitiesList, Path = SelectedItem.Name}" Margin="10,0,0,0" Foreground="White" FontSize="30"  Style="{StaticResource TitleTextBlockStyle}"/>
+                </StackPanel>
+
+                <StackPanel  Background="Black" Orientation="Horizontal" FlowDirection="LeftToRight" Height="30" >
+                    <!--<TextBlock Text="Header: " Foreground="White"  FontSize="18" Margin="10,0,0,0" />
+                        <TextBlock Name="Header"   Foreground="White"  FontSize="18" Margin="0,0,10,0"/>-->
+                </StackPanel>
+            </StackPanel>
+
+            <Grid FlowDirection="LeftToRight"   Grid.Row="1" Padding="5" Background="{StaticResource SystemControlAccentAcrylicElementAccentMediumHighBrush}" Height="40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition MinWidth="250" />
+                    <!--<ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>-->
+                    <ColumnDefinition Width="60"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Name" Grid.Column="0"  FontSize="18" Foreground="White" Margin="32,0,0,0"/>
+                <!--<TextBlock Text="Position"  Grid.Column="1" FontSize="18" Foreground="White" />
+                    <TextBlock Text="Attr Ptr" Grid.Column="2"  FontSize="18" Foreground="White" />
+                    <TextBlock Text="Data Ptr" Grid.Column="3" FontSize="18" Foreground="White" />
+                    <TextBlock Text="Next Ptr" Grid.Column="4" FontSize="18" Foreground="White" />-->
+            </Grid>
+        </StackPanel>
+
+
+        
+
+        <Grid Grid.Row= "2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Grid Name="Headers" Background="DarkGray">
+            <Grid Name="Headers" Background="{StaticResource SystemControlAccentAcrylicElementAccentMediumHighBrush}">
                 
             </Grid>
 
-            <ListView Name="RegistersList" Grid.Row="1" ScrollViewer.HorizontalScrollMode="Enabled" >
+            <ListView Name="RegistersList" Grid.Row="1" ScrollViewer.HorizontalScrollMode="Enabled" Background="{ThemeResource AppBarBackgroundThemeBrush}" Margin="0,0,0,20" >
 
                
                 <ListView.ItemTemplate>
@@ -59,10 +101,54 @@
             </ListView>
             
         </Grid>
-       
 
-        <Button Grid.Row="2" HorizontalAlignment="Right" Name="AddRegister" Click="AddRegister_Click">
-            Add Register
-        </Button>
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" FlowDirection="RightToLeft" >
+
+
+            <Button  HorizontalAlignment="Right" Name="DeleteRegister"  Style="{ThemeResource AccentButtonStyle}" Margin="0,0,10,0">
+
+                <StackPanel Orientation="Horizontal">
+
+
+                    <TextBlock  Margin="0,0,10,0">Delete Register</TextBlock>
+                    <SymbolIcon   Symbol="Delete"  />
+
+
+                </StackPanel>
+
+            </Button>
+
+
+
+            <Button  HorizontalAlignment="Right" Name="EditRegister"  Style="{ThemeResource AccentButtonStyle}" Margin="0,0,10,0">
+
+                <StackPanel Orientation="Horizontal">
+
+
+                    <TextBlock  Margin="0,0,10,0">Edit Register</TextBlock>
+                    <SymbolIcon   Symbol="Edit"  />
+                    
+
+                </StackPanel>
+
+            </Button>
+
+            <Button  HorizontalAlignment="Right" Name="AddRegister" Click="AddRegister_Click" Style="{ThemeResource AccentButtonStyle}">
+
+                <StackPanel Orientation="Horizontal">
+
+
+                    <TextBlock Margin="0,0,10,0"  >Add Register</TextBlock>
+                    <SymbolIcon   Symbol="Add"  />
+
+                </StackPanel>
+                
+            </Button>
+
+            
+
+
+        </StackPanel>
     </Grid>
 </Page>

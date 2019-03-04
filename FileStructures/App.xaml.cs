@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Runtime.Serialization;
+using System.Threading.Tasks;
+using System.Xml;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -34,18 +37,10 @@ namespace FileStructures
           
         }
 
-        //public static StorageFolder projectsFolder { get; set; } 
-        public static string CurrentFileName { get; set; }
-        public static FileOrganization CurrentFileOrganization = FileOrganization.Indexed;
-        public static int PrimaryKeyIndexNumber = 5;
-        public static int SecondaryKeyIndexNumber=5;
 
-        public static List<Char> Alphabet = new List<char> {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'}; 
-        /// <summary>
-        /// Se invoca cuando el usuario final inicia la aplicación normalmente. Se usarán otros puntos
-        /// de entrada cuando la aplicación se inicie para abrir un archivo específico, por ejemplo.
-        /// </summary>
-        /// <param name="e">Información detallada acerca de la solicitud y el proceso de inicio.</param>
+        public static Project CurrentProject { get; set; }
+        public static StorageFolder WorkFolder;   
+
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
@@ -84,18 +79,7 @@ namespace FileStructures
                 Window.Current.Activate();
             }
 
-//            string ss = "Jose alfredo Granja Jalomo, 812123, Juan alvarez # 136\n" +
-// "Jose de jesus Zaval rico, 882877, av de los andes #345\n" +
-// "everardo de jesus perez gonzalez, 32349909, av carranza #435\n" +
-// "juliana sanchez rojas, 666736, rivas guillen # 323\n" +
-//"pedro paramo de la O,278722, pedro rojas don juan #323, colonia las aves\n";
 
-            //byte[] chars = new byte[stream.Length];
-            //stream.Read(chars,0,(int)stream.Length);
-            //var tochar= chars.Cast<char>();
-            //string s = new string(tochar.ToArray());
-            //var rows = CutStringToRegisters(ss);
-            //int j = 23;
         }
 
         /// <summary>
@@ -123,81 +107,38 @@ namespace FileStructures
         }
 
 
-        public static List<List<string>> CutStringToRegisters( string  data)
+
+
+        public async static Task SerializeProject()
         {
-            List< List<string>> registers = new List<List<string>>();
+            Stream stream= await WorkFolder.OpenStreamForWriteAsync(CurrentProject.Name , CreationCollisionOption.ReplaceExisting);
+            //FileStream stream = new FileStream(WorkFolder. CurrentProject.Name + ".dbp", FileMode.Create);
+            DataContractSerializer serializer = new DataContractSerializer(typeof(Project));
+            serializer.WriteObject(stream,CurrentProject);
+            stream.Close();
+        }
 
-            char[] newLine = new char[1];
-            char[] comma = new char[1];
-            newLine[0] = '\n';
-            comma[0] = ',';
+        public async static Task< Project> DeserializeProject(string projectName)
+        {
+            //Stream stream = await WorkFolder.OpenStreamForReadAsync(projectName);
 
-            var rows = data.Split(newLine);
-            foreach (string row in rows)
-            {
-                if(!string.IsNullOrWhiteSpace(row))
-                    registers.Add(row.Split(comma).ToList());
-            }
-               
+            //FileStream stream = new FileStream(projectName,FileMode.Open);
 
-            return registers;
+            StorageFile file = await StorageFile.GetFileFromPathAsync(projectName);
+            Stream stream = await file.OpenStreamForReadAsync();
+            XmlDictionaryReader reader =  XmlDictionaryReader.CreateTextReader(stream, new XmlDictionaryReaderQuotas());
+            DataContractSerializer serializer = new DataContractSerializer(typeof(Project));
+            Project p = new Project();
+            p=(Project) serializer.ReadObject(reader,true);
+            reader.Close();
+            stream.Close();
+
+            return p;
 
         }
 
-        public static object CloneObjPrimitive(object item, char type)
-        {
-            object o = new object();
-            switch (type)
-            {
-                case 'I':
-                    o = (int)item;
-                    break;
-
-                case 'S':
-                    o = (string)item;
-                    break;
-            }
-            return o;
-
-        }
-
-        public static int GetIntFirstDigit(int number)
-        {
-            var asString = number.ToString();
-            int result=int.Parse(asString[0].ToString());
-            return result;
-
-        }
-
-        // A>B --> -1 
-        // A<B --> 1
-        // A=B --> 0
-        public static int CompareObjects(object objectA, object objectB)
-        {
-            int result = -1;
-            string a = objectA.GetType().Name;
-            string b = objectB.GetType().Name;
-            //if (objectA.GetType().Name != objectB.GetType().Name)
-            // {
-            if (objectA.GetType() == typeof(int))
-            {
-                if ((int)objectA < (int)objectB)
-                    result = 1;
-                else if ((int)objectA == (int)objectB)
-                    result = 0;
-            }
-            else if (objectA.GetType() == typeof(string))
-            {
-                result = string.Compare(objectA as string, objectB as string, StringComparison.CurrentCulture);
-            }
-            //}
-            // else
-            //   throw new Exception("arguments are not instances of the same type");
-
-            return result;
-        }
-
-        public static int TDrawElemSize = 46;
+       
+       
 
 
     }

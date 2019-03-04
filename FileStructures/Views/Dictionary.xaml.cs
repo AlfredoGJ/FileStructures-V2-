@@ -23,8 +23,7 @@ namespace FileStructures.Views
     /// </summary>
     public sealed partial class Dictionary : Page
     {
-        DictionaryManager manager;
-        string entityNameAux="";
+      
         public Dictionary()
         {
             this.InitializeComponent();
@@ -32,110 +31,108 @@ namespace FileStructures.Views
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!String.IsNullOrWhiteSpace(App.CurrentFileName))
+            if (App.CurrentProject!=null)
             {
                 AddEntityButton.IsEnabled = true;
+                Entities.ItemsSource = null;
+                Entities.ItemsSource = App.CurrentProject.Entities;
+                App.SerializeProject();
 
-                manager = new DictionaryManager(App.CurrentFileName);
-                manager.itemsOnFileChanged += UpdateDictionaryData;
             }
             else
             {
                 AddEntityButton.IsEnabled = false;
+               
             }
         }
 
-        private void UpdateDictionaryData()
-        {
-            Entity E = Entities.SelectedItem as Entity;
-            Entities.ItemsSource = null;
-            Entities.ItemsSource = manager.Entities;
-            //Header.Text = "  " + manager.Header.ToString();
-            Entities.SelectedItem = E;
-        }
+       
 
-        public void EntityChange(Entity entity, char chage)
-        {
-            Console.WriteLine("Matanga dijo la changa");
-        }
+      
 
         private async void AddEntity_Click(object sender, RoutedEventArgs e)
         {
-            Entity entity;
-            ContentDialogResult result= await addEntityContentDialog.ShowAsync();
+            Entity entity= new Entity("Uninitialized");
+            ContentDialog cd = new EntityContentDialog("Add Entity",entity);
+
+            ContentDialogResult result= await cd.ShowAsync();
+
             if (result == ContentDialogResult.Primary)
             {
-                if (EntityName.Text != "")
-                {
-                    entity = new Entity(EntityName.Text, manager);
-                    var entities = manager.Entities;
-                    if (!entities.Any(x => x.Name == entity.Name))
-                    {
-                        manager.AddEntity(entity);
-                    }
-                    else
-                    {
-                        ContentDialog cd = new ContentDialog();
-                        cd.CloseButtonText = "OK";
-                        cd.Title = "Error";
-                        cd.Content = "Already exist an entity with this name";
-                        cd.ShowAsync();
-                    }
-                }
+                
+                Entities.ItemsSource = null;
+                Entities.ItemsSource = App.CurrentProject.Entities;
                 
             }
-            UpdateDictionaryData();
+            
         }
 
-        private async  void Delete_Click(object sender, RoutedEventArgs e)
+        private async void DeleteEntityButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Entity entity = Entities.SelectedItem as Entity;
             ContentDialog cd = new ContentDialog();
             cd.CloseButtonText = "No";
             cd.PrimaryButtonText = "Yes";
             cd.Title = "Delete Entity";
-            cd.Content = "Are you sure?";
-            var result= await  cd.ShowAsync();
+            cd.Content = "Are you sure you want to delete the Entity "+entity.Name+ "?";
+            var result = await cd.ShowAsync();
 
             if (result == ContentDialogResult.Primary)
             {
-                Entity entity = (sender as Control).DataContext as Entity;
-                manager.RemoveEntity(entity, true);
-                UpdateDictionaryData();
+                App.CurrentProject.DeleteEntity(entity);
+                Entities.ItemsSource = null;
+                Entities.ItemsSource = App.CurrentProject.Entities;
+
             }
-          
+        }
+
+        private async void EditEntityButton_Click(object sender, RoutedEventArgs e)
+        {
+
             
-        }
+            Entity entity = Entities.SelectedItem as Entity;
+            ContentDialog cd =  new EntityContentDialog("Edit Entity", entity);
+            ContentDialogResult result = await cd.ShowAsync();
 
-        private void Name_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            Console.WriteLine("Matanga dijo la changa");
-        }
-
-        private void Name_LostFocus(object sender, RoutedEventArgs e)
-        {
-            Entity entity = (sender as Control).DataContext as Entity;
-            TextBox textBox = (sender as TextBox);
-            string newName = textBox.Text;
-            var entities = manager.Entities;
-
-            // The name of the entity has been changed
-            if (newName != entity.Name)
+            if (result == ContentDialogResult.Primary)
             {
-                if (!entities.Any(x => x.Name == newName))
-                    manager.UpdateEntity(entity, newName);
-                else
-                {
-                    ContentDialog cd = new ContentDialog();
-                    cd.CloseButtonText = "OK";
-                    cd.Title = "Error";
-                    cd.Content = "Already exist an entity with the name: "+newName ;
-                    textBox.Text = entity.Name;
-                    cd.ShowAsync();
-                    
-                }
+                Entities.ItemsSource = null;
+                Entities.ItemsSource = App.CurrentProject.Entities;
+
             }
         }
+
+
+
+        //private void Name_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    Console.WriteLine("Matanga dijo la changa");
+        //}
+
+        //private void Name_LostFocus(object sender, RoutedEventArgs e)
+        //{
+        //    //Entity entity = (sender as Control).DataContext as Entity;
+        //    TextBox textBox = (sender as TextBox);
+        //    string newName = textBox.Text;
+        //    //var entities = manager.Entities;
+
+        //    // The name of the entity has been changed
+        //    //if (newName != entity.Name)
+        //    //{
+        //        //if (!entities.Any(x => x.Name == newName))
+        //        //    manager.UpdateEntity(entity, newName);
+        //        //else
+        //        //{
+        //        //    ContentDialog cd = new ContentDialog();
+        //        //    cd.CloseButtonText = "OK";
+        //        //    cd.Title = "Error";
+        //        //    cd.Content = "Already exist an entity with the name: "+newName ;
+        //        //    textBox.Text = entity.Name;
+        //        //    cd.ShowAsync();
+                    
+        //        //}
+        //    //}
+        //}
 
         private async  void AddAttributeButton_Click(object sender, RoutedEventArgs e)
         {
@@ -146,7 +143,7 @@ namespace FileStructures.Views
                 ContentDialog dialog = new EditAttributeContentDialog(entity);
                 var result = await dialog.ShowAsync();
                 if (result == ContentDialogResult.Primary)
-                    UpdateDictionaryData();
+                    ;
 
 
 
@@ -168,43 +165,11 @@ namespace FileStructures.Views
             }
             
         }
-
-        private void DataType_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            switch (DataType.SelectedIndex)
-            {
-                case 0:
-                    Lenght.Text = "4";
-                    Lenght.IsEnabled = false;
-                    break;
-
-                case 1:
-                    Lenght.Text ="1";
-                    Lenght.IsEnabled = true;
-                    break;
-            }
-        }
+        
 
         private async void addAttributeContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            //if (!String.IsNullOrWhiteSpace(AttributeName.Text) && DataType.SelectedValue != null && IndexType.SelectedValue != null)
-            //{
-               
-            //    int lenght = 0;
-            //    int.TryParse(Lenght.Text, out lenght);
-            //    var attributes = entity.Attributes;
-
-            //    Attribute attribute = new Attribute(AttributeName.Text, DataType.SelectedValue.ToString()[0], lenght, IndexType.SelectedIndex);
-            //    if (!attributes.Any(x => x.Name == attribute.Name))
-            //    {
-            //        entity.AddAttribute(attribute);
-            //        UpdateDictionaryData();
-            //    }
-            //}
-            //else
-            //{
-            //    args.Cancel = true;
-            //}
+           
            
         }
 
@@ -220,23 +185,60 @@ namespace FileStructures.Views
             if (result == ContentDialogResult.Primary)
             {
                 Entity entity = Entities.SelectedItem as Entity;
-                Attribute attribute = (sender as Control).DataContext as Attribute;
-                entity.RemoveAttribute(attribute);
-                UpdateDictionaryData();
+                //Attribute attribute = (sender as Control).DataContext as Attribute;
+                Attribute attribute = Attributes.SelectedItem as Attribute;
+                //entity.RemoveAttribute(attribute);
+               
             }
         }
 
         private async void EditAttribute_Click(object sender, RoutedEventArgs e)
         {
-            Attribute attribute = (sender as Control).DataContext as Attribute;
+            //Attribute attribute = (sender as Control).DataContext as Attribute;
+            Attribute attribute = Attributes.SelectedItem as Attribute;
             Entity entity = Entities.SelectedItem as Entity;
             EditAttributeContentDialog editAttributeContentDialog = new EditAttributeContentDialog(attribute, entity);
             var result=await editAttributeContentDialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
-                UpdateDictionaryData();
+                ;
+               
 
         }
 
+        
+
       
+
+        private void Entities_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Entities.SelectedItem != null)
+            {
+                EditEntityButton.IsEnabled = true;
+                DeleteEntityButton.IsEnabled = true;
+
+            }
+            else
+            {
+                EditEntityButton.IsEnabled = false;
+                DeleteEntityButton.IsEnabled = false;
+            }
+        }
+
+        private void Attributes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Attributes.SelectedItem != null)
+            {
+                EditAttributeButton.IsEnabled = true;
+                DeleteAttributeButton.IsEnabled = true;
+
+            }
+            else
+            {
+                EditAttributeButton.IsEnabled = false;
+                DeleteAttributeButton.IsEnabled =false;
+            }
+        }
+
+       
     }
 }

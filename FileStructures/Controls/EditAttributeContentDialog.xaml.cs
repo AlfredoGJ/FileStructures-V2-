@@ -24,27 +24,27 @@ namespace FileStructures.Controls
 
         public EditAttributeContentDialog(Attribute attribute, Entity entity)
         {
-            this.InitializeComponent();
-            this.attribute = new Attribute(attribute.Name,attribute.Type,attribute.Length,attribute.IndexType,attribute.Position,attribute.IndexPtr,attribute.NextPtr);
-            this.entity = entity;
+            //this.InitializeComponent();
+            //this.attribute = new Attribute(attribute.Name,attribute.Type,attribute.Length,attribute.IndexType,attribute.Position,attribute.IndexPtr,attribute.NextPtr);
+            //this.entity = entity;
 
 
 
-            AttributeName.Text = attribute.Name;
+            //AttributeName.Text = attribute.Name;
 
-            if (attribute.Type == 'I')
-            {
-                DataType.SelectedIndex = 0;
-                Lenght.IsEnabled = false;
-            }
-            else
-            {
-                DataType.SelectedIndex = 1;
-                Lenght.IsEnabled = true;
-            }
+            //if (attribute.Type == 'I')
+            //{
+            //    DataType.SelectedIndex = 0;
+            //    Lenght.IsEnabled = false;
+            //}
+            //else
+            //{
+            //    DataType.SelectedIndex = 1;
+            //    Lenght.IsEnabled = true;
+            //}
 
-            Lenght.Text = attribute.Length.ToString();
-            IndexType.SelectedIndex = attribute.IndexType;
+            //Lenght.Text = attribute.Length.ToString();
+            //IndexType.SelectedIndex = attribute.IndexType;
 
         }
 
@@ -68,6 +68,26 @@ namespace FileStructures.Controls
                     Lenght.Text = "1";
                     Lenght.IsEnabled = true;
                     break;
+
+                case 2:
+                    Lenght.Text = "1";
+                    Lenght.IsEnabled = false;
+                    break;
+
+                case 3:
+                    Lenght.Text = "4";
+                    Lenght.IsEnabled = false;
+                    break;
+
+
+                case 4:
+                    Lenght.Text = "1";
+                    Lenght.IsEnabled = false;
+                    break;
+                case 5:
+                    Lenght.Text = "8";
+                    Lenght.IsEnabled = false;
+                    break;
             }
         }
 
@@ -75,59 +95,59 @@ namespace FileStructures.Controls
         {
 
             // Th attribute is being edited 
-            if (attribute != null)
-            {
-                int lenght = 0;
-                int.TryParse(Lenght.Text, out lenght);
+            //if (attribute != null)
+            //{
+            //    int lenght = 0;
+            //    int.TryParse(Lenght.Text, out lenght);
 
-                attribute.Name = AttributeName.Text;
-                attribute.Type = DataType.SelectedValue.ToString()[0];
-                attribute.Length = lenght;
-                attribute.IndexType = IndexType.SelectedIndex;
+            //    attribute.Name = AttributeName.Text;
+            //    attribute.Type = DataType.SelectedValue.ToString()[0];
+            //    attribute.Length = lenght;
+            //    attribute.IndexType = IndexType.SelectedIndex;
 
-                bool result = await entity.UpdateAttribute(attribute);
-                if (!result)
-                {
-                    args.Cancel = true;
-                    Warning.Text = "Error: Already exists an attribute with ths name.";
-                }
+            //    bool result = await entity.UpdateAttribute(attribute);
+            //    if (!result)
+            //    {
+            //        args.Cancel = true;
+            //        Warning.Text = "Error: Already exists an attribute with ths name.";
+            //    }
                     
-            }
+            //}
             // The attribute is being created and inserted
-            else
-            {
-                if (!String.IsNullOrWhiteSpace(AttributeName.Text) && DataType.SelectedValue != null && IndexType.SelectedValue != null)
-                {
+            //else
+            //{
+            //    if (!String.IsNullOrWhiteSpace(AttributeName.Text) && DataType.SelectedValue != null && IndexType.SelectedValue != null  )
+            //    {
 
-                    int lenght = 0;
-                    int.TryParse(Lenght.Text, out lenght);
-                    var attributes = entity.Attributes;
+            //        int lenght = 0;
+            //        int.TryParse(Lenght.Text, out lenght);
+            //        var attributes = entity.Attributes;
 
-                    Attribute attribute = new Attribute(AttributeName.Text, DataType.SelectedValue.ToString()[0], lenght, IndexType.SelectedIndex);
-                    if (!attributes.Any(x => x.Name == attribute.Name))
-                    {
-                        if (attributes.Any(x => x.IndexType == 2) && attribute.IndexType == 2)
-                        {
-                            args.Cancel = true;
-                            Warning.Text = "Error: This entity already contains a primary key.";
-                        }
-                        else
-                            entity.AddAttribute(attribute);
-                    }
-                    else
-                    {
-                        args.Cancel = true;
-                        Warning.Text = "Error: Already exists an attribute with ths name.";
-                    }
+            //        Attribute attribute = new Attribute(AttributeName.Text, DataType.SelectedValue.ToString()[0], lenght, IndexType.SelectedIndex);
+            //        if (!attributes.Any(x => x.Name == attribute.Name))
+            //        {
+            //            if (attributes.Any(x => x.IndexType == 2) && attribute.IndexType == 2)
+            //            {
+            //                args.Cancel = true;
+            //                Warning.Text = "Error: This entity already contains a primary key.";
+            //            }
+            //            else
+            //                entity.AddAttribute(attribute);
+            //        }
+            //        else
+            //        {
+            //            args.Cancel = true;
+            //            Warning.Text = "Error: Already exists an attribute with ths name.";
+            //        }
                     
 
-                }
-                else
-                {
-                    args.Cancel = true;
-                    Warning.Text = "Error: Complete all the fields correctly";
-                }
-            }
+            //    }
+            //    else
+            //    {
+            //        args.Cancel = true;
+            //        Warning.Text = "Error: Complete all the fields correctly";
+            //    }
+            //}
 
             
            
@@ -139,6 +159,31 @@ namespace FileStructures.Controls
             Warning.Text = "";
         }
 
-   
+        private void IndexType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+            if (IndexType.SelectedIndex == 3)
+            {
+                //entityAsociated.ItemsSource = App.Entities;
+                entityAsociated.Visibility = Visibility.Visible;
+                DataType.SelectedIndex = 5;
+                DataType.IsEnabled = false;
+                Lenght.Text = "8";
+                Lenght.IsEnabled = false;
+
+
+                
+
+            }
+            else
+            {
+                entityAsociated.Visibility = Visibility.Collapsed;
+                DataType.IsEnabled = true;
+                //Lenght.IsEnabled = true;
+            }
+
+
+            
+        }
     }
 }

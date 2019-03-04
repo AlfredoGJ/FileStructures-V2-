@@ -23,7 +23,7 @@ namespace FileStructures.Views
     /// </summary>
     public sealed partial class Registers : Page
     {
-        DictionaryManager manager;
+       
         public Registers()
         {
             this.InitializeComponent();
@@ -31,29 +31,29 @@ namespace FileStructures.Views
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!string.IsNullOrEmpty(App.CurrentFileName))
+            //if (!string.IsNullOrEmpty(App.CurrentProjectName)) Alrato vemos esto... Ok
             {
-                manager = new DictionaryManager(App.CurrentFileName);
-                manager.itemsOnFileChanged += UpdateDictionaryData;
+                //manager = new DictionaryManager(App.CurrentFileName);
+                //manager.itemsOnFileChanged += UpdateDictionaryData;
 
             }
         }
 
         private void UpdateDictionaryData()
         {
-            EntitiesList.ItemsSource = null;
-            EntitiesList.ItemsSource = manager.Entities;
-            foreach (Entity entity in manager.Entities)
-                entity.itemsOnFileChanged += UpdateRegistersData;
+            //EntitiesList.ItemsSource = null;
+            //EntitiesList.ItemsSource = manager.Entities;
+            //foreach (Entity entity in manager.Entities)
+            //    entity.itemsOnFileChanged += UpdateRegistersData;
         }
 
         private void UpdateRegistersData()
         {
-            if (EntitiesList.SelectedItem != null)
-            {
-                RegistersList.ItemsSource = null;
-                RegistersList.ItemsSource = (EntitiesList.SelectedItem as Entity).Registers;
-            }
+            //if (EntitiesList.SelectedItem != null)
+            //{
+            //    RegistersList.ItemsSource = null;
+            //    RegistersList.ItemsSource = (EntitiesList.SelectedItem as Entity).Registers;
+            //}
         }
 
         private void AddRegister_Click(object sender, RoutedEventArgs e)
@@ -80,32 +80,33 @@ namespace FileStructures.Views
                 Entity E = EntitiesList.SelectedItem as Entity;
                 //E.itemsOnFileChanged += UpdateRegistersData;
                 int i;
-                for (i = 0; i < E.Attributes.Count; i++)
-                {
-                    Headers.ColumnDefinitions.Add(new ColumnDefinition());
-                    TextBlock tb = new TextBlock();
-                    tb.Text = E.Attributes[i].Name;
-                    tb.FontSize = 18;
-                    Grid.SetColumn(tb, i);
-                    Headers.Children.Add(tb);
-                }
+                //for (i = 0; i < E.Attributes.Count; i++)
+                //{
+                //    Headers.ColumnDefinitions.Add(new ColumnDefinition());
+                //    TextBlock tb = new TextBlock();
+                //    tb.Text = E.Attributes[i].Name;
+                //    tb.FontSize = 18;
+                //    tb.Foreground = new SolidColorBrush(color: Windows.UI.Color.FromArgb(255,255,255,255));
+                //    Grid.SetColumn(tb, i);
+                //    Headers.Children.Add(tb);
+                //}
+                
+                //Headers.ColumnDefinitions.Add(new ColumnDefinition());
+                //TextBlock pos = new TextBlock();
+                //pos.Text = "Position";
+                //pos.FontSize = 18;
+                //Grid.SetColumn(pos, i);
+                //Headers.Children.Add(pos);
 
-                Headers.ColumnDefinitions.Add(new ColumnDefinition());
-                TextBlock pos = new TextBlock();
-                pos.Text = "Position";
-                pos.FontSize = 18;
-                Grid.SetColumn(pos, i);
-                Headers.Children.Add(pos);
+                //Headers.ColumnDefinitions.Add(new ColumnDefinition());
+                //TextBlock next = new TextBlock();
+                //next.Text = "NextPtr";
+                //next.FontSize = 18;
+                //Grid.SetColumn(next, i + 1);
+                //Headers.Children.Add(next);
 
-                Headers.ColumnDefinitions.Add(new ColumnDefinition());
-                TextBlock next = new TextBlock();
-                next.Text = "NextPtr";
-                next.FontSize = 18;
-                Grid.SetColumn(next, i + 1);
-                Headers.Children.Add(next);
-
-                Headers.ColumnDefinitions.Add(new ColumnDefinition());
-                Headers.ColumnDefinitions.Add(new ColumnDefinition());
+                //Headers.ColumnDefinitions.Add(new ColumnDefinition());
+                //Headers.ColumnDefinitions.Add(new ColumnDefinition());
 
 
 
@@ -130,8 +131,8 @@ namespace FileStructures.Views
 
                 if (result == ContentDialogResult.Primary)
                 {
-                    Attribute attribute = (sender as Control).DataContext as Attribute;
-                    entity.RemoveRegister (register, true);
+                    //Attribute attribute = (sender as Control).DataContext as Attribute;
+                    //entity.RemoveRegister (register, true);
                    
                 }
             }

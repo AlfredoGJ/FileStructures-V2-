@@ -35,11 +35,11 @@ namespace FileStructures.Controls
             int i = 0;
             var dc = DataContext;
             entity = this.DataContext as Entity;
-            Name.Text = entity.Name;
-            Pos.Text = entity.Position.ToString();
-            AtrrPtr.Text = entity.AttributesPtr.ToString();
-            DataPtr.Text = entity.DataPtr.ToString();
-            NextPtr.Text = entity.NextPtr.ToString();
+            //Name.Text = entity.Name;
+            //Pos.Text = entity.Position.ToString();
+            //AtrrPtr.Text = entity.AttributesPtr.ToString();
+            //DataPtr.Text = entity.DataPtr.ToString();
+            //NextPtr.Text = entity.NextPtr.ToString();
 
             //entityChanged+= 
         }

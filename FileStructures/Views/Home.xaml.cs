@@ -28,9 +28,9 @@ namespace FileStructures.Views
         {
             this.InitializeComponent();
 
-            if (!String.IsNullOrEmpty( App.CurrentFileName))
+            if (App.CurrentProject!=null)
             {
-                CurrentFileName.Text = App.CurrentFileName;
+                CurrentFileName.Text = App.CurrentProject.Name;
                 Header.Text = "Current opened file:";
             }
             else
@@ -43,25 +43,17 @@ namespace FileStructures.Views
         {
             FileOpenPicker picker = new FileOpenPicker();
             picker.ViewMode = PickerViewMode.Thumbnail;
-            picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-            picker.FileTypeFilter.Add(".ddc");
-            picker.FileTypeFilter.Add(".idd");
-            picker.FileTypeFilter.Add(".tdd");
-
-
+            picker.SuggestedStartLocation = PickerLocationId.MusicLibrary;
+            picker.FileTypeFilter.Add(".DBP");
+            picker.FileTypeFilter.Add(".dbp");
 
             StorageFile file =  await picker.PickSingleFileAsync();
+
             
             if (file != null)
             {
                 CurrentFileName.Text = file.Name;
-                App.CurrentFileName = file.Name;
-                if (file.FileType == ".ddc")
-                    App.CurrentFileOrganization =  FileOrganization.Ordered;
-                else if(file.FileType==".idd")
-                    App.CurrentFileOrganization =  FileOrganization.Indexed; 
-                else
-                    App.CurrentFileOrganization = FileOrganization.Tree;
+                App.CurrentProject =  await App.DeserializeProject(file.Path);
 
             }
 
@@ -73,25 +65,13 @@ namespace FileStructures.Views
             ContentDialogResult dialog = await NewFileDialog.ShowAsync();
             if (dialog == ContentDialogResult.Primary)
             {
-               
-                StorageFolder localFolder = KnownFolders.PicturesLibrary;
-                StorageFolder projectsFolder=  await localFolder.CreateFolderAsync("Projects", CreationCollisionOption.OpenIfExists);
-                StorageFile myNewFile;
-                if (App.CurrentFileOrganization== FileOrganization.Ordered)
-                    myNewFile= await projectsFolder.CreateFileAsync(FileNameTextBox.Text + ".ddc");
-                else if(App.CurrentFileOrganization == FileOrganization.Indexed)
-                    myNewFile = await projectsFolder.CreateFileAsync(FileNameTextBox.Text + ".idd");
-                else
-                    myNewFile = await projectsFolder.CreateFileAsync(FileNameTextBox.Text + ".tdd");
-
-                BinaryWriter writer = new BinaryWriter(  await myNewFile.OpenStreamForWriteAsync());
-                writer.Write(((long)(-1)));
-                writer.Close();
 
 
-                CurrentFileName.Text = myNewFile.Name ;
-                Header.Text = "Current opened file:";
-                App.CurrentFileName = myNewFile.Name;
+                StorageFolder localFolder = KnownFolders.MusicLibrary;
+                StorageFolder projectsFolder=  await localFolder.CreateFolderAsync("SGBDProjects", CreationCollisionOption.OpenIfExists);
+                CurrentFileName.Text = FileNameTextBox.Text + ".dbp";
+                App.CurrentProject = new Project(FileNameTextBox.Text + ".dbp");
+                App.SerializeProject();
 
             }
         }

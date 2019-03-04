@@ -13,7 +13,7 @@
     HorizontalContentAlignment="Stretch"
     PrimaryButtonClick ="addAttributeEditContentDialog_PrimaryButtonClick">
 
-    <StackPanel>
+    <StackPanel Name="babyshark">
         <StackPanel Name="Container" Orientation="Horizontal" HorizontalAlignment="Center" >
 
             <TextBox  x:Name="AttributeName" MaxLength="30" Width="150" PlaceholderText="Name" Margin="10" MinWidth="200" GotFocus="AnyField_GotFocus"/>
@@ -26,12 +26,28 @@
                     String
                 </ComboBoxItem>
 
+                <ComboBoxItem Tag="C"  >
+                    Character
+                </ComboBoxItem>
+
+                <ComboBoxItem Tag="F"  >
+                    Float
+                </ComboBoxItem>
+
+                <ComboBoxItem Tag="B"  >
+                    Boolean
+                </ComboBoxItem>
+
+                <ComboBoxItem Tag="L"  >
+                    Long
+                </ComboBoxItem>
+
 
             </ComboBox>
 
             <TextBox Name="Lenght" Margin="10" MinWidth="50" PlaceholderText="Length" InputScope="Number" Text="" GotFocus="AnyField_GotFocus"/>
 
-            <ComboBox Name="IndexType" Margin="10" MinWidth="180" PlaceholderText="Index Type" GotFocus="AnyField_GotFocus">
+            <ComboBox Name="IndexType" Margin="10" MinWidth="180" PlaceholderText="Index Type" GotFocus="AnyField_GotFocus" SelectionChanged="IndexType_SelectionChanged">
                 <ComboBoxItem >
                     No index
                 </ComboBoxItem>
@@ -39,15 +55,25 @@
                     Search Key
                 </ComboBoxItem>
                 <ComboBoxItem>
-                    Primary Search Key
+                    Primary Key
                 </ComboBoxItem>
                 <ComboBoxItem>
-                    Secondary Search Key
+                    Secondary Key
                 </ComboBoxItem>
                 <ComboBoxItem>
                     Primary B+ Search Key
                 </ComboBoxItem>
 
+            </ComboBox>
+
+            <ComboBox Name="entityAsociated" Visibility="Collapsed" Margin="10" PlaceholderText="Of entity">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
             </ComboBox>
 
 

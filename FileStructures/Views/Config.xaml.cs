@@ -29,35 +29,35 @@ namespace FileStructures.Views
 
         private void tree_Click(object sender, RoutedEventArgs e)
         {
-            if (App.CurrentFileOrganization != FileOrganization.Tree)
-                App.CurrentFileName = "";
-            App.CurrentFileOrganization = FileOrganization.Tree;
+            //if (App.CurrentFileOrganization != FileOrganization.Tree)
+            //    App.CurrentFileName = "";
+            //App.CurrentFileOrganization = FileOrganization.Tree;
         }
 
         private void indexed_Click(object sender, RoutedEventArgs e)
         {
-            if (App.CurrentFileOrganization != FileOrganization.Indexed)
-                App.CurrentFileName = "";
-             App.CurrentFileOrganization = FileOrganization.Indexed;
+            //if (App.CurrentFileOrganization != FileOrganization.Indexed)
+            //    App.CurrentFileName = "";
+            // App.CurrentFileOrganization = FileOrganization.Indexed;
         }
 
         private void ordered_Click(object sender, RoutedEventArgs e)
         {
-            if (App.CurrentFileOrganization != FileOrganization.Ordered)
-                App.CurrentFileName = "";
-             App.CurrentFileOrganization = FileOrganization.Ordered;
+        //    if (App.CurrentFileOrganization != FileOrganization.Ordered)
+        //        App.CurrentFileName = "";
+        //     App.CurrentFileOrganization = FileOrganization.Ordered;
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            if (App.CurrentFileOrganization == FileOrganization.Indexed)
-                indexed.IsChecked = true;
+            //if (App.CurrentFileOrganization == FileOrganization.Indexed)
+            //    indexed.IsChecked = true;
 
-            if (App.CurrentFileOrganization == FileOrganization.Ordered)
-                ordered.IsChecked = true;
+            //if (App.CurrentFileOrganization == FileOrganization.Ordered)
+            //    ordered.IsChecked = true;
 
-            if (App.CurrentFileOrganization == FileOrganization.Tree)
-                tree.IsChecked = true;
+            //if (App.CurrentFileOrganization == FileOrganization.Tree)
+            //    tree.IsChecked = true;
         }
     }
 }

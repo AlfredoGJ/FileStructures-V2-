@@ -28,19 +28,19 @@ namespace FileStructures.Controls
 
         private List<object> fields;
         private DataRegister register;
-        public List<object> Fields
-        {
-            get
-            {
-                return register.Fields;
-            }
+        //public List<object> Fields
+        //{
+        //    get
+        //    {
+        //        //return register.Fields;
+        //    }
 
-            set
-            {
-                fields = value;
-                Fill();
-            }
-        }
+        //    set
+        //    {
+        //        fields = value;
+        //        Fill();
+        //    }
+        //}
 
         public DataRegisterViewControl()
         {
@@ -64,35 +64,35 @@ namespace FileStructures.Controls
                 ControlContent.Children.Add(tb);
             }
 
-            ControlContent.ColumnDefinitions.Add(new ColumnDefinition());
-            TextBlock pos = new TextBlock();
-            pos.Text = register.Position.ToString();
-            pos.FontSize = 18;
-            Grid.SetColumn(pos, i);
-            ControlContent.Children.Add(pos);
+            //ControlContent.ColumnDefinitions.Add(new ColumnDefinition());
+            //TextBlock pos = new TextBlock();
+            //pos.Text = register.Position.ToString();
+            //pos.FontSize = 18;
+            //Grid.SetColumn(pos, i);
+            //ControlContent.Children.Add(pos);
 
-            ControlContent.ColumnDefinitions.Add(new ColumnDefinition());
-            TextBlock next = new TextBlock();
-            next.Text = register.NextPtr.ToString();
-            next.FontSize = 18;
-            Grid.SetColumn(next, i+1);
-            ControlContent.Children.Add(next);
+            //ControlContent.ColumnDefinitions.Add(new ColumnDefinition());
+            //TextBlock next = new TextBlock();
+            //next.Text = register.NextPtr.ToString();
+            //next.FontSize = 18;
+            //Grid.SetColumn(next, i+1);
+            //ControlContent.Children.Add(next);
 
-            ControlContent.ColumnDefinitions.Add(new ColumnDefinition());
-            Button deleteButton = new Button();
-            SymbolIcon symbol = new SymbolIcon(Symbol.Delete);
-            deleteButton.Content = symbol;
-            deleteButton.Click += DeleteClick;
-            Grid.SetColumn(deleteButton, i + 2);
-            ControlContent.Children.Add(deleteButton);
+            //ControlContent.ColumnDefinitions.Add(new ColumnDefinition());
+            //Button deleteButton = new Button();
+            //SymbolIcon symbol = new SymbolIcon(Symbol.Delete);
+            //deleteButton.Content = symbol;
+            //deleteButton.Click += DeleteClick;
+            //Grid.SetColumn(deleteButton, i );
+            //ControlContent.Children.Add(deleteButton);
 
-            ControlContent.ColumnDefinitions.Add(new ColumnDefinition());
-            Button editButton = new Button();
-            SymbolIcon symbolE = new SymbolIcon(Symbol.Edit);
-            editButton.Content = symbolE;
-            editButton.Click += EditClick;
-            Grid.SetColumn(editButton, i + 3);
-            ControlContent.Children.Add(editButton);
+            //ControlContent.ColumnDefinitions.Add(new ColumnDefinition());
+            //Button editButton = new Button();
+            //SymbolIcon symbolE = new SymbolIcon(Symbol.Edit);
+            //editButton.Content = symbolE;
+            //editButton.Click += EditClick;
+            //Grid.SetColumn(editButton, i + 1);
+            //ControlContent.Children.Add(editButton);
 
 
         }
@@ -116,12 +116,12 @@ namespace FileStructures.Controls
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (DataContext != null)
-            {
-                register = (DataContext as DataRegister);
+            //if (DataContext != null)
+            //{
+            //    register = (DataContext as DataRegister);
 
-                Fields = register.Fields;
-            }
+            //    Fields = register.Fields;
+            //}
 
         }
 
@@ -129,9 +129,9 @@ namespace FileStructures.Controls
         {
             if (DataContext != null)
             {
-                register = (DataContext as DataRegister);
+                //register = (DataContext as DataRegister);
 
-                Fields = register.Fields;
+                //Fields = register.Fields;
             }
         }
     }

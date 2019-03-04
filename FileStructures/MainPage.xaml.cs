@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -18,22 +19,15 @@ using Windows.UI.Xaml.Navigation;
 namespace FileStructures
 {
 
-    public enum FileOrganization {Ordered, Indexed,Tree }
-
-    /// <summary>
-    /// Página vacía que se puede usar de forma independiente o a la que se puede navegar dentro de un objeto Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         public MainPage()
         {
             this.InitializeComponent();
+
+            
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
 
         private void Navigation_Loaded(object sender, RoutedEventArgs e)
         {
@@ -48,8 +42,13 @@ namespace FileStructures
             ContentFrame.Navigate(typeof(Views.Home));
         }
 
-        private void navigation_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
+        private async  void navigation_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
+            // We save the project on every page change
+            if(App.CurrentProject!=null)
+                await App.SerializeProject();
+
+
             switch ((args.SelectedItem as NavigationViewItem).Content)
             {
                 case "Archivo":
@@ -62,13 +61,7 @@ namespace FileStructures
                     break;
 
                 case "Datos":
-                    if(App.CurrentFileOrganization== FileOrganization.Ordered)
                         ContentFrame.Navigate(typeof(Views.Registers));
-                    if(App.CurrentFileOrganization == FileOrganization.Indexed)
-                        ContentFrame.Navigate(typeof(Views.IndexedRegisters));
-
-                    if (App.CurrentFileOrganization == FileOrganization.Tree)
-                        ContentFrame.Navigate(typeof(Views.TreeRegisters));
 
                     break;
 
@@ -77,6 +70,11 @@ namespace FileStructures
                     break;
             }
            
+        }
+
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            App.WorkFolder= await KnownFolders.MusicLibrary.GetFolderAsync("SGBDProjects");
         }
     }
 }

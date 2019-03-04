@@ -10,7 +10,7 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <StackPanel Margin="20">
-        <TextBlock Style="{ThemeResource  TitleTextBlockStyle}" FontSize="28"  Margin="0,0,0,50">
+        <!--<TextBlock Style="{ThemeResource  TitleTextBlockStyle}" FontSize="28"  Margin="0,0,0,50">
             Settings
         </TextBlock>
 
@@ -29,7 +29,7 @@
 
         <RadioButton  Name ="tree"  Click="tree_Click">
             B+ Tree
-        </RadioButton>
+        </RadioButton>-->
 
 
 

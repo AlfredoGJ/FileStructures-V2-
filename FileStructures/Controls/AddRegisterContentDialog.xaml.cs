@@ -29,31 +29,31 @@ namespace FileStructures.Controls
             //byte[] block = new byte[blockSise];
             
 
-            foreach (Attribute attr in this.entity.Attributes)
-            {
+            //foreach (Attribute attr in this.entity.Attributes)
+            //{
                 
-                TextBox tb = new TextBox();
-                tb.Name = attr.Name;
-                tb.PlaceholderText = attr.Name;
-                tb.Margin = new Thickness(20, 0, 0, 0);
+            //    TextBox tb = new TextBox();
+            //    tb.Name = attr.Name;
+            //    tb.PlaceholderText = attr.Name;
+            //    tb.Margin = new Thickness(20, 0, 0, 0);
                 
-                switch (attr.Type)
-                {
-                    case 'I':
-                        tb.Width = 120;
-                        tb.MaxLength = 8;
-                        tb.TextChanging += NumbersOnly;
-                        break;
+            //    switch (attr.Type)
+            //    {
+            //        case 'I':
+            //            tb.Width = 120;
+            //            tb.MaxLength = 8;
+            //            tb.TextChanging += NumbersOnly;
+            //            break;
 
-                    case 'S':
-                        tb.Width = attr.Length * 12;
-                        tb.MaxLength = attr.Length;
-                        tb.TextChanging += OnlyText;
-                        break;
-                }
+            //        case 'S':
+            //            tb.Width = attr.Length * 12;
+            //            tb.MaxLength = attr.Length;
+            //            tb.TextChanging += OnlyText;
+            //            break;
+            //    }
 
-                Container.Children.Add(tb);
-            }
+            //    Container.Children.Add(tb);
+            //}
 
         }
 
@@ -94,64 +94,64 @@ namespace FileStructures.Controls
             this.entity = entity;
             this.register = register;
 
-            foreach (Attribute attr in this.entity.Attributes)
-            {
-                TextBox tb = new TextBox();
-                tb.Name = attr.Name;
-                tb.PlaceholderText = attr.Name;
-                tb.Margin = new Thickness(20, 0, 0, 0);
-                tb.Text = register.Fields[entity.Attributes.IndexOf(attr)].ToString();
+            //foreach (Attribute attr in this.entity.Attributes)
+            //{
+            //    TextBox tb = new TextBox();
+            //    tb.Name = attr.Name;
+            //    tb.PlaceholderText = attr.Name;
+            //    tb.Margin = new Thickness(20, 0, 0, 0);
+            //    tb.Text = register.Fields[entity.Attributes.IndexOf(attr)].ToString();
 
-                switch (attr.Type)
-                {
-                    case 'I':
-                        tb.Width = 120;
-                        tb.MaxLength = 8;
-                        break;
+            //    switch (attr.Type)
+            //    {
+            //        case 'I':
+            //            tb.Width = 120;
+            //            tb.MaxLength = 8;
+            //            break;
 
-                    case 'S':
-                        tb.Width = attr.Length * 12;
-                        tb.MaxLength = attr.Length;
-                        break;
-                }
-                Container.Children.Add(tb);
-            }
+            //        case 'S':
+            //            tb.Width = attr.Length * 12;
+            //            tb.MaxLength = attr.Length;
+            //            break;
+            //    }
+            //    Container.Children.Add(tb);
+            //}
         }
 
         private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             List<string> values = new List<string>();
             for (int i = 0; i < Container.Children.Count; i++)
-                values.Add((Container.Children[i] as TextBox).Text);
+                values.Add((Container.Children[i] as TextBox).Text); 
 
-            DataRegister register = new DataRegister(values, entity.Attributes);
+            //DataRegister register = new DataRegister(values, entity.Attributes);
 
-            // If we are adding the register
-            if (this.register == null)
-            {
-                if (!entity.Registers.Any(x => App.CompareObjects(x.Key, register.Key) == 0))
-                    entity.AddRegister(register, true, false);
-                else
-                {
-                    Warning.Margin = new Thickness(20, 10, 10, 0);
-                    Warning.Text = "Error: This entity already contains a register with the key " + register.Key.ToString();
-                    args.Cancel = true;
-                }
-            }
+            //// If we are adding the register
+            //if (this.register == null)
+            //{
+            //    if (!entity.Registers.Any(x => App.CompareObjects(x.Key, register.Key) == 0))
+            //        entity.AddRegister(register, true, false);
+            //    else
+            //    {
+            //        Warning.Margin = new Thickness(20, 10, 10, 0);
+            //        Warning.Text = "Error: This entity already contains a register with the key " + register.Key.ToString();
+            //        args.Cancel = true;
+            //    }
+            //}
                 
 
             // If we are Editing an existent Register
-            else
-            {
-                register.Position = this.register.Position;
-                register.NextPtr = this.register.NextPtr;
-                bool result = await entity.UpdateDataRegister(register);
+            //else
+            //{
+                //register.Position = this.register.Position;
+                //register.NextPtr = this.register.NextPtr;
+                //bool result = await entity.UpdateDataRegister(register);
 
-                if (!result)
-                    args.Cancel = true;
+                //if (!result)
+                //    args.Cancel = true;
 
 
-            }
+            //}
 
         }
 
