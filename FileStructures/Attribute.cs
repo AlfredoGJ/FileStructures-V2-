@@ -11,12 +11,15 @@ namespace FileStructures
     /// 
 
 
-    public enum DataTypes {Integer,String}
+    public enum DataTypes {Integer,String,Character,Float,Boolean,Long}
+    public enum KeyTypes {NoKey,Primary,Foreign }
     [Serializable]
     public class Attribute
     {
-        DataTypes Type;
-        string Name;
+        
+        public KeyTypes KeyType { get; set; }
+        public DataTypes Type { get; set; }
+        public string Name { get; set; }
 
 
     }

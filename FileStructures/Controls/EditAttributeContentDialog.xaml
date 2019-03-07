@@ -45,24 +45,19 @@
 
             </ComboBox>
 
-            <TextBox Name="Lenght" Margin="10" MinWidth="50" PlaceholderText="Length" InputScope="Number" Text="" GotFocus="AnyField_GotFocus"/>
+            <!--<TextBox Name="Lenght" Margin="10" MinWidth="50" PlaceholderText="Length" InputScope="Number" Text="" GotFocus="AnyField_GotFocus"/>-->
 
             <ComboBox Name="IndexType" Margin="10" MinWidth="180" PlaceholderText="Index Type" GotFocus="AnyField_GotFocus" SelectionChanged="IndexType_SelectionChanged">
                 <ComboBoxItem >
-                    No index
+                    No Key
                 </ComboBoxItem>
                 <ComboBoxItem>
-                    Search Key
+                    Primary key
                 </ComboBoxItem>
                 <ComboBoxItem>
-                    Primary Key
+                    Foreign Key
                 </ComboBoxItem>
-                <ComboBoxItem>
-                    Secondary Key
-                </ComboBoxItem>
-                <ComboBoxItem>
-                    Primary B+ Search Key
-                </ComboBoxItem>
+               
 
             </ComboBox>
 

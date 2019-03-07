@@ -103,37 +103,6 @@ namespace FileStructures.Views
         }
 
 
-
-        //private void Name_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    Console.WriteLine("Matanga dijo la changa");
-        //}
-
-        //private void Name_LostFocus(object sender, RoutedEventArgs e)
-        //{
-        //    //Entity entity = (sender as Control).DataContext as Entity;
-        //    TextBox textBox = (sender as TextBox);
-        //    string newName = textBox.Text;
-        //    //var entities = manager.Entities;
-
-        //    // The name of the entity has been changed
-        //    //if (newName != entity.Name)
-        //    //{
-        //        //if (!entities.Any(x => x.Name == newName))
-        //        //    manager.UpdateEntity(entity, newName);
-        //        //else
-        //        //{
-        //        //    ContentDialog cd = new ContentDialog();
-        //        //    cd.CloseButtonText = "OK";
-        //        //    cd.Title = "Error";
-        //        //    cd.Content = "Already exist an entity with the name: "+newName ;
-        //        //    textBox.Text = entity.Name;
-        //        //    cd.ShowAsync();
-                    
-        //        //}
-        //    //}
-        //}
-
         private async  void AddAttributeButton_Click(object sender, RoutedEventArgs e)
         {
             Entity entity = Entities.SelectedItem as Entity;
@@ -143,25 +112,10 @@ namespace FileStructures.Views
                 ContentDialog dialog = new EditAttributeContentDialog(entity);
                 var result = await dialog.ShowAsync();
                 if (result == ContentDialogResult.Primary)
-                    ;
+                {
 
+                }
 
-
-                //ContentDialogResult result = await addAttributeContentDialog.ShowAsync();
-                //if (result == ContentDialogResult.Primary)
-                //{
-                //    int lenght = 0;
-                //    int.TryParse(Lenght.Text, out lenght);
-                //    var attributes = entity.Attributes;
-
-                //    Attribute attribute = new Attribute(AttributeName.Text, DataType.SelectedValue.ToString()[0], lenght, IndexType.SelectedIndex);
-                //    if (!attributes.Any(x => x.Name == attribute.Name))
-                //    {
-                //        entity.AddAttribute(attribute);
-                //        UpdateDictionaryData();
-                //    }
-
-                //}
             }
             
         }

@@ -24,27 +24,12 @@ namespace FileStructures.Controls
 
         public EditAttributeContentDialog(Attribute attribute, Entity entity)
         {
-            //this.InitializeComponent();
-            //this.attribute = new Attribute(attribute.Name,attribute.Type,attribute.Length,attribute.IndexType,attribute.Position,attribute.IndexPtr,attribute.NextPtr);
-            //this.entity = entity;
+            this.InitializeComponent();
+            this.attribute = attribute;
+            this.entity = entity;
+            entityAsociated.ItemsSource = App.CurrentProject.Entities;
 
 
-
-            //AttributeName.Text = attribute.Name;
-
-            //if (attribute.Type == 'I')
-            //{
-            //    DataType.SelectedIndex = 0;
-            //    Lenght.IsEnabled = false;
-            //}
-            //else
-            //{
-            //    DataType.SelectedIndex = 1;
-            //    Lenght.IsEnabled = true;
-            //}
-
-            //Lenght.Text = attribute.Length.ToString();
-            //IndexType.SelectedIndex = attribute.IndexType;
 
         }
 
@@ -52,6 +37,8 @@ namespace FileStructures.Controls
         {
             this.InitializeComponent();
             this.entity = entity;
+            this.attribute = new Attribute();
+            entityAsociated.ItemsSource = App.CurrentProject.Entities;
 
         }
 
@@ -59,35 +46,31 @@ namespace FileStructures.Controls
         {
             switch (DataType.SelectedIndex)
             {
-                case 0:
-                    Lenght.Text = "4";
-                    Lenght.IsEnabled = false;
+                case  0:
+                    attribute.Type = DataTypes.Integer;
                     break;
 
                 case 1:
-                    Lenght.Text = "1";
-                    Lenght.IsEnabled = true;
+                    attribute.Type = DataTypes.String;
                     break;
 
                 case 2:
-                    Lenght.Text = "1";
-                    Lenght.IsEnabled = false;
+                    attribute.Type = DataTypes.Character;
                     break;
 
                 case 3:
-                    Lenght.Text = "4";
-                    Lenght.IsEnabled = false;
+                    attribute.Type = DataTypes.Float;
                     break;
-
 
                 case 4:
-                    Lenght.Text = "1";
-                    Lenght.IsEnabled = false;
+                    attribute.Type = DataTypes.Boolean;
                     break;
+
                 case 5:
-                    Lenght.Text = "8";
-                    Lenght.IsEnabled = false;
+                    attribute.Type = DataTypes.Long;
                     break;
+
+               
             }
         }
 
@@ -162,25 +145,29 @@ namespace FileStructures.Controls
         private void IndexType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
-            if (IndexType.SelectedIndex == 3)
+            switch (IndexType.SelectedIndex)
             {
-                //entityAsociated.ItemsSource = App.Entities;
-                entityAsociated.Visibility = Visibility.Visible;
-                DataType.SelectedIndex = 5;
-                DataType.IsEnabled = false;
-                Lenght.Text = "8";
-                Lenght.IsEnabled = false;
+                case 0:
+                    attribute.KeyType = KeyTypes.NoKey;
+                    entityAsociated.Visibility = Visibility.Collapsed;
+                    DataType.IsEnabled = true;
+                    break;
 
+                case 1:
+                    attribute.KeyType = KeyTypes.Primary;
+                    entityAsociated.Visibility = Visibility.Collapsed;
+                    DataType.IsEnabled = true;
+                    break;
 
-                
+                case 2:
+                    attribute.KeyType = KeyTypes.Foreign;
+                    entityAsociated.Visibility = Visibility.Visible;
+                    DataType.SelectedIndex = 5;
+                    DataType.IsEnabled = false;
+                    break;
 
             }
-            else
-            {
-                entityAsociated.Visibility = Visibility.Collapsed;
-                DataType.IsEnabled = true;
-                //Lenght.IsEnabled = true;
-            }
+            
 
 
             
