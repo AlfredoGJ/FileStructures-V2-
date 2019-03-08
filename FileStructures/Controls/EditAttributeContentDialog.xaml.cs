@@ -19,16 +19,19 @@ namespace FileStructures.Controls
 {
     public sealed partial class EditAttributeContentDialog : ContentDialog
     {
+        private Attribute auxAttribute;
         private Attribute attribute;
         private Entity entity;
+        private bool isNew;
 
         public EditAttributeContentDialog(Attribute attribute, Entity entity)
         {
             this.InitializeComponent();
             this.attribute = attribute;
             this.entity = entity;
-            entityAsociated.ItemsSource = App.CurrentProject.Entities;
-
+            auxAttribute = new Attribute(attribute);
+            AsociatedEntity.ItemsSource = App.CurrentProject.Entities;
+            isNew = false;
 
 
         }
@@ -37,8 +40,9 @@ namespace FileStructures.Controls
         {
             this.InitializeComponent();
             this.entity = entity;
-            this.attribute = new Attribute();
-            entityAsociated.ItemsSource = App.CurrentProject.Entities;
+            this.auxAttribute = new Attribute();
+            AsociatedEntity.ItemsSource = App.CurrentProject.Entities;
+            isNew = true;
 
         }
 
@@ -47,93 +51,120 @@ namespace FileStructures.Controls
             switch (DataType.SelectedIndex)
             {
                 case  0:
-                    attribute.Type = DataTypes.Integer;
+                    auxAttribute.DataType = DataTypes.Integer;
                     break;
 
                 case 1:
-                    attribute.Type = DataTypes.String;
+                    auxAttribute.DataType = DataTypes.String;
                     break;
 
                 case 2:
-                    attribute.Type = DataTypes.Character;
+                    auxAttribute.DataType = DataTypes.Character;
                     break;
 
                 case 3:
-                    attribute.Type = DataTypes.Float;
+                    auxAttribute.DataType = DataTypes.Float;
                     break;
 
                 case 4:
-                    attribute.Type = DataTypes.Boolean;
+                    auxAttribute.DataType = DataTypes.Boolean;
                     break;
 
                 case 5:
-                    attribute.Type = DataTypes.Long;
+                    auxAttribute.DataType = DataTypes.Long;
                     break;
 
                
             }
         }
 
-        private async  void addAttributeEditContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void IndexType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            switch (IndexType.SelectedIndex)
+            {
+                case 0:
+                    auxAttribute.KeyType = KeyTypes.NoKey;
+                    AsociatedEntity.Visibility = Visibility.Collapsed;
+                    DataType.IsEnabled = true;
+                    auxAttribute.AsociatedEntity = "";
+                    break;
 
-            // Th attribute is being edited 
-            //if (attribute != null)
-            //{
-            //    int lenght = 0;
-            //    int.TryParse(Lenght.Text, out lenght);
+                case 1:
+                    auxAttribute.KeyType = KeyTypes.Primary;
+                    AsociatedEntity.Visibility = Visibility.Collapsed;
+                    DataType.IsEnabled = true;
+                    auxAttribute.AsociatedEntity = "";
+                    break;
 
-            //    attribute.Name = AttributeName.Text;
-            //    attribute.Type = DataType.SelectedValue.ToString()[0];
-            //    attribute.Length = lenght;
-            //    attribute.IndexType = IndexType.SelectedIndex;
 
-            //    bool result = await entity.UpdateAttribute(attribute);
-            //    if (!result)
-            //    {
-            //        args.Cancel = true;
-            //        Warning.Text = "Error: Already exists an attribute with ths name.";
-            //    }
-                    
-            //}
-            // The attribute is being created and inserted
-            //else
-            //{
-            //    if (!String.IsNullOrWhiteSpace(AttributeName.Text) && DataType.SelectedValue != null && IndexType.SelectedValue != null  )
-            //    {
+                case 2:
+                    auxAttribute.KeyType = KeyTypes.Foreign;
+                    AsociatedEntity.Visibility = Visibility.Visible;
+                    DataType.SelectedIndex = 5;
+                    DataType.IsEnabled = false;
+                    break;
+            }
+        }
 
-            //        int lenght = 0;
-            //        int.TryParse(Lenght.Text, out lenght);
-            //        var attributes = entity.Attributes;
 
-            //        Attribute attribute = new Attribute(AttributeName.Text, DataType.SelectedValue.ToString()[0], lenght, IndexType.SelectedIndex);
-            //        if (!attributes.Any(x => x.Name == attribute.Name))
-            //        {
-            //            if (attributes.Any(x => x.IndexType == 2) && attribute.IndexType == 2)
-            //            {
-            //                args.Cancel = true;
-            //                Warning.Text = "Error: This entity already contains a primary key.";
-            //            }
-            //            else
-            //                entity.AddAttribute(attribute);
-            //        }
-            //        else
-            //        {
-            //            args.Cancel = true;
-            //            Warning.Text = "Error: Already exists an attribute with ths name.";
-            //        }
-                    
+        private void addAttributeEditContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        {
+            auxAttribute.Name = AttributeName.Text;
+            if (!String.IsNullOrWhiteSpace(AttributeName.Text) && DataType.SelectedValue != null && IndexType.SelectedValue != null)
+            {
+                // An attribute is being added, not edited, "attribute" is passed in the constructor 
+                // When its mean to be edited.
+                if (attribute== null)
+                {
+                    if (!entity.Attributes.Any(x => x.Name == auxAttribute.Name))
+                    {
+                        if (entity.Attributes.Any(x => x.KeyType == KeyTypes.Primary) && auxAttribute.KeyType == KeyTypes.Primary)
+                        {
+                            args.Cancel = true;
+                            Warning.Text = "Error: This entity already contains a primary key.";
+                        }
+                        else
+                        {
+                            auxAttribute.Name = AttributeName.Text;
+                            entity.AddAttribute(auxAttribute);
+                        }
 
-            //    }
-            //    else
-            //    {
-            //        args.Cancel = true;
-            //        Warning.Text = "Error: Complete all the fields correctly";
-            //    }
-            //}
+                    }
+                    else
+                    {
+                        args.Cancel = true;
+                        Warning.Text = "Error: Already exists an attribute with ths name.";
+                    }
+                }
+                else
+                {
+                    //if (auxAttribute.Name == attribute.Name && auxAttribute.KeyType == attribute.KeyType)
+                    //{
 
-            
-           
+                    //}
+                    if (auxAttribute.KeyType != attribute.KeyType && auxAttribute.KeyType == KeyTypes.Primary && entity.Attributes.Any(x => x.KeyType == KeyTypes.Primary))
+                    {
+                        args.Cancel = true;
+                        Warning.Text = "Error: This entity already contains a primary key.";
+                    }
+
+
+                    if (auxAttribute.Name != attribute.Name && entity.Attributes.Any(x => x.Name == auxAttribute.Name))
+                    {
+                        args.Cancel = true;
+                        Warning.Text = "Error: Already exists an attribute with ths name.";
+                    }
+
+                }
+                   
+               
+            }
+            else
+            {
+                args.Cancel = true;
+                Warning.Text = "Error: Complete all the fields correctly";
+            }
+
 
         }
 
@@ -142,35 +173,9 @@ namespace FileStructures.Controls
             Warning.Text = "";
         }
 
-        private void IndexType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void AsociatedEntity_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
-            switch (IndexType.SelectedIndex)
-            {
-                case 0:
-                    attribute.KeyType = KeyTypes.NoKey;
-                    entityAsociated.Visibility = Visibility.Collapsed;
-                    DataType.IsEnabled = true;
-                    break;
-
-                case 1:
-                    attribute.KeyType = KeyTypes.Primary;
-                    entityAsociated.Visibility = Visibility.Collapsed;
-                    DataType.IsEnabled = true;
-                    break;
-
-                case 2:
-                    attribute.KeyType = KeyTypes.Foreign;
-                    entityAsociated.Visibility = Visibility.Visible;
-                    DataType.SelectedIndex = 5;
-                    DataType.IsEnabled = false;
-                    break;
-
-            }
-            
-
-
-            
+            auxAttribute.AsociatedEntity = (AsociatedEntity.SelectedItem as Entity).Name; 
         }
     }
 }

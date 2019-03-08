@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,15 +14,34 @@ namespace FileStructures
     /// Clase que representa una entidad 
     /// </summary>
     [Serializable]
-    public class Entity 
+    public class Entity
     {
-        List<Attribute> Attributes;
-        List<DataRegister> Registers;
-        public string Name { get;  set; }
+        
+        public List<Attribute> Attributes;
+        public List<DataRegister> Registers;
+        public string Name { get; set; }
+
         public Entity(string name)
         {
             Name = name;
+            Attributes = new List<Attribute>();
+            Registers = new List<DataRegister>();
         }
-       
+
+        public void AddAttribute(Attribute attribute)
+        {
+            Attributes.Add(attribute);
+        }
+
+        [OnDeserialized()]
+        internal void OnDeserializedMethod(StreamingContext context)
+        {
+            if (Attributes == null)
+                Attributes = new List<Attribute>();
+
+            if (Registers == null)
+                Registers = new List<DataRegister>();
+        }
+
     }
 }

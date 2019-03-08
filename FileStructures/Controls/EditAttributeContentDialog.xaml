@@ -61,7 +61,7 @@
 
             </ComboBox>
 
-            <ComboBox Name="entityAsociated" Visibility="Collapsed" Margin="10" PlaceholderText="Of entity">
+            <ComboBox Name="AsociatedEntity" SelectionChanged="AsociatedEntity_SelectionChanged" Visibility="Collapsed" Margin="10" PlaceholderText="Of entity">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>

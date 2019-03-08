@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,7 +15,9 @@ namespace FileStructures
 
         
         public Project()
-        { }
+        {
+
+        }
 
         public Project(string projectName)
         {
@@ -30,6 +33,13 @@ namespace FileStructures
         internal void DeleteEntity(Entity entity)
         {
             Entities.Remove(entity);
+        }
+
+        [OnDeserialized]
+        internal void OnDeserializeMethod(StreamingContext context)
+        {
+            if (Entities == null)
+                Entities = new List<Entity>();
         }
     }
 }

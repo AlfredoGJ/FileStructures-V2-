@@ -113,6 +113,8 @@ namespace FileStructures.Views
                 var result = await dialog.ShowAsync();
                 if (result == ContentDialogResult.Primary)
                 {
+                    Attributes.ItemsSource = null;
+                    Attributes.ItemsSource = entity.Attributes;
 
                 }
 
@@ -121,7 +123,7 @@ namespace FileStructures.Views
         }
         
 
-        private async void addAttributeContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private async void AddAttributeContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
            
            
