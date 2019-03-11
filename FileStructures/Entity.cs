@@ -17,7 +17,7 @@ namespace FileStructures
     public class Entity
     {
         
-        public List<Attribute> Attributes;
+        public List<Attribute> Attributes { get; set; }
         public List<DataRegister> Registers;
         public string Name { get; set; }
 
@@ -43,5 +43,9 @@ namespace FileStructures
                 Registers = new List<DataRegister>();
         }
 
+        internal void RemoveAttribute(Attribute attribute)
+        {
+            Attributes.Remove(attribute);
+        }
     }
 }

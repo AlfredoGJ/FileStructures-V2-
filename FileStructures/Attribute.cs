@@ -20,7 +20,8 @@ namespace FileStructures
         public KeyTypes KeyType { get; set; }
         public DataTypes DataType { get; set; }
         public string Name { get; set; }
-        public string AsociatedEntity { get; set; }
+        public string AssociatedEntity { get; set; }
+        public string Description { get; set; }
 
         public string KeyTypeString
         {
@@ -56,6 +57,29 @@ namespace FileStructures
                     case DataTypes.Boolean:
                         return "Boolean";
                         break;
+
+                    case DataTypes.Character:
+                        return "Character";
+                        break;
+
+                    case DataTypes.Float:
+                        return "Float";
+                        break;
+
+                    case DataTypes.Integer:
+                        return "Integer";
+                        break;
+
+                    case DataTypes.Long:
+                        return "Long";
+                        break;
+
+                    case DataTypes.String:
+                        return "String";
+                        break;
+
+
+
                     default:
                         return "Error";
                         break;
@@ -65,16 +89,26 @@ namespace FileStructures
 
         public Attribute()
         {
-
+            AssociatedEntity = "N/A";
         }
 
         public Attribute(Attribute attribute)
         {
-            this.KeyType = attribute.KeyType;
-            this.DataType = attribute.DataType;
-            this.Name = attribute.Name;
-            this.AsociatedEntity = attribute.AsociatedEntity;
+            //this.KeyType = attribute.KeyType;
+            //this.DataType = attribute.DataType;
+            //this.Name = attribute.Name;
+            //this.AsociatedEntity = attribute.AsociatedEntity;
 
+            attribute.CopyTo(this);
+
+        }
+
+        public void CopyTo( Attribute attribute)
+        {
+            attribute.KeyType = this.KeyType;
+            attribute.DataType = this.DataType;
+            attribute.Name = this.Name;
+            attribute.AssociatedEntity = this.AssociatedEntity;
         }
 
     }

@@ -30,8 +30,15 @@ namespace FileStructures.Controls
             this.attribute = attribute;
             this.entity = entity;
             auxAttribute = new Attribute(attribute);
-            AsociatedEntity.ItemsSource = App.CurrentProject.Entities;
             isNew = false;
+            List<Entity> dummy = new List<Entity>();
+            dummy.Add(entity);
+            AsociatedEntity.ItemsSource = App.CurrentProject.Entities.Except(dummy);
+
+            this.AttributeName.Text = attribute.Name;
+            this.DataType.SelectedIndex = (int)attribute.DataType;
+            this.IndexType.SelectedIndex = (int)attribute.KeyType;
+
 
 
         }
@@ -41,8 +48,12 @@ namespace FileStructures.Controls
             this.InitializeComponent();
             this.entity = entity;
             this.auxAttribute = new Attribute();
-            AsociatedEntity.ItemsSource = App.CurrentProject.Entities;
             isNew = true;
+
+            List<Entity> dummy = new List<Entity>();
+            dummy.Add(entity);
+            AsociatedEntity.ItemsSource = App.CurrentProject.Entities.Except(dummy);
+            
 
         }
 
@@ -86,14 +97,14 @@ namespace FileStructures.Controls
                     auxAttribute.KeyType = KeyTypes.NoKey;
                     AsociatedEntity.Visibility = Visibility.Collapsed;
                     DataType.IsEnabled = true;
-                    auxAttribute.AsociatedEntity = "";
+                    auxAttribute.AssociatedEntity = "N/A";
                     break;
 
                 case 1:
                     auxAttribute.KeyType = KeyTypes.Primary;
                     AsociatedEntity.Visibility = Visibility.Collapsed;
                     DataType.IsEnabled = true;
-                    auxAttribute.AsociatedEntity = "";
+                    auxAttribute.AssociatedEntity = "N/A";
                     break;
 
 
@@ -110,6 +121,7 @@ namespace FileStructures.Controls
         private void addAttributeEditContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
             auxAttribute.Name = AttributeName.Text;
+            auxAttribute.Description = Description.Text;
             if (!String.IsNullOrWhiteSpace(AttributeName.Text) && DataType.SelectedValue != null && IndexType.SelectedValue != null)
             {
                 // An attribute is being added, not edited, "attribute" is passed in the constructor 
@@ -126,6 +138,7 @@ namespace FileStructures.Controls
                         else
                         {
                             auxAttribute.Name = AttributeName.Text;
+                            auxAttribute.Description = Description.Text;
                             entity.AddAttribute(auxAttribute);
                         }
 
@@ -146,6 +159,7 @@ namespace FileStructures.Controls
                     {
                         args.Cancel = true;
                         Warning.Text = "Error: This entity already contains a primary key.";
+                        return;
                     }
 
 
@@ -153,7 +167,15 @@ namespace FileStructures.Controls
                     {
                         args.Cancel = true;
                         Warning.Text = "Error: Already exists an attribute with ths name.";
+                        return;
                     }
+
+                   
+
+                    auxAttribute.CopyTo(attribute);
+
+
+
 
                 }
                    
@@ -175,7 +197,7 @@ namespace FileStructures.Controls
 
         private void AsociatedEntity_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            auxAttribute.AsociatedEntity = (AsociatedEntity.SelectedItem as Entity).Name; 
+            auxAttribute.AssociatedEntity = (AsociatedEntity.SelectedItem as Entity).Name; 
         }
     }
 }

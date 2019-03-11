@@ -74,7 +74,7 @@ namespace FileStructures.Views
             cd.CloseButtonText = "No";
             cd.PrimaryButtonText = "Yes";
             cd.Title = "Delete Entity";
-            cd.Content = "Are you sure you want to delete the Entity "+entity.Name+ "?";
+            cd.Content = "Are you sure you want to delete the Entity \""+entity.Name+ "\"?";
             var result = await cd.ShowAsync();
 
             if (result == ContentDialogResult.Primary)
@@ -113,8 +113,7 @@ namespace FileStructures.Views
                 var result = await dialog.ShowAsync();
                 if (result == ContentDialogResult.Primary)
                 {
-                    Attributes.ItemsSource = null;
-                    Attributes.ItemsSource = entity.Attributes;
+                    UpdateDictionaryData();
 
                 }
 
@@ -123,7 +122,7 @@ namespace FileStructures.Views
         }
         
 
-        private async void AddAttributeContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private  void AddAttributeContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
            
            
@@ -131,32 +130,33 @@ namespace FileStructures.Views
 
         private async void DeleteAttribute_Click(object sender, RoutedEventArgs e)
         {
+
+            Entity entity = Entities.SelectedItem as Entity;
+            Attribute attribute = Attributes.SelectedItem as Attribute;
             ContentDialog cd = new ContentDialog();
             cd.CloseButtonText = "No";
             cd.PrimaryButtonText = "Yes";
             cd.Title = "Delete Attribute";
-            cd.Content = "Are you sure?";
+            cd.Content = "Are you sure you want to delete the Attribute \""+attribute.Name +"\"?";
             var result = await cd.ShowAsync();
 
             if (result == ContentDialogResult.Primary)
             {
-                Entity entity = Entities.SelectedItem as Entity;
-                //Attribute attribute = (sender as Control).DataContext as Attribute;
-                Attribute attribute = Attributes.SelectedItem as Attribute;
-                //entity.RemoveAttribute(attribute);
+               
+                entity.RemoveAttribute(attribute);
+                UpdateDictionaryData();
                
             }
         }
 
         private async void EditAttribute_Click(object sender, RoutedEventArgs e)
         {
-            //Attribute attribute = (sender as Control).DataContext as Attribute;
             Attribute attribute = Attributes.SelectedItem as Attribute;
             Entity entity = Entities.SelectedItem as Entity;
             EditAttributeContentDialog editAttributeContentDialog = new EditAttributeContentDialog(attribute, entity);
             var result=await editAttributeContentDialog.ShowAsync();
             if (result == ContentDialogResult.Primary)
-                ;
+                UpdateDictionaryData();
                
 
         }
@@ -191,10 +191,18 @@ namespace FileStructures.Views
             else
             {
                 EditAttributeButton.IsEnabled = false;
-                DeleteAttributeButton.IsEnabled =false;
+                DeleteAttributeButton.IsEnabled = false;
             }
         }
 
-       
+        private void UpdateDictionaryData()
+        {
+            Entity E = Entities.SelectedItem as Entity;
+            Entities.ItemsSource = null;
+            Entities.ItemsSource = App.CurrentProject.Entities;
+            Entities.SelectedItem = E;
+        }
+
+
     }
 }

@@ -52,7 +52,7 @@
                         <ColumnDefinition Width="60"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Name" Grid.Column="0"  FontSize="18" Foreground="White" Margin="32,0,0,0"/>
+                    <TextBlock Text="Name" Grid.Column="0"  FontSize="18" Foreground="White" Margin="0,0,0,0"/>
                     <!--<TextBlock Text="Position"  Grid.Column="1" FontSize="18" Foreground="White" />
                     <TextBlock Text="Attr Ptr" Grid.Column="2"  FontSize="18" Foreground="White" />
                     <TextBlock Text="Data Ptr" Grid.Column="3" FontSize="18" Foreground="White" />
@@ -138,14 +138,18 @@
                 <Grid FlowDirection="LeftToRight"  Grid.Row="1" Padding="5" Height="40" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Background="{StaticResource SystemControlAccentAcrylicElementAccentMediumHighBrush}" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition MinWidth="200" />
+                        <ColumnDefinition MinWidth="80" />
+                        <ColumnDefinition MinWidth="80" />
                         <ColumnDefinition MinWidth="120"/>
-                        <ColumnDefinition MinWidth="120"/>
+                        <ColumnDefinition MinWidth="220"/>
                         
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Name" Grid.Column="0"  FontSize="18" Foreground="White" Margin="32,0,0,0"/>
+                    <TextBlock Text="Name" Grid.Column="0"  FontSize="18" Foreground="White" Margin="0,0,0,0"/>
                     <TextBlock Text="Data Type"  Grid.Column="1" FontSize="18" Foreground="White" />
                     <TextBlock Text="Key Type"  Grid.Column="2" FontSize="18" Foreground="White" />
+                    <TextBlock Text="Associated Entity"  Grid.Column="3" FontSize="18" Foreground="White" />
+                    <TextBlock Text="Description"  Grid.Column="4" FontSize="18" Foreground="White" />
 
 
                 </Grid>
@@ -153,13 +157,15 @@
 
 
             <Grid Grid.Row="1" HorizontalAlignment="Stretch">
-                <ListView x:Name="Attributes" SelectionChanged="Attributes_SelectionChanged"  ItemsSource="{Binding ElementName=Entities, Path=SelectedItem.Attributes, UpdateSourceTrigger=PropertyChanged}" Margin="6,0,-6,20" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Background="{ThemeResource AppBarBackgroundThemeBrush}" HorizontalAlignment="Stretch" >
+                <ListView x:Name="Attributes" SelectionChanged="Attributes_SelectionChanged"  ItemsSource="{Binding ElementName=Entities, Path=SelectedItem.Attributes, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,20" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Background="{ThemeResource AppBarBackgroundThemeBrush}" HorizontalAlignment="Stretch" >
                     <ListView.ItemTemplate>
                         <DataTemplate >
                             <Grid  FlowDirection="LeftToRight" HorizontalAlignment="Stretch"  >
 
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition MinWidth="200" />
+                                    <ColumnDefinition MinWidth="120"/>
+                                    <ColumnDefinition MinWidth="120"/>
                                     <ColumnDefinition MinWidth="120"/>
                                     <ColumnDefinition MinWidth="120"/>
                                     
@@ -169,6 +175,8 @@
                                 <TextBlock x:Name="Name" Grid.Column="0" Margin="0,0,30,0" Text="{Binding Path=Name}" />
                                 <TextBlock x:Name="DataType"  Grid.Column="1" HorizontalAlignment="Left" Text="{Binding Path=DataTypeString}"/>
                                 <TextBlock x:Name="KeyType"  Grid.Column="2" HorizontalAlignment="Left" Text="{Binding Path=KeyTypeString}"/>
+                                <TextBlock x:Name="AssociatedEntity"  Grid.Column="3" HorizontalAlignment="Left" Text="{Binding Path=AssociatedEntity}"/>
+                                <TextBlock x:Name="Description"  Grid.Column="4" HorizontalAlignment="Left" Text="{Binding Path=Description}"/>
 
 
                             </Grid>

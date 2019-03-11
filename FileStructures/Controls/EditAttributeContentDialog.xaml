@@ -45,7 +45,7 @@
 
             </ComboBox>
 
-            <!--<TextBox Name="Lenght" Margin="10" MinWidth="50" PlaceholderText="Length" InputScope="Number" Text="" GotFocus="AnyField_GotFocus"/>-->
+            <TextBox Name="Description" Margin="10" MinWidth="300" PlaceholderText="Description"  GotFocus="AnyField_GotFocus"/>
 
             <ComboBox Name="IndexType" Margin="10" MinWidth="180" PlaceholderText="Index Type" GotFocus="AnyField_GotFocus" SelectionChanged="IndexType_SelectionChanged">
                 <ComboBoxItem >
