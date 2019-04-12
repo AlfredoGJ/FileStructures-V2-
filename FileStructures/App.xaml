@@ -7,7 +7,7 @@
 
     <Application.Resources>
 
-        <x:Double x:Key="ContentDialogMaxWidth">950</x:Double>
+        <x:Double x:Key="ContentDialogMaxWidth">1050</x:Double>
     </Application.Resources>
 
 </Application>

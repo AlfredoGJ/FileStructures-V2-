@@ -125,21 +125,34 @@ namespace FileStructures.Controls
             if (!String.IsNullOrWhiteSpace(AttributeName.Text) && DataType.SelectedValue != null && IndexType.SelectedValue != null)
             {
                 // An attribute is being added, not edited, "attribute" is passed in the constructor 
-                // When its mean to be edited.
+                // When its meant to be edited.
                 if (attribute== null)
                 {
+                    // Entity doesn't contain an attribute with this name 
                     if (!entity.Attributes.Any(x => x.Name == auxAttribute.Name))
                     {
-                        if (entity.Attributes.Any(x => x.KeyType == KeyTypes.Primary) && auxAttribute.KeyType == KeyTypes.Primary)
+                        // If already contains a primary key
+                        if (entity.Key != null && auxAttribute.KeyType == KeyTypes.Primary) //Attributes.Any(x => x.KeyType == KeyTypes.Primary)
                         {
                             args.Cancel = true;
                             Warning.Text = "Error: This entity already contains a primary key.";
+                        }
+                        else if (auxAttribute.KeyType == KeyTypes.Foreign && AsociatedEntity.SelectedItem == null)
+                        {
+                            Warning.Text = "Please select a valid entity as Foreign Key";
+                            args.Cancel = true;
+                        }
+                        else if (auxAttribute.KeyType == KeyTypes.Foreign && entity.Attributes.Any(x =>x.KeyType==KeyTypes.Foreign && x.AssociatedEntity== auxAttribute.AssociatedEntity))
+                        {
+                            Warning.Text = "This entity already contains Foreign Key from the selected Entity";
+                            args.Cancel = true;
                         }
                         else
                         {
                             auxAttribute.Name = AttributeName.Text;
                             auxAttribute.Description = Description.Text;
                             entity.AddAttribute(auxAttribute);
+                         
                         }
 
                     }
@@ -155,7 +168,7 @@ namespace FileStructures.Controls
                     //{
 
                     //}
-                    if (auxAttribute.KeyType != attribute.KeyType && auxAttribute.KeyType == KeyTypes.Primary && entity.Attributes.Any(x => x.KeyType == KeyTypes.Primary))
+                    if (auxAttribute.KeyType != attribute.KeyType && auxAttribute.KeyType == KeyTypes.Primary && entity.Key!=null)//Attributes.Any(x => x.KeyType == KeyTypes.Primary)
                     {
                         args.Cancel = true;
                         Warning.Text = "Error: This entity already contains a primary key.";
@@ -170,7 +183,21 @@ namespace FileStructures.Controls
                         return;
                     }
 
-                   
+
+
+                    else if (auxAttribute.KeyType == KeyTypes.Foreign && AsociatedEntity.SelectedItem == null)
+                    {
+                        Warning.Text = "Please select a valid entity as Foreign Key";
+                        args.Cancel = true;
+                        return;
+                    }
+                    else if (auxAttribute.KeyType == KeyTypes.Foreign && entity.Attributes.Any(x => x.KeyType == KeyTypes.Foreign && x.AssociatedEntity == auxAttribute.AssociatedEntity))
+                    {
+                        Warning.Text = "This entity already contains Foreign Key from the selected Entity";
+                        args.Cancel = true;
+                        return;
+                    }
+
 
                     auxAttribute.CopyTo(attribute);
 
@@ -197,7 +224,24 @@ namespace FileStructures.Controls
 
         private void AsociatedEntity_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            auxAttribute.AssociatedEntity = (AsociatedEntity.SelectedItem as Entity).Name; 
+            
+            Entity entity = (AsociatedEntity.SelectedItem as Entity);
+
+            if (entity != null)
+            {
+                if (entity.Key != null)
+                {
+                    auxAttribute.AssociatedEntity = entity.Name;
+                    auxAttribute.DataType = entity.Key.DataType;
+                }
+                else
+                {
+                    AsociatedEntity.SelectedItem = null;
+                    Warning.Text = "Please select an entity with a Primary Key";
+
+                }
+            }
         }
+        
     }
 }

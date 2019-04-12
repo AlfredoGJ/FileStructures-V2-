@@ -20,7 +20,7 @@ namespace FileStructures
         public List<Attribute> Attributes { get; set; }
         public List<DataRegister> Registers;
         public string Name { get; set; }
-
+        public Attribute Key { get; set; }
         public Entity(string name)
         {
             Name = name;
@@ -31,6 +31,8 @@ namespace FileStructures
         public void AddAttribute(Attribute attribute)
         {
             Attributes.Add(attribute);
+            if (attribute.KeyType == KeyTypes.Primary)
+                Key = attribute;
         }
 
         [OnDeserialized()]
@@ -46,6 +48,8 @@ namespace FileStructures
         internal void RemoveAttribute(Attribute attribute)
         {
             Attributes.Remove(attribute);
+            if (attribute.KeyType == KeyTypes.Primary)
+                Key = null;
         }
     }
 }
