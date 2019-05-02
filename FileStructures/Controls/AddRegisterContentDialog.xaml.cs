@@ -25,35 +25,9 @@ namespace FileStructures.Controls
         {
             this.InitializeComponent();
             this.entity = entity;
-            //int blockSise = entity.Attributes.Sum(x => x.Length);
-            //byte[] block = new byte[blockSise];
-            
 
-            //foreach (Attribute attr in this.entity.Attributes)
-            //{
-                
-            //    TextBox tb = new TextBox();
-            //    tb.Name = attr.Name;
-            //    tb.PlaceholderText = attr.Name;
-            //    tb.Margin = new Thickness(20, 0, 0, 0);
-                
-            //    switch (attr.Type)
-            //    {
-            //        case 'I':
-            //            tb.Width = 120;
-            //            tb.MaxLength = 8;
-            //            tb.TextChanging += NumbersOnly;
-            //            break;
+            CreateFields(null);
 
-            //        case 'S':
-            //            tb.Width = attr.Length * 12;
-            //            tb.MaxLength = attr.Length;
-            //            tb.TextChanging += OnlyText;
-            //            break;
-            //    }
-
-            //    Container.Children.Add(tb);
-            //}
 
         }
 
@@ -93,71 +67,193 @@ namespace FileStructures.Controls
             this.InitializeComponent();
             this.entity = entity;
             this.register = register;
+            CreateFields(register);
 
-            //foreach (Attribute attr in this.entity.Attributes)
-            //{
-            //    TextBox tb = new TextBox();
-            //    tb.Name = attr.Name;
-            //    tb.PlaceholderText = attr.Name;
-            //    tb.Margin = new Thickness(20, 0, 0, 0);
-            //    tb.Text = register.Fields[entity.Attributes.IndexOf(attr)].ToString();
-
-            //    switch (attr.Type)
-            //    {
-            //        case 'I':
-            //            tb.Width = 120;
-            //            tb.MaxLength = 8;
-            //            break;
-
-            //        case 'S':
-            //            tb.Width = attr.Length * 12;
-            //            tb.MaxLength = attr.Length;
-            //            break;
-            //    }
-            //    Container.Children.Add(tb);
-            //}
         }
 
         private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            List<string> values = new List<string>();
-            for (int i = 0; i < Container.Children.Count; i++)
-                values.Add((Container.Children[i] as TextBox).Text); 
-
-            //DataRegister register = new DataRegister(values, entity.Attributes);
-
-            //// If we are adding the register
-            //if (this.register == null)
-            //{
-            //    if (!entity.Registers.Any(x => App.CompareObjects(x.Key, register.Key) == 0))
-            //        entity.AddRegister(register, true, false);
-            //    else
-            //    {
-            //        Warning.Margin = new Thickness(20, 10, 10, 0);
-            //        Warning.Text = "Error: This entity already contains a register with the key " + register.Key.ToString();
-            //        args.Cancel = true;
-            //    }
-            //}
+            List<string> values = ConvertValues();
                 
+               
+            
 
-            // If we are Editing an existent Register
-            //else
-            //{
-                //register.Position = this.register.Position;
-                //register.NextPtr = this.register.NextPtr;
-                //bool result = await entity.UpdateDataRegister(register);
+            DataRegister register = new DataRegister(values, entity.Attributes);
 
-                //if (!result)
-                //    args.Cancel = true;
+            // If we are adding the register
+            if (this.register == null)
+            {
+                if (!entity.Registers.Any(x => x.Key==register.Key))
+                    entity.AddRegister(register);
+                else
+                {
+                    Warning.Margin = new Thickness(20, 10, 10, 0);
+                    Warning.Text = "Error: This entity already contains a register with the key " + register.Key.value.ToString();
+                    args.Cancel = true;
+                }
+            }
 
 
-            //}
+           // If we are Editing an existent Register
+            else
+            {
+
+
+                if (this.register.Key == register.Key)
+                    this.register.Fields = register.Fields;
+                else
+                {
+                    if (entity.Registers.All(x => x.Key != register.Key))
+                    {
+                        this.register.Fields = register.Fields;
+                        this.register.Key = register.Key;
+                    }
+                    else
+                    {
+                        Warning.Margin = new Thickness(20, 10, 10, 0);
+                        Warning.Text = "Error: This entity already contains a register with the key " + register.Key.value.ToString();
+                        args.Cancel = true;
+                    }
+                }
+
+
+            }
 
         }
 
         private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
 
+        }
+
+
+        private void CreateFields(DataRegister r)
+        {
+
+            for (int i = 0; i < this.entity.Attributes.Count; i++)
+            {
+
+                TextBox tb = new TextBox();
+                CheckBox cb = new CheckBox();
+
+
+                switch (entity.Attributes[i].DataType)
+                {
+
+
+                    case DataTypes.Boolean:
+                        cb.Name= entity.Attributes[i].Name;
+                        if (r != null)
+                            cb.IsChecked = Boolean.Parse( r.Fields[i].value.ToString());
+                        Container.Children.Add(cb);
+                        break;
+
+
+                    case DataTypes.Character:
+                        
+                        tb.Name = entity.Attributes[i].Name;
+                        tb.PlaceholderText = entity.Attributes[i].Name;
+                        tb.Margin = new Thickness(20, 0, 0, 0);
+                        tb.MaxLength = 1;
+                        if (r != null)
+                            tb.Text = r.Fields[i].value.ToString();
+                        if (entity.Attributes[i].KeyType == KeyTypes.Foreign)
+                            tb.LostFocus += ValidateReferentialIntegrity;
+                        Container.Children.Add(tb);
+
+                        
+                        break;
+
+                    case DataTypes.Float:
+                        tb = new TextBox();
+                        tb.Name = entity.Attributes[i].Name;
+                        tb.PlaceholderText = entity.Attributes[i].Name;
+                        tb.Margin = new Thickness(20, 0, 0, 0);
+                        if (r != null)
+                            tb.Text = r.Fields[i].value.ToString();
+                        if (entity.Attributes[i].KeyType == KeyTypes.Foreign)
+                            tb.LostFocus += ValidateReferentialIntegrity;
+                        Container.Children.Add(tb);
+
+
+                        break;
+
+                    case DataTypes.Integer:
+                        tb = new TextBox();
+                        tb.Name = entity.Attributes[i].Name;
+                        tb.PlaceholderText = entity.Attributes[i].Name;
+                        tb.Margin = new Thickness(20, 0, 0, 0);
+                        tb.Width = 120;
+                        tb.MaxLength = 8;
+                        tb.TextChanging += NumbersOnly;
+                        if (r != null)
+                            tb.Text = r.Fields[i].value.ToString();
+                        if (entity.Attributes[i].KeyType == KeyTypes.Foreign)
+                            tb.LostFocus += ValidateReferentialIntegrity;
+                        Container.Children.Add(tb);
+                        break;
+
+
+                    case DataTypes.Long:
+                        tb = new TextBox();
+                        tb.Name = entity.Attributes[i].Name;
+                        tb.PlaceholderText = entity.Attributes[i].Name;
+                        tb.Margin = new Thickness(20, 0, 0, 0);
+                        tb.TextChanging += NumbersOnly;
+                        if (r != null)
+                            tb.Text = r.Fields[i].value.ToString();
+                        if (entity.Attributes[i].KeyType == KeyTypes.Foreign)
+                            tb.LostFocus += ValidateReferentialIntegrity;
+                        Container.Children.Add(tb);
+                        break;
+
+                    case DataTypes.String:
+
+                        tb = new TextBox();
+                        tb.Name = entity.Attributes[i].Name;
+                        tb.PlaceholderText = entity.Attributes[i].Name;
+                        tb.Margin = new Thickness(20, 0, 0, 0);
+                        tb.Width = 120;
+                        tb.MaxLength = 120;
+                        tb.TextChanging += OnlyText;
+                        if (r != null)
+                            tb.Text = r.Fields[i].value.ToString();
+                        if (entity.Attributes[i].KeyType == KeyTypes.Foreign)
+                            tb.LostFocus += ValidateReferentialIntegrity;
+                        Container.Children.Add(tb);
+                        break;
+
+                }
+
+               
+            }
+        }
+
+        private void ValidateReferentialIntegrity(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        // Hay luego compa
+        private void ValidateFields()
+        {
+
+        }
+
+        private List<string> ConvertValues()
+        {
+            List<string> s = new List<string>();
+
+            for (int i = 0; i < Container.Children.Count; i++)
+            {
+                if (Container.Children[i].GetType() == typeof(TextBox))
+                    s.Add((Container.Children[i] as TextBox).Text);
+                if (Container.Children[i].GetType() == typeof(CheckBox))
+                    s.Add((Container.Children[i] as CheckBox).IsChecked.ToString());
+            }
+
+
+            return s;
         }
     }
 }

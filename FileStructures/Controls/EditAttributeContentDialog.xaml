@@ -11,6 +11,7 @@
     CloseButtonText="Cancel" 
     Name="addAttributeEditContentDialog"      
     HorizontalContentAlignment="Stretch"
+    DefaultButton="Primary"
     PrimaryButtonClick ="addAttributeEditContentDialog_PrimaryButtonClick">
 
     <StackPanel Name="babyshark">

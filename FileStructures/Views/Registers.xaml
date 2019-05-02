@@ -43,18 +43,13 @@
                 </StackPanel>
 
                 <StackPanel  Background="Black" Orientation="Horizontal" FlowDirection="LeftToRight" Height="30" >
-                    <!--<TextBlock Text="Header: " Foreground="White"  FontSize="18" Margin="10,0,0,0" />
-                        <TextBlock Name="Header"   Foreground="White"  FontSize="18" Margin="0,0,10,0"/>-->
+                   
                 </StackPanel>
             </StackPanel>
 
             <Grid FlowDirection="LeftToRight"   Grid.Row="1" Padding="5" Background="{StaticResource SystemControlAccentAcrylicElementAccentMediumHighBrush}" Height="40">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition MinWidth="250" />
-                    <!--<ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>-->
                     <ColumnDefinition Width="60"/>
                 </Grid.ColumnDefinitions>
 
@@ -75,9 +70,11 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <Grid Name="Headers" Background="{StaticResource SystemControlAccentAcrylicElementAccentMediumHighBrush}">
-                
-            </Grid>
+            <StackPanel Grid.Row="0"  Background="{StaticResource SystemControlAccentAcrylicElementAccentMediumHighBrush}">
+                <Grid Name="Headers" Margin="10,0,0,0" >
+
+                </Grid>
+            </StackPanel>
 
             <ListView Name="RegistersList" Grid.Row="1" ScrollViewer.HorizontalScrollMode="Enabled" Background="{ThemeResource AppBarBackgroundThemeBrush}" Margin="0,0,0,20" >
 
@@ -106,7 +103,7 @@
         <StackPanel Grid.Row="3" Orientation="Horizontal" FlowDirection="RightToLeft" >
 
 
-            <Button  HorizontalAlignment="Right" Name="DeleteRegister"  Style="{ThemeResource AccentButtonStyle}" Margin="0,0,10,0">
+            <Button Click="DeleteRegisterButtonClick"  HorizontalAlignment="Right" Name="DeleteRegister"  Style="{ThemeResource AccentButtonStyle}" Margin="0,0,10,0">
 
                 <StackPanel Orientation="Horizontal">
 
@@ -121,7 +118,7 @@
 
 
 
-            <Button  HorizontalAlignment="Right" Name="EditRegister"  Style="{ThemeResource AccentButtonStyle}" Margin="0,0,10,0">
+            <Button Click="EditRegisterButtonClick"  HorizontalAlignment="Right" Name="EditRegister"  Style="{ThemeResource AccentButtonStyle}" Margin="0,0,10,0">
 
                 <StackPanel Orientation="Horizontal">
 

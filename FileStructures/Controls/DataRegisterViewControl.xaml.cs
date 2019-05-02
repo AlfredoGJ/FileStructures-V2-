@@ -26,21 +26,21 @@ namespace FileStructures.Controls
 
         //private Button deleteButton;
 
-        private List<object> fields;
+        private List<Field> fields;
         private DataRegister register;
-        //public List<object> Fields
-        //{
-        //    get
-        //    {
-        //        //return register.Fields;
-        //    }
+        public List<Field> Fields
+        {
+            get
+            {
+                return register.Fields;
+            }
 
-        //    set
-        //    {
-        //        fields = value;
-        //        Fill();
-        //    }
-        //}
+            set
+            {
+                fields = value;
+                Fill();
+            }
+        }
 
         public DataRegisterViewControl()
         {
@@ -57,7 +57,7 @@ namespace FileStructures.Controls
             {
                 ControlContent.ColumnDefinitions.Add(new ColumnDefinition());
                 TextBlock tb = new TextBlock();
-                tb.Text = fields[i].ToString();
+                tb.Text = fields[i].value.ToString();
                 tb.FontSize = 18;
                 //tb.HorizontalAlignment = HorizontalAlignment.Stretch;
                 Grid.SetColumn(tb, i);
@@ -129,9 +129,9 @@ namespace FileStructures.Controls
         {
             if (DataContext != null)
             {
-                //register = (DataContext as DataRegister);
+                register = (DataContext as DataRegister);
 
-                //Fields = register.Fields;
+                Fields = register.Fields;
             }
         }
     }

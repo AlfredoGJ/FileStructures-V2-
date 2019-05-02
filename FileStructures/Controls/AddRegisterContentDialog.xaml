@@ -11,7 +11,7 @@
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick"
-   
+    DefaultButton="Primary"
     >
     <Grid>
         <Grid.RowDefinitions>

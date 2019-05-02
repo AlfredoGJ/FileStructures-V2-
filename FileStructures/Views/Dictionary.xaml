@@ -37,27 +37,14 @@
                     </StackPanel>
 
                     <StackPanel  Background="Black" Orientation="Horizontal" FlowDirection="LeftToRight" Height="30" >
-                        <!--<TextBlock Text="Header: " Foreground="White"  FontSize="18" Margin="10,0,0,0" />
-                        <TextBlock Name="Header"   Foreground="White"  FontSize="18" Margin="0,0,10,0"/>-->
+                       
                     </StackPanel>
                 </StackPanel>
 
-                <Grid FlowDirection="LeftToRight"   Grid.Row="1" Padding="5" Background="{StaticResource SystemControlAccentAcrylicElementAccentMediumHighBrush}" Height="40">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition MinWidth="250" />
-                        <!--<ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>-->
-                        <ColumnDefinition Width="60"/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Text="Name" Grid.Column="0"  FontSize="18" Foreground="White" Margin="0,0,0,0"/>
-                    <!--<TextBlock Text="Position"  Grid.Column="1" FontSize="18" Foreground="White" />
-                    <TextBlock Text="Attr Ptr" Grid.Column="2"  FontSize="18" Foreground="White" />
-                    <TextBlock Text="Data Ptr" Grid.Column="3" FontSize="18" Foreground="White" />
-                    <TextBlock Text="Next Ptr" Grid.Column="4" FontSize="18" Foreground="White" />-->
-                </Grid>
+                <StackPanel FlowDirection="LeftToRight"   Grid.Row="1" Padding="5" Background="{StaticResource SystemControlAccentAcrylicElementAccentMediumHighBrush}" Height="40">
+                    <TextBlock Text="Name" Grid.Column="0"  FontSize="18" Foreground="White" Margin="10,0,0,0"/>
+                </StackPanel>
+                
             </StackPanel>
 
 
@@ -69,10 +56,9 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition MinWidth="450" />
 
-
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock x:Name="Name" Grid.Column="0" Margin="0,0,30,0" Text="{Binding Path=Name}"/>
+                            <TextBlock x:Name="Name" Grid.Column="0" Margin="0,0,0,0" Text="{Binding Path=Name}"/>
 
 
                         </Grid>
@@ -134,25 +120,28 @@
                     <TextBlock Text="Attributes of " Style="{StaticResource TitleTextBlockStyle}" Foreground="White"  FontSize="20" Margin="10,0,0,0"/>
                     <TextBlock Text="{Binding ElementName=Entities, Path = SelectedItem.Name}" Margin="10,0,0,0" Foreground="White" FontSize="30"  Style="{StaticResource TitleTextBlockStyle}"/>
                 </StackPanel>
+                    <Grid Padding="5"   Margin="0,0,0,0" FlowDirection="LeftToRight"    Height="40" Background="{StaticResource SystemControlAccentAcrylicElementAccentMediumHighBrush}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="200" Width="*" />
+                            <ColumnDefinition MinWidth="100" Width="*"/>
+                            <ColumnDefinition MinWidth="120" Width="*"/>
+                            <ColumnDefinition MinWidth="120" Width="*"/>
+                            <ColumnDefinition MinWidth="150" Width="*"/>
 
-                <Grid FlowDirection="LeftToRight"  Grid.Row="1" Padding="5" Height="40" HorizontalAlignment="Stretch" Margin="0,0,0,0" VerticalAlignment="Stretch" Background="{StaticResource SystemControlAccentAcrylicElementAccentMediumHighBrush}" >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition MinWidth="200" />
-                        <ColumnDefinition MinWidth="80" />
-                        <ColumnDefinition MinWidth="80" />
-                        <ColumnDefinition MinWidth="120"/>
-                        <ColumnDefinition MinWidth="220"/>
-                        
-                    </Grid.ColumnDefinitions>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
 
-                    <TextBlock Text="Name" Grid.Column="0"  FontSize="18" Foreground="White" Margin="0,0,0,0"/>
-                    <TextBlock Text="Data Type"  Grid.Column="1" FontSize="18" Foreground="White" />
-                    <TextBlock Text="Key Type"  Grid.Column="2" FontSize="18" Foreground="White" />
-                    <TextBlock Text="Associated Entity"  Grid.Column="3" FontSize="18" Foreground="White" />
-                    <TextBlock Text="Description"  Grid.Column="4" FontSize="18" Foreground="White" />
+                        <TextBlock Text="Name" Grid.Row="0" Grid.Column="0"  FontSize="18" Foreground="White" Margin="0,0,0,0"/>
+                        <TextBlock Text="Data Type"  Grid.Column="1" FontSize="18" Foreground="White" />
+                        <TextBlock Text="Key Type"  Grid.Column="2" FontSize="18" Foreground="White" />
+                        <TextBlock Text="Associated Entity"  Grid.Column="3" FontSize="18" Foreground="White" />
+                        <TextBlock Text="Description"  Grid.Column="4" FontSize="18" Foreground="White" />
 
 
-                </Grid>
+                    </Grid>
+               
             </StackPanel>
 
 
@@ -164,19 +153,19 @@
 
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition MinWidth="200" />
+                                    <ColumnDefinition MinWidth="100"/>
                                     <ColumnDefinition MinWidth="120"/>
                                     <ColumnDefinition MinWidth="120"/>
-                                    <ColumnDefinition MinWidth="120"/>
-                                    <ColumnDefinition MinWidth="120"/>
+                                    <ColumnDefinition MinWidth="150"/>
                                     
 
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock x:Name="Name" Grid.Column="0" Margin="0,0,30,0" Text="{Binding Path=Name}" />
-                                <TextBlock x:Name="DataType"  Grid.Column="1" HorizontalAlignment="Left" Text="{Binding Path=DataTypeString}"/>
-                                <TextBlock x:Name="KeyType"  Grid.Column="2" HorizontalAlignment="Left" Text="{Binding Path=KeyTypeString}"/>
-                                <TextBlock x:Name="AssociatedEntity"  Grid.Column="3" HorizontalAlignment="Left" Text="{Binding Path=AssociatedEntity}"/>
-                                <TextBlock x:Name="Description"  Grid.Column="4" HorizontalAlignment="Left" Text="{Binding Path=Description}"/>
+                                <TextBlock x:Name="Name" Grid.Column="0" Margin="0,0,0,0" Text="{Binding Path=Name}" />
+                                <TextBlock x:Name="DataType"  Grid.Column="1" HorizontalAlignment="Left" Text="{Binding Path=DataTypeString}" Margin="0,0,0,0"/>
+                                <TextBlock x:Name="KeyType"  Grid.Column="2" HorizontalAlignment="Left" Text="{Binding Path=KeyTypeString}" Margin="0,0,0,0"/>
+                                <TextBlock x:Name="AssociatedEntity"  Grid.Column="3" HorizontalAlignment="Left" Text="{Binding Path=AssociatedEntity}" Margin="0,0,0,0"/>
+                                <TextBlock x:Name="Description"  Grid.Column="4" HorizontalAlignment="Left" Text="{Binding Path=Description}" Margin="0,0,0,0"/>
 
 
                             </Grid>

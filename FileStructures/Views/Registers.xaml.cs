@@ -31,12 +31,7 @@ namespace FileStructures.Views
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            //if (!string.IsNullOrEmpty(App.CurrentProjectName)) Alrato vemos esto... Ok
-            {
-                //manager = new DictionaryManager(App.CurrentFileName);
-                //manager.itemsOnFileChanged += UpdateDictionaryData;
-
-            }
+            this.EntitiesList.ItemsSource = App.CurrentProject.Entities;
         }
 
         private void UpdateDictionaryData()
@@ -49,22 +44,32 @@ namespace FileStructures.Views
 
         private void UpdateRegistersData()
         {
-            //if (EntitiesList.SelectedItem != null)
-            //{
-            //    RegistersList.ItemsSource = null;
-            //    RegistersList.ItemsSource = (EntitiesList.SelectedItem as Entity).Registers;
-            //}
+            if (EntitiesList.SelectedItem != null)
+            {
+                RegistersList.ItemsSource = null;
+                RegistersList.ItemsSource = (EntitiesList.SelectedItem as Entity).Registers;
+            }
         }
 
-        private void AddRegister_Click(object sender, RoutedEventArgs e)
+        private async void AddRegister_Click(object sender, RoutedEventArgs e)
         {
             if (EntitiesList.SelectedItem != null)
             {
 
                 AddRegisterContentDialog dialog = new AddRegisterContentDialog(EntitiesList.SelectedItem as Entity);
-                dialog.ShowAsync();
+                var result = await  dialog.ShowAsync();
+                if (result == ContentDialogResult.Primary)
+                {
+                    App.SerializeProject();
+                    UpdateRegistersData();
+                }
+                    
 
-                
+
+
+
+
+
 
             }
 
@@ -80,34 +85,16 @@ namespace FileStructures.Views
                 Entity E = EntitiesList.SelectedItem as Entity;
                 //E.itemsOnFileChanged += UpdateRegistersData;
                 int i;
-                //for (i = 0; i < E.Attributes.Count; i++)
-                //{
-                //    Headers.ColumnDefinitions.Add(new ColumnDefinition());
-                //    TextBlock tb = new TextBlock();
-                //    tb.Text = E.Attributes[i].Name;
-                //    tb.FontSize = 18;
-                //    tb.Foreground = new SolidColorBrush(color: Windows.UI.Color.FromArgb(255,255,255,255));
-                //    Grid.SetColumn(tb, i);
-                //    Headers.Children.Add(tb);
-                //}
-                
-                //Headers.ColumnDefinitions.Add(new ColumnDefinition());
-                //TextBlock pos = new TextBlock();
-                //pos.Text = "Position";
-                //pos.FontSize = 18;
-                //Grid.SetColumn(pos, i);
-                //Headers.Children.Add(pos);
-
-                //Headers.ColumnDefinitions.Add(new ColumnDefinition());
-                //TextBlock next = new TextBlock();
-                //next.Text = "NextPtr";
-                //next.FontSize = 18;
-                //Grid.SetColumn(next, i + 1);
-                //Headers.Children.Add(next);
-
-                //Headers.ColumnDefinitions.Add(new ColumnDefinition());
-                //Headers.ColumnDefinitions.Add(new ColumnDefinition());
-
+                for (i = 0; i < E.Attributes.Count; i++)
+                {
+                    Headers.ColumnDefinitions.Add(new ColumnDefinition());
+                    TextBlock tb = new TextBlock();
+                    tb.Text = E.Attributes[i].Name;
+                    tb.FontSize = 18;
+                    tb.Foreground = new SolidColorBrush(color: Windows.UI.Color.FromArgb(255, 255, 255, 255));
+                    Grid.SetColumn(tb, i);
+                    Headers.Children.Add(tb);
+                }
 
 
                 UpdateRegistersData();
@@ -116,8 +103,8 @@ namespace FileStructures.Views
 
          async void DeleteRegisterButtonClick(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
-            DataRegister register = (button.Parent as Grid).DataContext as DataRegister;
+
+            DataRegister register = (DataRegister)RegistersList.SelectedItem;
 
             if (EntitiesList.SelectedItem != null)
             {
@@ -131,28 +118,32 @@ namespace FileStructures.Views
 
                 if (result == ContentDialogResult.Primary)
                 {
-                    //Attribute attribute = (sender as Control).DataContext as Attribute;
-                    //entity.RemoveRegister (register, true);
+                   
+                    entity.RemoveRegister (register);
+                    UpdateRegistersData();
+                    App.SerializeProject();
                    
                 }
             }
 
-
-            //(e.OriginalSource as FrameworkElement).DataContext;
-
         }
 
-        private void EditRegisterButtonClick(object sender, RoutedEventArgs e)
+        private async void EditRegisterButtonClick(object sender, RoutedEventArgs e)
         {
-            Button button = sender as Button;
-            DataRegister register = (button.Parent as Grid).DataContext as DataRegister;
+            DataRegister register = RegistersList.SelectedItem as DataRegister;
 
             if (EntitiesList.SelectedItem != null)
             {
                 Entity entity = EntitiesList.SelectedItem as Entity;
 
                 AddRegisterContentDialog dialog = new AddRegisterContentDialog(EntitiesList.SelectedItem as Entity, register);
-                dialog.ShowAsync();
+                var result = await dialog.ShowAsync();
+
+                if (result == ContentDialogResult.Primary)
+                {
+                    App.SerializeProject();
+                    UpdateRegistersData();
+                }
 
             }
         }

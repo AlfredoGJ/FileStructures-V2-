@@ -18,9 +18,10 @@ namespace FileStructures
     {
         
         public List<Attribute> Attributes { get; set; }
-        public List<DataRegister> Registers;
+        public List<DataRegister> Registers { get; set; }
         public string Name { get; set; }
         public Attribute Key { get; set; }
+
         public Entity(string name)
         {
             Name = name;
@@ -50,6 +51,16 @@ namespace FileStructures
             Attributes.Remove(attribute);
             if (attribute.KeyType == KeyTypes.Primary)
                 Key = null;
+        }
+
+        public void AddRegister(DataRegister register)
+        {
+            Registers.Add(register);
+        }
+
+        internal void RemoveRegister(DataRegister register)
+        {
+            Registers.Remove(register);
         }
     }
 }

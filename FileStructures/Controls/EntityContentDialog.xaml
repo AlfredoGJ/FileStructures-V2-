@@ -12,6 +12,7 @@
     PrimaryButtonText="Ok"
     CloseButtonText="Cancel"
     Name="EntityCD"
+    DefaultButton="Primary"
     
     >
 
