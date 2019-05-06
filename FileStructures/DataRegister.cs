@@ -22,23 +22,7 @@ namespace FileStructures
             for(int i=0;i<values.Count;i++)
             {
 
-                object value= null;
-                switch (template[i].DataType)
-                {
-
-                    case DataTypes.Integer:
-                        value = int.Parse(values[i]);
-                        break;
-
-                    case DataTypes.String:
-                        value = values[i];
-                        break;
-
-                }
-                
-                Field f;
-                f.value = value;
-                f.dataType = template[i].DataType;
+                Field f = Utils.StringToField(values[i],template[i]);
                 if (Template[i].KeyType == KeyTypes.Primary)
                     this.Key = f;
                 Fields.Add(f);

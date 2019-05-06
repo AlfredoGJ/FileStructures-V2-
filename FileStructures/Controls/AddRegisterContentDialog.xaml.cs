@@ -21,6 +21,7 @@ namespace FileStructures.Controls
     {
         Entity entity;
         DataRegister register;
+        bool RefIntegrity = true;
         public AddRegisterContentDialog( Entity entity)
         {
             this.InitializeComponent();
@@ -73,41 +74,17 @@ namespace FileStructures.Controls
 
         private async void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
         {
-            List<string> values = ConvertValues();
-                
-               
-            
+            List<string> values = ConvertToStrings();
 
-            DataRegister register = new DataRegister(values, entity.Attributes);
-
-            // If we are adding the register
-            if (this.register == null)
-            {
-                if (!entity.Registers.Any(x => x.Key==register.Key))
-                    entity.AddRegister(register);
-                else
-                {
-                    Warning.Margin = new Thickness(20, 10, 10, 0);
-                    Warning.Text = "Error: This entity already contains a register with the key " + register.Key.value.ToString();
-                    args.Cancel = true;
-                }
-            }
-
-
-           // If we are Editing an existent Register
-            else
+            if (RefIntegrity && values!=null)
             {
 
-
-                if (this.register.Key == register.Key)
-                    this.register.Fields = register.Fields;
-                else
+                DataRegister register = new DataRegister(values, entity.Attributes);
+                // If we are adding the register
+                if (this.register == null)
                 {
-                    if (entity.Registers.All(x => x.Key != register.Key))
-                    {
-                        this.register.Fields = register.Fields;
-                        this.register.Key = register.Key;
-                    }
+                    if (!entity.Registers.Any(x => x.Key == register.Key))
+                        entity.AddRegister(register);
                     else
                     {
                         Warning.Margin = new Thickness(20, 10, 10, 0);
@@ -117,6 +94,28 @@ namespace FileStructures.Controls
                 }
 
 
+                // If we are Editing an existent Register
+                else
+                {
+
+                    if (this.register.Key == register.Key)
+                        this.register.Fields = register.Fields;
+                    else
+                    {
+                        if (entity.Registers.All(x => x.Key != register.Key))
+                        {
+                            this.register.Fields = register.Fields;
+                            this.register.Key = register.Key;
+                        }
+                        else
+                        {
+                            Warning.Margin = new Thickness(20, 10, 10, 0);
+                            Warning.Text = "Error: This entity already contains a register with the key " + register.Key.value.ToString();
+                            args.Cancel = true;
+                        }
+                    }
+
+                }
             }
 
         }
@@ -135,14 +134,14 @@ namespace FileStructures.Controls
 
                 TextBox tb = new TextBox();
                 CheckBox cb = new CheckBox();
-
-
+                
                 switch (entity.Attributes[i].DataType)
                 {
 
 
                     case DataTypes.Boolean:
                         cb.Name= entity.Attributes[i].Name;
+                        cb.DataContext = entity.Attributes[i];
                         if (r != null)
                             cb.IsChecked = Boolean.Parse( r.Fields[i].value.ToString());
                         Container.Children.Add(cb);
@@ -152,6 +151,7 @@ namespace FileStructures.Controls
                     case DataTypes.Character:
                         
                         tb.Name = entity.Attributes[i].Name;
+                        tb.DataContext = entity.Attributes[i];
                         tb.PlaceholderText = entity.Attributes[i].Name;
                         tb.Margin = new Thickness(20, 0, 0, 0);
                         tb.MaxLength = 1;
@@ -167,6 +167,7 @@ namespace FileStructures.Controls
                     case DataTypes.Float:
                         tb = new TextBox();
                         tb.Name = entity.Attributes[i].Name;
+                        tb.DataContext = entity.Attributes[i];
                         tb.PlaceholderText = entity.Attributes[i].Name;
                         tb.Margin = new Thickness(20, 0, 0, 0);
                         if (r != null)
@@ -181,6 +182,7 @@ namespace FileStructures.Controls
                     case DataTypes.Integer:
                         tb = new TextBox();
                         tb.Name = entity.Attributes[i].Name;
+                        tb.DataContext = entity.Attributes[i];
                         tb.PlaceholderText = entity.Attributes[i].Name;
                         tb.Margin = new Thickness(20, 0, 0, 0);
                         tb.Width = 120;
@@ -197,6 +199,7 @@ namespace FileStructures.Controls
                     case DataTypes.Long:
                         tb = new TextBox();
                         tb.Name = entity.Attributes[i].Name;
+                        tb.DataContext = entity.Attributes[i];
                         tb.PlaceholderText = entity.Attributes[i].Name;
                         tb.Margin = new Thickness(20, 0, 0, 0);
                         tb.TextChanging += NumbersOnly;
@@ -211,6 +214,7 @@ namespace FileStructures.Controls
 
                         tb = new TextBox();
                         tb.Name = entity.Attributes[i].Name;
+                        tb.DataContext = entity.Attributes[i];
                         tb.PlaceholderText = entity.Attributes[i].Name;
                         tb.Margin = new Thickness(20, 0, 0, 0);
                         tb.Width = 120;
@@ -231,23 +235,57 @@ namespace FileStructures.Controls
 
         private void ValidateReferentialIntegrity(object sender, RoutedEventArgs e)
         {
-            
+            if (sender.GetType() == typeof(TextBox))
+            {
+                TextBox textbox = sender as TextBox;
+                Attribute attribute = textbox.DataContext as Attribute;
+                Entity asociatedEntity = App.CurrentProject.Entities.Find(x => x.Name== attribute.AssociatedEntity);
+
+
+                if (string.IsNullOrEmpty(textbox.Text))
+                {
+
+                    RefIntegrity = false;
+                    Warning.Margin = new Thickness(20, 10, 10, 0);
+                    Warning.Text = "Please provide a value for the field " + attribute.Name;
+                }
+                else if (!asociatedEntity.Registers.Any(x => x.Key == Utils.StringToField(textbox.Text, attribute)))
+                {
+                    RefIntegrity = false;
+                    Warning.Margin = new Thickness(20, 10, 10, 0);
+                    Warning.Text = "Error: The value provided as Secodary Key does not exist";
+                }
+
+            }
         }
 
         // Hay luego compa
-        private void ValidateFields()
+        private bool ValidateFields()
         {
+            bool result = false;
+            for (int i = 0; i < Container.Children.Count; i++)
+            {
+               
+            }
+            return result;
 
         }
 
-        private List<string> ConvertValues()
+        private List<string> ConvertToStrings()
         {
             List<string> s = new List<string>();
 
             for (int i = 0; i < Container.Children.Count; i++)
             {
                 if (Container.Children[i].GetType() == typeof(TextBox))
-                    s.Add((Container.Children[i] as TextBox).Text);
+                {
+                    TextBox tb = (Container.Children[i] as TextBox);
+                    if (!string.IsNullOrEmpty(tb.Text))
+                        s.Add(tb.Text);
+                    else
+                        return null;
+                }
+                    
                 if (Container.Children[i].GetType() == typeof(CheckBox))
                     s.Add((Container.Children[i] as CheckBox).IsChecked.ToString());
             }
@@ -255,5 +293,7 @@ namespace FileStructures.Controls
 
             return s;
         }
+
+       
     }
 }
