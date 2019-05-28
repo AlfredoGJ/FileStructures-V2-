@@ -1,0 +1,150 @@
+﻿<Page
+    x:Class="FileStructures.Views.SQLPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FileStructures.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Margin="30,10,30,10" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="80"/>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+
+
+        <Grid  Grid.Row="0" >
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="700"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock  VerticalAlignment="Center" Grid.Column="0" Text="SQL Query:"  Style="{StaticResource TitleTextBlockStyle}" />
+
+            <TextBox Grid.Column="1"  Name="QueryBox" HorizontalAlignment="Stretch" />
+            <Button Click="Button_Click" Grid.Column="2" VerticalAlignment="Stretch">
+                Run Query
+            </Button>
+        </Grid>
+
+        <StackPanel Grid.Row="1"   Orientation="Vertical" >
+
+
+
+            <StackPanel Height="70">
+                <StackPanel Background="Black" Height="40" Orientation="Horizontal">
+                    <TextBlock Text="Query results" Style="{StaticResource TitleTextBlockStyle}" Foreground="White" FlowDirection="LeftToRight" FontSize="30" Margin="10,0,0,0"/>
+                </StackPanel>
+
+                <StackPanel  Background="Black" Orientation="Horizontal" FlowDirection="LeftToRight" Height="30" >
+
+                </StackPanel>
+            </StackPanel>
+
+            <Grid FlowDirection="LeftToRight"   Grid.Row="1" Padding="5" Background="{StaticResource SystemControlAccentAcrylicElementAccentMediumHighBrush}" Height="40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition MinWidth="250" />
+                    <ColumnDefinition Width="60"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Name" Grid.Column="0"  FontSize="18" Foreground="White" Margin="32,0,0,0"/>
+                <!--<TextBlock Text="Position"  Grid.Column="1" FontSize="18" Foreground="White" />
+                    <TextBlock Text="Attr Ptr" Grid.Column="2"  FontSize="18" Foreground="White" />
+                    <TextBlock Text="Data Ptr" Grid.Column="3" FontSize="18" Foreground="White" />
+                    <TextBlock Text="Next Ptr" Grid.Column="4" FontSize="18" Foreground="White" />-->
+            </Grid>
+        </StackPanel>
+
+
+
+
+        <Grid Grid.Row= "2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0"  Background="{StaticResource SystemControlAccentAcrylicElementAccentMediumHighBrush}">
+                <Grid Name="Headers" Margin="10,0,0,0" >
+
+                </Grid>
+            </StackPanel>
+
+            <ListView Name="QueryResults" Grid.Row="1" ScrollViewer.HorizontalScrollMode="Enabled" Background="{ThemeResource AppBarBackgroundThemeBrush}" Margin="0,0,0,20" >
+
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+
+
+                    </DataTemplate>
+
+                </ListView.ItemTemplate>
+
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+
+            </ListView>
+
+        </Grid>
+
+
+        <!--<StackPanel Grid.Row="3" Orientation="Horizontal" FlowDirection="RightToLeft" >
+
+
+            <Button Click="DeleteRegisterButtonClick"  HorizontalAlignment="Right" Name="DeleteRegister"  Style="{ThemeResource AccentButtonStyle}" Margin="0,0,10,0">
+
+                <StackPanel Orientation="Horizontal">
+
+
+                    <TextBlock  Margin="0,0,10,0">Delete Register</TextBlock>
+                    <SymbolIcon   Symbol="Delete"  />
+
+
+                </StackPanel>
+
+            </Button>
+
+
+
+            <Button Click="EditRegisterButtonClick"  HorizontalAlignment="Right" Name="EditRegister"  Style="{ThemeResource AccentButtonStyle}" Margin="0,0,10,0">
+
+                <StackPanel Orientation="Horizontal">
+
+
+                    <TextBlock  Margin="0,0,10,0">Edit Register</TextBlock>
+                    <SymbolIcon   Symbol="Edit"  />
+
+
+                </StackPanel>
+
+            </Button>
+
+            <Button  HorizontalAlignment="Right" Name="AddRegister" Click="AddRegister_Click" Style="{ThemeResource AccentButtonStyle}">
+
+                <StackPanel Orientation="Horizontal">
+
+
+                    <TextBlock Margin="0,0,10,0"  >Add Register</TextBlock>
+                    <SymbolIcon   Symbol="Add"  />
+
+                </StackPanel>
+
+            </Button>
+
+
+
+
+        </StackPanel>-->
+    </Grid>
+</Page>

@@ -68,6 +68,9 @@ namespace FileStructures
                 case "Configuración":
                     ContentFrame.Navigate(typeof(Views.Config));
                     break;
+                case "SQL":
+                    ContentFrame.Navigate(typeof(Views.SQLPage));
+                    break;
             }
            
         }

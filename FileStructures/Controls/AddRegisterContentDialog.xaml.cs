@@ -76,7 +76,7 @@ namespace FileStructures.Controls
         {
             List<string> values = ConvertToStrings();
 
-            if (RefIntegrity && values!=null)
+            if (RefIntegrity && values != null)
             {
 
                 DataRegister register = new DataRegister(values, entity.Attributes);
@@ -117,6 +117,8 @@ namespace FileStructures.Controls
 
                 }
             }
+            else
+                args.Cancel = true;
 
         }
 
@@ -254,6 +256,11 @@ namespace FileStructures.Controls
                     RefIntegrity = false;
                     Warning.Margin = new Thickness(20, 10, 10, 0);
                     Warning.Text = "Error: The value provided as Secodary Key does not exist";
+                }
+                else
+                {
+                    
+                    Warning.Text = "";
                 }
 
             }

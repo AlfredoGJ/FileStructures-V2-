@@ -33,7 +33,13 @@
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 
-                
+                <NavigationViewItem Content="SQL"  Tag="SQL">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="SQL"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+
+
 
             </NavigationView.MenuItems>
 
